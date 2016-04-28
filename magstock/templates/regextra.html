@@ -47,7 +47,7 @@
 <div id="food">
     {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food %}
         <div class="form-group">
-            <label class="col-sm-2 control-label">Want to Buy Food?</label>
+            <label class="col-sm-2 optional-field control-label">Want to Buy Food?</label>
             <div class="col-sm-6">
                 {% if c.PAGE_PATH != '/registration/form' and attendee.purchased_food and not attendee.is_new and not attendee.amount_unpaid %}
                     <i>You have already purchased food.</i>
