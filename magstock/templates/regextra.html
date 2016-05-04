@@ -1,17 +1,24 @@
 
 <script type="text/javascript">
     if (window.BADGE_TYPES) {
-        BADGE_TYPES.options[0].description = 'Includes three day admission and campground fees';
-        if (BADGE_TYPES.options[2]) {
-            BADGE_TYPES.options[2].description = 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime:'%b %d' }}. Limited quantities.)';
+        for (var i = 0; i < _(BADGE_TYPES.options).size(); i++) {
+            switch (BADGE_TYPES.options[i].extra) {
+                case 0:
+                    BADGE_TYPES.options[i].description = 'Includes three day admission and campground fees.';
+                    break;
+                case {{ c.SHIRT_LEVEL }}:
+                    BADGE_TYPES.options[i] = {
+                        title: 'Add a T-Shirt',
+                        description: 'Attendee level plus a MAGStock-themed t-shirt.',
+                        extra: {{ c.SHIRT_LEVEL }}
+                    };
+                    break;
+                case {{ c.SUPPORTER_LEVEL }}:
+                    BADGE_TYPES.options[i].description = 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime:'%b %d' }}. Limited quantities.)';
+                    break;
+            }
         }
-        {% if c.SHIRT_LEVEL in c.PREREG_DONATION_TIERS %}
-            BADGE_TYPES.options[1] = {
-                title: 'Add a T-Shirt',
-                description: 'Attendee level plus a MAGStock-themed t-shirt',
-                extra: {{ c.SHIRT_LEVEL }}
-            };
-        {% endif %}
+
         $(function () {
             if ($.field('amount_extra')) {
                 $.field('amount_extra').parents('.form-group').hide();
