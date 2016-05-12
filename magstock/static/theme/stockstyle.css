@@ -1,0 +1,24 @@
+@import url("https://opensource.keycdn.com/fontawesome/4.6.2/font-awesome.min.css ");
+body {
+  background-color: tan;
+  background-image: url("http://www.transparenttextures.com/patterns/purty-wood.png"); }
+
+header {
+  padding-bottom: 1em; }
+
+h2 {
+  padding-bottom: 0.5em; }
+
+.panel {
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 2em;
+  background: rgba(255, 255, 255, 0.8); }
+
+dt {
+  padding-top: 2em; }
+
+dd {
+  padding-left: 4em; }
+
+/*# sourceMappingURL=stockstyle.css.map */
