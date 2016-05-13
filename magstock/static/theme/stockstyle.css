@@ -1,0 +1,70 @@
+@import url("https://opensource.keycdn.com/fontawesome/4.6.2/font-awesome.min.css ");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css");
+body {
+  background-color: tan;
+  background-image: url("../theme/purty-wood.png"); }
+
+header {
+  padding-bottom: 1em; }
+
+h2 {
+  font-size: 250%; }
+
+h3 {
+  font-size: 200%; }
+
+.panel {
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 2em;
+  background: rgba(255, 255, 255, 0.8); }
+
+dt {
+  padding-top: 2em; }
+
+dd {
+  padding-left: 4em; }
+
+ul {
+  list-style-type: none; }
+
+p {
+  margin: 0; }
+
+hr {
+  border-top: 1px solid grey; }
+
+strong {
+  font-weight: bold; }
+
+.makematch {
+  color: rgba(3, 155, 229, 0.8); }
+
+.input-field label {
+  left: 2px;
+  color: rgba(3, 155, 229, 0.8); }
+
+textarea {
+  border: 0; }
+
+input[type=text], input[type=tel], textarea.materialize-textarea {
+  margin-bottom: 0;
+  margin-top: 6px; }
+
+[type="checkbox"] + label {
+  padding-left: 25px; }
+
+input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]), textarea {
+  border-bottom: 1px solid #039be5;
+  box-shadow: 0 1px 0 0 #039be5; }
+
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea, textarea {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-top-left-radius: 3px;
+  border-bottom-right-radius: 3px; }
+
+.help-text {
+  margin-left: 0.3em;
+  font-size: 90%; }
+
+/*# sourceMappingURL=stockstyle.css.map */
