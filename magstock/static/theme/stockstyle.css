@@ -1,44 +1,122 @@
-/*
-Error: Invalid CSS after "@import ": expected "{", was "url('https://cd..."
-        on line 3 of stockstyle.scss
+@import url("https://opensource.keycdn.com/fontawesome/4.6.2/font-awesome.min.css ");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css");
+@media all {
+  body {
+    background-color: tan;
+    background-image: url("../theme/purty-wood.png"); }
 
-1: @import url('https://opensource.keycdn.com/fontawesome/4.6.2/font-awesome.min.css ');
-2: <<<<<<< HEAD
-3: @import url('https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css');
-4: 
-5: @media all {
-6: =======
-7: >>>>>>> origin/magstock_style
-8: 
+  header {
+    padding-bottom: 1em; }
 
-Backtrace:
-stockstyle.scss:3
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:1179:in `expected'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:1115:in `expected'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:1110:in `tok!'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:654:in `block'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:647:in `ruleset'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:673:in `block_child'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:666:in `block_contents'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:123:in `stylesheet'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/scss/parser.rb:39:in `parse'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/engine.rb:403:in `_to_tree'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/engine.rb:378:in `_render_with_sourcemap'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/engine.rb:295:in `render_with_sourcemap'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/plugin/compiler.rb:490:in `update_stylesheet'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/plugin/compiler.rb:209:in `each'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/plugin.rb:82:in `update_stylesheets'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/exec/sass_scss.rb:363:in `watch_or_update'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/exec/sass_scss.rb:51:in `process_result'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/exec/base.rb:52:in `parse'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/lib/sass/exec/base.rb:19:in `parse!'
-/Users/chaney/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/sass-3.4.21/bin/scss:13:in `<top (required)>'
-/Users/chaney/.rbenv/versions/2.2.3/bin/scss:23:in `load'
-/Users/chaney/.rbenv/versions/2.2.3/bin/scss:23:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Invalid CSS after \"@import \": expected \"{\", was \"url('https://cd...\"\A         on line 3 of stockstyle.scss\A \A 1: @import url('https://opensource.keycdn.com/fontawesome/4.6.2/font-awesome.min.css ');\A 2: <<<<<<< HEAD\A 3: @import url('https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css');\A 4: \A 5: @media all {\A 6: =======\A 7: >>>>>>> origin/magstock_style\A 8: "; }
+  h2 {
+    font-size: 250%; }
+
+  h3 {
+    font-size: 200%; }
+
+  .panel {
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 2em;
+    background: rgba(255, 255, 255, 0.8); }
+
+  table {
+    margin-bottom: 2em; }
+
+  td {
+    border-right: 1px dotted lightgrey;
+    border-bottom: 1px dotted ivory; }
+
+  td:last-child {
+    border: 0; }
+
+  thead {
+    font-weight: bold; }
+
+  .headside {
+    border-right: 0; }
+
+  .tablecenter {
+    text-align: center; }
+
+  dt {
+    padding-top: 2em; }
+
+  dd {
+    padding-left: 4em; }
+
+  ul {
+    list-style-type: none; }
+
+  p {
+    margin: 0;
+    margin-bottom: 1em; }
+
+  hr {
+    border-top: 1px solid grey; }
+
+  strong {
+    font-weight: bold; }
+
+  .makematch {
+    color: rgba(3, 155, 229, 0.8); }
+
+  .input-field label {
+    left: 2px;
+    color: rgba(3, 155, 229, 0.8); }
+
+  textarea {
+    border: 0; }
+
+  input[type=text], input[type=tel], textarea.materialize-textarea {
+    margin-bottom: 0;
+    margin-top: 6px; }
+
+  [type="checkbox"] + label {
+    padding-left: 25px; }
+
+  input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]), textarea {
+    border-bottom: 1px solid #039be5;
+    box-shadow: 0 1px 0 0 #039be5; }
+
+  input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea, textarea {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-top-left-radius: 3px;
+    border-bottom-right-radius: 3px; }
+
+  .help-text {
+    margin-left: 0.3em;
+    font-size: 90%; } }
+@media print {
+  body {
+    font-size: 10pt;
+    margin: 0.1in;
+    margin-top: 0.01in; }
+
+  header {
+    margin: 0; }
+
+  img {
+    width: 250px; }
+
+  .panel {
+    margin: 0;
+    padding: 0;
+    border: 0; }
+
+  h2 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 14pt;
+    font-weight: bold; }
+
+  h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12pt;
+    font-weight: bold; }
+
+  .printhide {
+    display: none; } }
+
+/*# sourceMappingURL=stockstyle.css.map */
