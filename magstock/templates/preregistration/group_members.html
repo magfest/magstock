@@ -1,0 +1,136 @@
+{% extends "./preregistration/preregbase.html" %}
+
+{% block title %}
+    Group Members
+{% endblock %}
+
+{% block backlink %}{% endblock %}
+
+{% block content %}
+<div class="masthead"></div>
+
+<div class="panel panel-default">
+
+    {% if c.HAS_PEOPLE_ACCESS %}
+        <a href="../groups/form?id={{ group.id }}" class="pull-right">
+            Return to Group Admin Form
+        </a>
+    {% endif %}
+
+<h2>
+    Members of "{{ group.name }}"
+</h2>
+
+    <!--
+{% if group.amount_unpaid and group.status != c.WAITLISTED %}
+    {% if not group.is_dealer or group.status != c.UNAPPROVED %}
+        {% stripe_form process_group_payment charge %}
+    {% endif %}
+{% endif %}
+    -->
+
+<p>
+    {% if group.unregistered_badges and group.tables %}
+        Some of your badges are not yet assigned to a specific person.
+            <br>
+        Please assign these badges between now (using the links below) and the close of preregistation; any badges unclaimed at that time will be invalid. You may also distribute each of the registration links below to the individual members of your group, which will allow them to fill in their own information as well as purchase any upgrades on their own.
+    {% endif %}
+</p>
+<p>
+    If a {{ group.is_dealer|yesno:"planned Dealer Assistant,group member" }} cannot attend, you may use the "This person isn't coming" button next to their entry on the list below to unset their badge, which may then be assigned to someone else.
+        <br>
+    Upgraded badges may only be transferred directly between two people; please contact us at <a href="{{ c.CONTACT_URL }}">{{ c.CONTACT_URL }}</a> if you wish to transfer badges.
+</p>
+
+<h3>
+    Here are the badges for your group:
+</h3>
+
+<table>
+    <thead>
+        <td class="headside">
+            Name
+        </td>
+        <td class="headside tablecenter">
+            Badge Type
+        </td>
+        <td></td>
+    </thead>
+{% for attendee in group.sorted_attendees %}
+    <tr>
+    {% if attendee.first_name %}
+        <td>
+            {{ attendee.full_name }}
+        </td>
+        <td class="tablecenter">
+            {{ attendee.badge }}
+        </td>
+
+        <td class="tablecenter">
+            {% if attendee != group.leader and not attendee.amount_extra %}
+                <form method="post" action="unset_group_member">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ attendee.id }}" />
+                <input type="submit" value="This person isn't coming" />
+                </form>
+            {% elif attendee.is_transferable and attendee.amount_extra %}
+                <form method="get" action="transfer_badge">
+                <input type="hidden" name="id" value="{{ attendee.id }}" />
+                    <strong>
+                        Kicked in an extra ${{ attendee.amount_extra }}!
+                    </strong>
+                <input type="submit" value="Transfer Registration" />
+                </form>
+            {% endif %}
+        </td>
+    {% else %}
+        <td>
+            <a href="register_group_member?group_id={{ group.id }}">Register someone for this badge</a>
+        </td>
+        <td class="tablecenter">
+            {{ attendee.badge }}
+        </td>
+    {% endif %}
+    </tr>
+{% endfor %}
+</table>
+
+{% if c.PRE_CON and group.min_badges_addable %}
+    <div id="add" style="display:none">
+        <form method="get" action="add_group_members">
+        <input type="hidden" name="id" value="{{ group.id }}" />
+        Enter a number of {{ group.is_dealer|yesno:"Dealer Assistants,group members" }} to add{% if group.min_badges_addable > 1 %} (you cannot add fewer than {{ group.min_badges_addable }} badges to an existing group){% endif %}: <br/>
+        {% if group.is_dealer %}
+            <select name="count">
+                {% int_options group.min_badges_addable group.dealer_badges_remaining %}
+            </select>
+        {% else %}
+            <select name="count">
+                {% int_options group.min_badges_addable 10 %}
+            </select>
+        {% endif %}
+        <input type="submit" value="{{ group.is_dealer|yesno:"Add Dealer Assistants,Add Group Members" }}">
+        </form>
+    </div>
+    
+    <script type="text/javascript">
+        {% if group.amount_unpaid %}
+            $(function(){
+                $(".panel").append(
+                    $('<button disabled title="Group must be paid for before new members can be added.">Click here to add more {{ group.is_dealer|yesno:"Dealer Assistants,group members" }}.</button>')
+                );
+            });
+        {% else %}
+            $(function(){
+                $(".panel").append(
+                    $('<button>Click here to add more {{ group.is_dealer|yesno:"Dealer Assistants,group members" }}.</button>').click(function(e){
+                        $(e.target).hide();
+                        $("#add").show();
+                    }));
+            });
+        {% endif %}
+    </script>
+    
+{% endif %}
+</div><!-- /panel -->
+{% endblock %}
