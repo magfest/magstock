@@ -8,3 +8,33 @@ Tables will be available in our concert tent throughout the weekend for performe
 Though {{ c.EVENT_NAME }} is a laid back event, these time-frames will be enforced, via an on-stage timer,
 to ensure that performances occur in a timely fashion.
 {% endblock %}
+
+{% block band_text_accommodations_inner %}
+{{ band_info.performer_count|default:band.estimated_performer_count }}
+air-conditioned cabin space{{ band_info.performer_count|default:band.estimated_performer_count|pluralize }}
+with instrument storage will be provided
+(arriving {{ c.EPOCH|datetime:"%A, %B %d" }}, departing {{ c.ESCHATON|datetime:"%A, %B %d" }}),
+for each performer.
+    <br>
+Cabin space is limited, so cabins may be shared between performers.
+    <br>
+Alternately, performers may choose to camp in a tent, if they desire.
+Air-conditioned instrument storage will still be provided.
+    <br>
+Additional space, and camping equipment will be the responsibility of the performer.
+    <br>
+<strong>Performers <em>must</em> be free and clear of performer cabins by noon Sunday.</strong>
+    <br>
+This is a requirement of the campground and non-negotiable.
+{% endblock %}
+
+{% block band_text_parking_inner %}
+Available outside performer cabins, or in the campground parking lot.
+{% endblock %}
+
+{% block band_text_admission_inner %}
+Each performer will receive one admission wristband, good for the duration of the event,
+and one additional complimentary wristband for a guest.
+<br>
+Additional complimentary wristbands may be issued on request.
+{% endblock %}
