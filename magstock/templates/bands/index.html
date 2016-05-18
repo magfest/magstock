@@ -1,0 +1,253 @@
+{% extends "bandbase.html" %}
+
+{% block body %}
+
+<h2>
+    Band Checklist for {{ band.group.name }}
+</h2>
+
+<p>
+    Here is a list of things which {{ c.EVENT_NAME }} needs from you before the event.
+</p>
+
+<dl>
+
+    {% if c.BAND_PANEL_DEADLINE %}
+    <dt>
+         <span class="fa-stack fa-lg">
+            {% if band.panel.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="panel?band_id={{ band.id }}">
+            Want a Panel?
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_PANEL_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if not band.panel.completed %}
+            Please use the above link to let us know whether or not you are interested in also running a panel.
+            We cannot accommodate all requests, but we definitely want to hear your ideas!
+        {% elif band.panel.wants_panel %}
+            <strong>
+                You have already submitted your panel suggestion, but you may edit it using the link above.
+            </strong>
+        {% else %}
+            You have already let us know that you're not interested in running a panel.  If you change your mind
+            before the deadline, you can use the above link to share your panel idea.
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if c.BAND_BIO_DEADLINE %}
+    <dt>
+         <span class="fa-stack fa-lg">
+            {% if band.bio.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="bio?band_id={{ band.id }}">
+            Completed Band Bio
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_BIO_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if band.bio.completed %}
+            <strong>
+            You have already provided us with your bio information, but you can use the link above to update it.
+            </strong>
+            {% if not band.bio.uploaded_pic %}
+                We encourage you to upload a bio pic for your band (which you have NOT yet done) so that we can
+                include it on our website.
+            {% endif %}
+        {% else %}
+            Use the link above to provide us with the bio information we can put on our website.
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if c.BAND_AGREEMENT_DEADLINE %}
+    <dt>
+        <span class="fa-stack fa-lg">
+            {% if band.info.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="agreement?band_id={{ band.id }}">
+            Completed Band Agreement
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_AGREEMENT_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if band.info.completed %}
+            <strong>
+            You have already provided all the information required as part of your band agreement.
+            </strong>
+                <br>
+            You may edit your
+            information (e.g. if you've discovered that you'll be arriving on a different day or time) using the link above.
+        {% else %}
+            Use the link above to provide us with the necessary information we require about your band.
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if band.payment and c.BAND_W9_DEADLINE %}
+        <dt>
+            <span class="fa-stack fa-lg">
+            {% if band.taxes.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+            <a href="w9?band_id={{ band.id }}">
+                Completed W9
+            </a>
+            <span class="pull-right">
+                Deadline: {{ c.BAND_W9_DEADLINE|datetime }}
+            </span>
+        </dt>
+        <dd>
+            {% if band.taxes.completed %}
+                You have already uploaded your W9 form, but if you need to make changes you can upload a new one
+                using the link above.
+            {% else %}
+                Use the link above to upload a completed W9 form (a link will be provided to a blank form).
+            {% endif %}
+        </dd>
+    {% endif %}
+
+    {% if c.BAND_MERCH_DEADLINE %}
+    <dt>
+        <span class="fa-stack fa-lg">
+            {% if band.merch.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="rock_island?band_id={{ band.id }}">
+            Selling Merchandise
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_MERCH_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if band.merch.completed %}
+            <strong>
+            You have already indicated your merchandise preferences, but you may update them using the link above.
+            </strong>
+        {% else %}
+            We need you to tell us whether you have any merchandise to sell, and whether you intend to participate in
+            our "Rock Island" program where we sell your merchandise so that you do not need to staff your own table.
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if c.BAND_CHARITY_DEADLINE %}
+    <dt>
+        <span class="fa-stack fa-lg">
+            {% if band.charity.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="charity?band_id={{ band.id }}">
+            Donating to our Charity Auction
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_CHARITY_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if band.charity.completed %}
+            You have already indicated your charity preferences, but you may update them using the link above.
+        {% else %}
+            MAGFest runs a yearly charity auction, and we need you to tell us whether you can contribute any
+            signed merchandise.
+        {% endif %}
+    </dd>
+    {% endif %}
+
+    {% if c.BAND_BADGE_DEADLINE %}
+    <dt>
+        <span class="fa-stack fa-lg">
+            {% if band.all_badges_claimed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="../preregistration/group_members?id={{ band.group.id }}">
+            Assign Your Unclaimed Badges
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.BAND_BADGE_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        {% if band.all_badges_claimed %}
+            <strong>
+            You have already assigned all badges which have been assigned to your group, but you may change who your
+            complementary badges are assigned to using the link above anytime until the start of {{ c.EVENT_NAME }}.
+            </strong>
+        {% else %}
+            You currently have {{ band.group.floating|length }} unassigned complementary
+            badge{{ band.group.floating|length|pluralize }} available to your group.  You may use the link above to
+            assign these badges.
+        {% endif %}
+    </dd>
+    <dd>
+        By default, each performer receives a badge for themselves, plus an additional badge for a guest.
+        Additional complimentary badges may be issued upon request.
+    </dd>
+    {% endif %}
+
+    {% if c.STAGE_AGREEMENT_DEADLINE %}
+    <dt>
+        <span class="fa-stack fa-lg">
+            {% if band.stage_plot.completed %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            <i class="fa fa-check fa-stack-1x text-success"></i>
+            {% else %}
+            <i class="fa fa-square-o fa-stack-2x"></i>
+            {% endif %}
+        </span>
+        <a href="stage_plot?band_id={{ band.id }}">
+            Stage Plots
+        </a>
+        <span class="pull-right">
+            Deadline: {{ c.STAGE_AGREEMENT_DEADLINE|datetime }}
+        </span>
+    </dt>
+    <dd>
+        We require that you upload an exact description of your desired stage layout.  Failure to do so may result
+        in you not receiving the setup you expect or want.
+    </dd>
+    {% endif %}
+
+    {% include "bands/bandextra.html" %}
+
+{% endblock %}
