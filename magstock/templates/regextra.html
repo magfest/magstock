@@ -27,7 +27,7 @@
         });
     }
     var showOrHideAllergies = function () {
-        setVisible('#allergies', $.field('purchased_food').is(':checked') || {{ attendee.auto_food|jsonize }});
+        setVisible('#allergies', ($.field('purchased_food') != null && $.field('purchased_food').is(':checked')) || {{ attendee.auto_food|jsonize }});
     };
     var showOrHideComingWith = function () {
         var showComingWith = ($.val('coming_as') === {{ c.TENT_LEADER }} || $.val('coming_as') === {{ c.TENT_FOLLOWER }});
@@ -47,7 +47,9 @@
         showOrHideAllergies();
         showOrHideComingWith();
         $.field('coming_as').on('change', showOrHideComingWith);
-        $.field('purchased_food').on('click', showOrHideAllergies);
+        if ($.field('purchased_food')) {
+            $.field('purchased_food').on('click', showOrHideAllergies);
+        }
         if ($.field('badge_printed_name')) {
             $.field('badge_printed_name').parents('.form-group').remove();
         }
