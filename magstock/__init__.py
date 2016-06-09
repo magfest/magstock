@@ -69,7 +69,7 @@ class Attendee:
         :return: True if this Attendee automatically gets free food, False if not
         """
         return self.badge_type in [c.STAFF_BADGE, c.GUEST_BADGE] or \
-               hasattr(self, "associated_band") and self.associated_band is not None
+               hasattr(self, 'band') and self.band is not None
 
     @property
     def gets_food(self):
