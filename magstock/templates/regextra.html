@@ -27,7 +27,7 @@
         });
     }
     var showOrHideAllergies = function () {
-        setVisible('#allergies', $.field('purchased_food').is(':checked') || {{ attendee.auto_food|jsonize }});
+        setVisible('#allergies', ($.field('purchased_food') != null && $.field('purchased_food').is(':checked')) || {{ attendee.auto_food|jsonize }});
     };
     var showOrHideComingWith = function () {
         var showComingWith = ($.val('coming_as') === {{ c.TENT_LEADER }} || $.val('coming_as') === {{ c.TENT_FOLLOWER }});
@@ -47,7 +47,9 @@
         showOrHideAllergies();
         showOrHideComingWith();
         $.field('coming_as').on('change', showOrHideComingWith);
-        $.field('purchased_food').on('click', showOrHideAllergies);
+        if ($.field('purchased_food')) {
+            $.field('purchased_food').on('click', showOrHideAllergies);
+        }
         if ($.field('badge_printed_name')) {
             $.field('badge_printed_name').parents('.form-group').remove();
         }
@@ -58,12 +60,16 @@
 </script>
 
 <div id="food">
-    {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food %}
+    {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food or attendee.auto_food %}
         <div class="form-group">
             <label class="col-sm-2 optional-field control-label">Want to Buy Food?</label>
             <div class="col-sm-6">
                 {% if c.PAGE_PATH != '/registration/form' and attendee.purchased_food and not attendee.is_new and not attendee.amount_unpaid %}
                     <i>You have already purchased food.</i>
+                    <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
+                    <span style="display:none">{% checkbox attendee.purchased_food %}</span>
+                {% elif attendee.auto_food %}
+                    <i>Free food is included with your registration.</i>
                     <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
                     <span style="display:none">{% checkbox attendee.purchased_food %}</span>
                 {% else %}

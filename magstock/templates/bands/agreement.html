@@ -1,151 +1,40 @@
-{% extends "bandbase.html" %}
-{% block body %}
-<h2>
-    Band agreement for <strong>{{ band.group.name }}</strong> to perform at {{ c.EVENT_NAME_AND_YEAR }}!
-</h2>
-    <p>
-        {{ c.EVENT_NAME_AND_YEAR }} will be held at <strong>Small Country Campground: 4400 Byrd Mill Rd., Louisa, VA 23093,</strong> from <strong>{{ c.EPOCH|datetime:"%B %d" }} - {{ c.ESCHATON|datetime:"%d, %Y" }}.</strong>
-            <br>
-        Performers are encouraged to attend the full event and interact with staff, fellow performers, and attendees in a relaxed environment.
-            <br>
-        If performers will not be attending the full event, we ask that they inform us in advance so we may better allocate sleeping arrangements.
-    </p>
-<h3>
-    Performance
-</h3>
-    <p>
-        Performance time and date for {{ band.group.name }} to be determined, and will be provided prior to the event as an update to this document.
-            <br>
-        Performer will be provided with <strong>{{ band.estimated_loadin_minutes }} minutes</strong>, of set up and line-check, followed by <strong>{{ band.performance_minutes }} minutes</strong> for performance.
-            <br>
-        Though MAGStock is a laid back event, these time-frames will be enforced, via an on-stage timer, to ensure that performances occur in a timely fashion.
-    </p>
-<h3>
-    Merch
-</h3>
-    <p>
-        Tables will be available in our concert tent throughout the weekend for performers' use.
-    </p>
-{% if band.payment %}
-    <h3>
-        Payment
-    </h3>
-    <p>
-        <strong>${{ band.payment }}</strong> by check on site after the show.
-    </p>
-{% endif %}
-<h3>
-    Accommodations
-</h3>
-    <p>
-        {{ band_info.performer_count|default:band.estimated_performer_count }} air-conditioned cabin space{{ band_info.performer_count|default:band.estimated_performer_count|pluralize }} with instrument storage will be provided (arriving {{ c.EPOCH|datetime:"%A, %B %d" }}, departing {{ c.ESCHATON|datetime:"%A, %B %d" }}), for each performer.
-            <br>
-        Cabin space is limited, so cabins may be shared between performers.
-            <br>
-        Alternately, performers may choose to camp in a tent, if they desire. Air-conditioned instrument storage will still be provided.
-            <br>
-        Additional space, and camping equipment will be the responsibility of the performer.
-    </p>
-    <p>
-        <strong>Performers <em>must</em> be free and clear of performer cabins by noon Sunday.</strong>
-            <br>
-        This is a requirement of the campground and non-negotiable.
-    </p>
-<h3>
-    Parking
-</h3>
-    <p>
-        Available outside performer cabins, or in the campground parking lot.
-    </p>
-<h3>
-    Admission
-</h3>
-    <p>
-        Each performer will receive one admission wristband, good for the duration of the event, and one additional complimentary wristband for a guest.
-            <br>
-        Additional complimentary wristbands may be issued on request.
-    </p>
-<h3>
-    Agreement
-</h3>
-    <p>
-        By submitting your band's information<span class="printhide"> below</span>, you agree to the above terms.
-    </p>
+{% extends "bands/agreement-base.html" %}
 
-<div class="printhide">
-<hr>
+{% block band_text_merch_inner %}
+Tables will be available in our concert tent throughout the weekend for performers' use.
+{% endblock %}
 
-<h3>
-    Your Information
-</h3>
-<form method="post" action="agreement" class="form-horizontal" role="form">
-    <input type="hidden" name="band_id" value="{{ band.id }}" />
-    <input type="hidden" name="id" value="{{ band_info.db_id }}" />
-    {% csrf_token %}
+{% block band_text_timer %}
+Though {{ c.EVENT_NAME }} is a laid back event, these time-frames will be enforced, via an on-stage timer,
+to ensure that performances occur in a timely fashion.
+{% endblock %}
 
-<ul>
+{% block band_text_accommodations_inner %}
+{{ band_info.performer_count|default:band.estimated_performer_count }}
+air-conditioned cabin space{{ band_info.performer_count|default:band.estimated_performer_count|pluralize }}
+with instrument storage will be provided
+(arriving {{ c.EPOCH|datetime:"%A, %B %d" }}, departing {{ c.ESCHATON|datetime:"%A, %B %d" }}),
+for each performer.
+    <br><br>
+Cabin space is limited, so cabins may be shared between performers.
+    <br><br>
+Alternately, performers may choose to camp in a tent, if they desire.
+Air-conditioned instrument storage will still be provided.
+    <br><br>
+Additional space, and camping equipment will be the responsibility of the performer.
+    <br><br>
+<strong>Performers <em>must</em> be free and clear of performer cabins by noon Sunday.</strong>
+    <br><br>
+This is a requirement of the campground and non-negotiable.
+{% endblock %}
 
-    <li class="input-field">
-        <label for="performer_count">
-            Performer Count
-        </label>
-        <input id="performer_count" class="form-control" type="tel" name="performer_count" value="{{ band_info.performer_count|default:band.estimated_performer_count }}" />
-            <span class="help-text">
-                To ensure that we have assigned the correct number of badges to your band, please confirm the number
-                of performers in your band.
-            </span>
-    </li>
-    <li class="input-field">
-        <label for="poc_phone">
-            PoC Phone Number
-        </label>
-        <input id="poc_phone" class="form-control" type="tel" name="poc_phone" value="{{ band_info.poc_phone|default:band.group.leader.cellphone }}" />
-            <span class="help-text">
-                Please enter the cellphone number of your preferred Point of Contact for any issues we may need to
-                contact you about on-site.
-            </span>
-    </li>
-    <li class="input-field">
-        <label for="arrival_time">
-            Arrival Time
-        </label>
-        <input id="arrival_time" class="form-control" type="text" name="arrival_time" value="{{ band_info.arrival_time }}" />
-            <span class="help-text">
-                Please be as specific as possible about the day and time you plan on arriving at {{ c.EVENT_NAME }}.
-            </span>
-    </li>
-    <li class="input-field">
-        {% checkbox band_info.bringing_vehicle %}
-        <label for="bringing_vehicle" class="makematch">We will be parking at MAGFest</label>
-    </li>
-​
-    <li id="vehicle-info" class="input-field" style="display:none">
-        <label for="vehicle-info">
-            Vehicle Information</label>
-        <input class="form-control" id="vehicle-info" type="text" name="vehicle_info" value="{{ band_info.vehicle_info }}" />
-            <span class="help-text">
-                If you're parking on-site, then please tell us the vehicle info (car, truck, attached trailer, tour bus, monster truck), so we can ensure parking availability.
-            </span>
-    </li>
-    <li class="input-field">
-        <button type="submit" class="btn waves-effect waves-light blue darken-1">
-            Upload Band Info
-        </button>
-    </li>
+{% block band_text_parking_inner %}
+Available outside performer cabins, or in the campground parking lot.
+{% endblock %}
 
-</ul>
-</form>
-
-</div><!-- /printhide -->
-
-<script>
-    var showOrHideVehicleInfo = function () {
-        setVisible('#vehicle-info', $.field('bringing_vehicle').prop('checked'));
-    };
-    $(function () {
-        showOrHideVehicleInfo();
-        $.field('bringing_vehicle').on('click', showOrHideVehicleInfo);
-    });
-</script>
-
+{% block band_text_admission_inner %}
+Each performer will receive one admission wristband, good for the duration of the event,
+and one additional complimentary wristband for a guest.
+<br><br>
+Additional complimentary wristbands may be issued on request.
 {% endblock %}
