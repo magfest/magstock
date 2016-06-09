@@ -14,6 +14,7 @@ c.MENU.append_menu_item(
     ])
 )
 
+
 @Config.mixin
 class ExtraConfig:
     @property
