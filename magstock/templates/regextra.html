@@ -53,9 +53,6 @@
         if ($.field('badge_printed_name')) {
             $.field('badge_printed_name').parents('.form-group').remove();
         }
-        {% if c.PAGE_PATH == '/registration/form' %}
-            $('#vehicle-warning').hide();
-        {% endif %}
     });
 </script>
 
@@ -117,10 +114,12 @@
                 {% options c.CAMPING_TYPE_OPTS attendee.camping_type %}
             </select>
         </div>
+        {% if c.PAGE_PATH != '/registration/form' %}
         <p id="vehicle-warning" class="help-block col-sm-6">
             Please note: due to space restrictions, there will NO Parking allowed in the campsites this year.
             All vehicles must be in the designated parking lot.
         </p>
+        {% endif %}
     </div>
 
     <div class="form-group">
