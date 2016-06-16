@@ -6,7 +6,12 @@
     </tr>
     <tr>
         <td><strong>Site Number</strong></td>
-        <td><input type="text" id="site_{{ attendee.id }}" name="site_number" value="{{ attendee.site_number }}" /></td>
+        <td>
+            <select name="site_number">
+                <option value="">Choose a campsite, if applicable</option>
+                {% options c.CAMPSITE_OPTS attendee.site_number %}
+            </select>
+        </td>
     </tr>
     <tr>
         <td><strong>License Plate</strong></td>

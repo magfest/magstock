@@ -7,7 +7,12 @@
 {% endblock tableheadings %}
 
 {% block tablerows %}
-    <td><input form="new_checkin" type="text" size="4" name="site_number" placeholder="Site" value="{{ attendee.site_number }}" /></td>
+    <td>
+        <select form="new_checkin" name="site_number">
+            <option value="">Choose a campsite, if applicable</option>
+            {% options c.CAMPSITE_OPTS attendee.site_number %}
+        </select>
+    </td>
     <td><input form="new_checkin" type="text" size="8" name="license_plate" placeholder="License" value="{{ attendee.license_plate }}" /></td>
     {{ block.super }}
 {% endblock tablerows %}
