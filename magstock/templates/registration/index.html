@@ -1,0 +1,13 @@
+{% extends "registration/index_base.html" %}
+
+{% block tableheadings %}
+    <th><a href="index?order={{ order.site_number }}">Site Number</a></th>
+    {{ block.super }}
+{% endblock tableheadings %}
+
+{% block tablerows %}
+    <td>
+        {{ attendee.site_number_label }}
+    </td>
+    {{ block.super }}
+{% endblock tablerows %}
