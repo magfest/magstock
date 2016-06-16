@@ -17,5 +17,11 @@
         <td><strong>License Plate</strong></td>
         <td><input type="text" id="license_{{ attendee.id }}" name="license_plate" value="{{ attendee.license_plate }}" /></td>
     </tr>
+    {% if attendee.coming_as == c.TENT_FOLLOWER %}
+        <tr>
+            <td><strong>Tent Leader</strong></td>
+            <td><a href="index?search_text={{ attendee.coming_with }}" target="_blank">Find Tent Leader</a></td>
+        </tr>
+    {% endif %}
     {{ block.super }}
 {% endblock checkin_fields %}

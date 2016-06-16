@@ -53,6 +53,9 @@
         if ($.field('badge_printed_name')) {
             $.field('badge_printed_name').parents('.form-group').remove();
         }
+        if ($('#leader_search')) {
+            $('#leader_search').appendTo($.field('coming_with').parents('.form-group'));
+        }
     });
 </script>
 
@@ -157,6 +160,12 @@
                 <input type="text" class="form-control" name="license_plate" value="{{ attendee.license_plate }}" placeholder="Admin-only field" />
             </div>
         </div>
+
+        {% if attendee.coming_as == c.TENT_FOLLOWER %}
+            <p id="leader_search" class="help-block col-sm-6">
+                <a href="index?search_text={{ attendee.coming_with }}" target="_blank">Find Tent Leader</a>
+            </p>
+        {% endif %}
     {% endif %}
 </div>
 
