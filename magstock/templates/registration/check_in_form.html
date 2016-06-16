@@ -1,0 +1,16 @@
+{% extends "registration/check_in_form_base.html" %}
+{% block checkin_fields %}
+    <tr>
+        <td><strong>Food?</strong></td>
+        <td>{{ attendee.gets_food }}</td>
+    </tr>
+    <tr>
+        <td><strong>Site Number</strong></td>
+        <td><input type="text" id="site_{{ attendee.id }}" name="site_number" value="{{ attendee.site_number }}" /></td>
+    </tr>
+    <tr>
+        <td><strong>License Plate</strong></td>
+        <td><input type="text" id="license_{{ attendee.id }}" name="license_plate" value="{{ attendee.license_plate }}" /></td>
+    </tr>
+    {{ block.super }}
+{% endblock checkin_fields %}
