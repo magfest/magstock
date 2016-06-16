@@ -2,7 +2,7 @@
 {% block checkin_fields %}
     <tr>
         <td><strong>Food?</strong></td>
-        <td>{{ attendee.gets_food }}</td>
+        <td>{{ attendee.gets_food|yesno:"Give food wristband,No" }}</td>
     </tr>
     <tr>
         <td><strong>Site Number</strong></td>
