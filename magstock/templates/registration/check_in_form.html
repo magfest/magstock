@@ -1,0 +1,21 @@
+{% extends "registration/check_in_form_base.html" %}
+{% block checkin_fields %}
+    <tr>
+        <td><strong>Food?</strong></td>
+        <td>{{ attendee.gets_food|yesno:"Give food wristband,No" }}</td>
+    </tr>
+    <tr>
+        <td><strong>Site Number</strong></td>
+        <td>
+            <select name="site_number">
+                <option value="">Choose a campsite, if applicable</option>
+                {% options c.CAMPSITE_OPTS attendee.site_number %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>License Plate</strong></td>
+        <td><input type="text" id="license_{{ attendee.id }}" name="license_plate" value="{{ attendee.license_plate }}" /></td>
+    </tr>
+    {{ block.super }}
+{% endblock checkin_fields %}
