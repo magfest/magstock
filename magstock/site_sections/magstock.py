@@ -49,6 +49,20 @@ class Root:
             'free_food_count': free_food_count,
         }
 
+    def campsite_assignments(self, session):
+        """
+        This report shows all campsites and who is in them (or no one)
+        """
+
+        campsite_assignments = []
+        for site_id, site_name in c.CAMPSITE_OPTS:
+            campsite_assignments.append({'site_name': site_name, 'attendees':
+                session.query(Attendee).filter(Attendee.site_number == site_id).all()})
+
+        return {
+            'campsite_assignments': campsite_assignments
+        }
+
     @ajax
     def set_extra_checkin_fields(self, session, id, site_number, license_plate):
         attendee = session.attendee(id)
