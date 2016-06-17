@@ -63,8 +63,6 @@ class Root:
             'campsite_assignments': campsite_assignments
         }
 
-
-
     @ajax
     def set_extra_checkin_fields(self, session, id, site_number, license_plate):
         attendee = session.attendee(id)
