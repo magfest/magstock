@@ -36,7 +36,8 @@ a[href]:after {
                 <td>{{ site.attendees|length }}</td>
                 <td>
                 {% for attendee in site.attendees %}
-                    <a href="../registration/form?id={{ attendee.id }}">{{ attendee.full_name }}</a><br/>
+                    <a href="../registration/form?id={{ attendee.id }}">{{ attendee.full_name }}</a>
+                    {% if 'car' in attendee.admin_notes or 'parking' in attendee.admin_notes %}- {{ attendee.admin_notes  }}{% endif %}<br/>
                 {% endfor %}
                 </td>
             </tr>
