@@ -64,6 +64,15 @@ class Root:
             'campsite_assignments': campsite_assignments
         }
 
+    def parking(self, session):
+        """
+        This report shows all cars parked in places
+        """
+
+        return {
+            'attendees': session.query(Attendee).filter().all()
+        }
+
     @ajax
     def set_extra_checkin_fields(self, session, id, site_number, license_plate):
         attendee = session.attendee(id)
