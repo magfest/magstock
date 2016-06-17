@@ -23,5 +23,9 @@
             <td><a href="index?search_text={{ attendee.coming_with }}" target="_blank">Find Tent Leader</a></td>
         </tr>
     {% endif %}
+    <tr>
+        <td><strong>Kick-in Level</strong></td>
+        <td>{{ attendee.amount_extra_label }}</td>
+    </tr>
     {{ block.super }}
 {% endblock checkin_fields %}
