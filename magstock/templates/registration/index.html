@@ -3,15 +3,15 @@
 {% block tableheadings %}
     <th><a href="index?order={{ order.site_number }}">Site Number</a></th>
     <th>Gets Food</th>
-    {{ block.super }}
+    {{ super() }}
 {% endblock tableheadings %}
 
 {% block tablerows %}
     <td>
-        {{ attendee.site_number_label }}
+        {% if attendee.site_number %}{{ attendee.site_number_label }}{% endif %}
     </td>
     <td>
         {{ attendee.gets_food|yesno("Yes,No") }}
     </td>
-    {{ block.super }}
+    {{ super() }}
 {% endblock tablerows %}
