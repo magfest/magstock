@@ -11,7 +11,7 @@
         {{ attendee.site_number_label }}
     </td>
     <td>
-        {{ attendee.gets_food|yesno:"Yes,No" }}
+        {{ attendee.gets_food|yesno("Yes,No") }}
     </td>
     {{ block.super }}
 {% endblock tablerows %}
