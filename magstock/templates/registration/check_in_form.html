@@ -9,7 +9,7 @@
         <td>
             <select name="site_number">
                 <option value="">Choose a campsite, if applicable</option>
-                {% options c.CAMPSITE_OPTS attendee.site_number %}
+                {{ options(c.CAMPSITE_OPTS,attendee.site_number) }}
             </select>
         </td>
     </tr>
