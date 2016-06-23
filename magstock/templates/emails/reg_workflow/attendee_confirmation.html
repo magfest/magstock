@@ -21,11 +21,11 @@ No registration materials are physically mailed before the event, so you should 
 <br/><br/>
 Please note: due to space restrictions, there will NO Parking allowed in the campsites this year. All vehicles must be in the designated parking lot.
 
-{% if attendee.donation_swag|add:attendee.addons %}
+{% if attendee.donation_swag|list + attendee.addons|list %}
     <br/> <br/>
-    Your additional contribution of ${{ attendee.amount_extra|add:attendee.food_cost }} provides you with these bonuses:
+    Your additional contribution of ${{ attendee.amount_extra + attendee.food_cost }} provides you with these bonuses:
     <ul>
-    {% for swag in attendee.donation_swag|add:attendee.addons %}
+    {% for swag in attendee.donation_swag|list + attendee.addons|list %}
         <li>{{ swag }}</li>
     {% endfor %}
     </ul>
