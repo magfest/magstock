@@ -1,8 +1,10 @@
-{% comment %}Magstock-specific: don't worry about shirt and food prerequisites for Magstock{% endcomment%}
+{% import 'macros.html' as macros %}
+
+{# Magstock-specific: don't worry about shirt and food prerequisites for Magstock #}
 
 {% if attendee.takes_shifts %}
     <li>
-        {% checked_if attendee.shifts %}
+        {{ macros.checklist_image(attendee.shifts) }}
         {% if not attendee.placeholder %}
             <a href="shifts">Sign up</a>
         {% else %}
