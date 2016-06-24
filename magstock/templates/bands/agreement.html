@@ -13,7 +13,7 @@ to ensure that performances occur in a timely fashion.
 {{ band_info.performer_count|default:band.estimated_performer_count }}
 air-conditioned cabin space{{ band_info.performer_count|default:band.estimated_performer_count|pluralize }}
 with instrument storage will be provided
-(arriving {{ c.EPOCH|datetime:"%A, %B %d" }}, departing {{ c.ESCHATON|datetime:"%A, %B %d" }}),
+(arriving {{ c.EPOCH|datetime("%A, %B %d") }}, departing {{ c.ESCHATON|datetime("%A, %B %d") }}),
 for each performer.
     <br><br>
 Cabin space is limited, so cabins may be shared between performers.
