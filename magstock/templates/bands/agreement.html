@@ -10,8 +10,8 @@ to ensure that performances occur in a timely fashion.
 {% endblock %}
 
 {% block band_text_accommodations_inner %}
-{{ band_info.performer_count|default:band.estimated_performer_count }}
-air-conditioned cabin space{{ band_info.performer_count|default:band.estimated_performer_count|pluralize }}
+{{ band_info.performer_count|default(band.estimated_performer_count) }}
+air-conditioned cabin space{{ band_info.performer_count|default(band.estimated_performer_count)|pluralize }}
 with instrument storage will be provided
 (arriving {{ c.EPOCH|datetime("%A, %B %d") }}, departing {{ c.ESCHATON|datetime("%A, %B %d") }}),
 for each performer.
