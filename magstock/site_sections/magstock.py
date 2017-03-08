@@ -58,7 +58,7 @@ class Root:
         campsite_assignments = []
         for site_id, site_name in c.CAMPSITE_OPTS:
             campsite_assignments.append({'site_name': site_name, 'attendees':
-                session.query(Attendee).filter(cast(site_id, sqlalchemy.String) == Attendee.site_number).all()})
+                session.query(Attendee).filter(site_id == Attendee.site_number).all()})
 
         return {
             'campsite_assignments': campsite_assignments
