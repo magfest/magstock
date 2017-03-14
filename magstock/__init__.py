@@ -11,6 +11,8 @@ c.MENU.append_menu_item(
     MenuItem(name='MAGStock', submenu=[
         MenuItem(name='Tent Groupings', href='../magstock/grouped'),
         MenuItem(name='Food Report', href='../magstock/food_consumers'),
+        MenuItem(name='Campsite Assignments', href='../magstock/campsite_assignments'),
+        MenuItem(name='Parking Info', href='../magstock/parking'),
     ])
 )
 
