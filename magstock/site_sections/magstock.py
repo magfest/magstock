@@ -1,4 +1,5 @@
 from uber.common import *
+from sqlalchemy.sql.expression import cast
 
 
 @all_renderable(c.PEOPLE)
@@ -39,8 +40,38 @@ class Root:
             'grouped': sorted({frozenset(group) for group in lookup.values() if any_match(group)}, key=len, reverse=True)
         }
 
-    def food_purchases(self, session):
-        return {'attendees': session.food_purchasers().order_by(Attendee.full_name).all()}
+    def food_consumers(self, session):
+        attendees = sorted(session.food_consumers(), key=lambda a: a.full_name)
+        paid_food_count = len([a for a in attendees if a.purchased_food])
+        free_food_count = len(attendees) - paid_food_count
+        return {
+            'attendees': attendees,
+            'paid_food_count': paid_food_count,
+            'free_food_count': free_food_count,
+        }
+
+    def campsite_assignments(self, session):
+        """
+        This report shows all campsites and who is in them (or no one)
+        """
+
+        campsite_assignments = []
+        for site_id, site_name in c.CAMPSITE_OPTS:
+            campsite_assignments.append({'site_name': site_name, 'attendees':
+                session.query(Attendee).filter(cast(site_id, sqlalchemy.String) == Attendee.site_number).all()})
+
+        return {
+            'campsite_assignments': campsite_assignments
+        }
+
+    def parking(self, session):
+        """
+        This report shows all cars parked in places
+        """
+
+        return {
+            'attendees': session.query(Attendee).filter().all()
+        }
 
     @ajax
     def set_extra_checkin_fields(self, session, id, site_number, license_plate):

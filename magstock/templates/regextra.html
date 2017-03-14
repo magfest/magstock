@@ -53,19 +53,23 @@
         if ($.field('badge_printed_name')) {
             $.field('badge_printed_name').parents('.form-group').remove();
         }
-        {% if c.PAGE_PATH == '/registration/form' %}
-            $('#vehicle-warning').hide();
-        {% endif %}
+        if ($('#leader_search')) {
+            $('#leader_search').appendTo($.field('coming_with').parents('.form-group'));
+        }
     });
 </script>
 
 <div id="food">
-    {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food %}
+    {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food or attendee.auto_food %}
         <div class="form-group">
             <label class="col-sm-2 optional-field control-label">Want to Buy Food?</label>
             <div class="col-sm-6">
                 {% if c.PAGE_PATH != '/registration/form' and attendee.purchased_food and not attendee.is_new and not attendee.amount_unpaid %}
                     <i>You have already purchased food.</i>
+                    <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
+                    <span style="display:none">{% checkbox attendee.purchased_food %}</span>
+                {% elif attendee.auto_food %}
+                    <i>Free food is included with your registration.</i>
                     <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
                     <span style="display:none">{% checkbox attendee.purchased_food %}</span>
                 {% else %}
@@ -113,10 +117,12 @@
                 {% options c.CAMPING_TYPE_OPTS attendee.camping_type %}
             </select>
         </div>
+        {% if c.PAGE_PATH != '/registration/form' %}
         <p id="vehicle-warning" class="help-block col-sm-6">
             Please note: due to space restrictions, there will NO Parking allowed in the campsites this year.
             All vehicles must be in the designated parking lot.
         </p>
+        {% endif %}
     </div>
 
     <div class="form-group">
@@ -138,19 +144,28 @@
     </div>
 
     {% if c.PAGE_PATH == '/registration/form' %}
-        <div class="form-group" id="allergies">
+        <div class="form-group">
             <label class="col-sm-2 control-label optional-field">Site Number</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="site_number" value="{{ attendee.site_number }}" placeholder="Admin-only field" />
+                <select name="site_number">
+                    <option value="">Choose a campsite, if applicable</option>
+                    {% options c.CAMPSITE_OPTS attendee.site_number %}
+                </select>
             </div>
         </div>
 
-        <div class="form-group" id="allergies">
+        <div class="form-group">
             <label class="col-sm-2 control-label optional-field">License Plate</label>
             <div class="col-sm-6">
                 <input type="text" class="form-control" name="license_plate" value="{{ attendee.license_plate }}" placeholder="Admin-only field" />
             </div>
         </div>
+
+        {% if attendee.coming_as == c.TENT_FOLLOWER %}
+            <p id="leader_search" class="help-block col-sm-6">
+                <a href="index?search_text={{ attendee.coming_with }}" target="_blank">Find Tent Leader</a>
+            </p>
+        {% endif %}
     {% endif %}
 </div>
 

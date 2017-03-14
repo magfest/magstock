@@ -41,9 +41,17 @@ class ExtraConfig:
 
 @Session.model_mixin
 class SessionMixin:
+    def food_consumers(self):
+        """
+        :return: list of anyone who gets food, regardless of if they're comp'd food or if they paid for it
+        """
+        return [a for a in self.query(Attendee).all() if a.gets_food]
+
     def food_purchasers(self):
-        return self.query(Attendee).filter(or_(Attendee.purchased_food == True,
-                                               Attendee.badge_type.in_([c.STAFF_BADGE, c.GUEST_BADGE])))
+        """
+        :return: list of anyone who paid money to get food
+        """
+        return self.query(Attendee).filter(Attendee.purchased_food == True)
 
 
 @Session.model_mixin
@@ -55,8 +63,8 @@ class Attendee:
     noise_level    = Column(Choice(c.NOISE_LEVEL_OPTS), nullable=True)
     camping_type   = Column(Choice(c.CAMPING_TYPE_OPTS), nullable=True)
     purchased_food = Column(Boolean, default=False)
-    license_plate  = Column(UnicodeText, default='')
-    site_number    = Column(UnicodeText, default='')
+    license_plate  = Column(UnicodeText, default='', admin_only=True)
+    site_number    = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
 
     @cost_property
     def food_cost(self):
@@ -64,7 +72,11 @@ class Attendee:
 
     @property
     def auto_food(self):
-        return self.badge_type in [c.STAFF_BADGE, c.GUEST_BADGE]
+        """
+        :return: True if this Attendee automatically gets free food, False if not
+        """
+        return self.badge_type in [c.STAFF_BADGE, c.GUEST_BADGE] or \
+               hasattr(self, 'band') and self.band is not None
 
     @property
     def gets_food(self):
