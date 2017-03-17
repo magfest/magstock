@@ -76,6 +76,11 @@
                     {% checkbox attendee.purchased_food %} Pay an extra <b>${{ c.FOOD_PRICE }}</b> for food.
                 {% endif %}
                 {% popup_link "../static/food_menu.html" "What's on the menu?" %}
+            {% if c.PAGE_PATH != '/registration/form' %}
+            <p id="food-warning" class="help-block">
+                There are a limited number of food passes.
+            </p>
+            {% endif %}
             </div>
         </div>
 
@@ -119,8 +124,9 @@
         </div>
         {% if c.PAGE_PATH != '/registration/form' %}
         <p id="vehicle-warning" class="help-block col-sm-6">
-            Please note: due to space restrictions, there will NO Parking allowed in the campsites this year.
-            All vehicles must be in the designated parking lot.
+            You will only be able to load/unload your vehicle at the campsites. No parking will be permitted without a
+            parking pass. Limited parking passes will be $20/each, sold on-site, and are available on a
+            first-come-first-serve basis.
         </p>
         {% endif %}
     </div>
