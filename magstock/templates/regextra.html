@@ -4,7 +4,7 @@
         $.each(BADGE_TYPES.options, function (i, badgeType) {
             switch (BADGE_TYPES.options[i].extra) {
                 case 0:
-                    $.extend(badgeType, {description: 'Includes three day admission and campground fees.'});
+                    $.extend(badgeType, {description: 'Includes four day admission and campground fees.'});
                     break;
                 case {{ c.SHIRT_LEVEL }}:
                     $.extend(badgeType, {
