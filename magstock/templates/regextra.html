@@ -15,7 +15,7 @@
                     });
                     break;
                 case {{ c.SUPPORTER_LEVEL }}:
-                    $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime('%b %d') }}. Limited quantities.)'});
+                    $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
                     break;
             }
         });
