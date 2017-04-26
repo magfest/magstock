@@ -110,6 +110,3 @@ def camping_checks(attendee):
                 return 'Please tell us who is in your camping group'
             elif attendee.coming_as == c.TENT_FOLLOWER:
                 return 'Please tell us who your camp leader is'
-
-
-Session.initialize_db()
