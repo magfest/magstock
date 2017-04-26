@@ -51,9 +51,6 @@
         if ($.field('purchased_food')) {
             $.field('purchased_food').on('click', showOrHideAllergies);
         }
-        if ($.field('badge_printed_name')) {
-            $.field('badge_printed_name').parents('.form-group').remove();
-        }
         if ($('#leader_search')) {
             $('#leader_search').appendTo($.field('coming_with').parents('.form-group'));
         }
