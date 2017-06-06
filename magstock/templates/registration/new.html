@@ -3,7 +3,7 @@
 {% block tableheadings %}
     <th>Site Number</th>
     <th>License Plate</th>
-    {{ block.super }}
+    {{ super() }}
 {% endblock tableheadings %}
 
 {% block tablerows %}
@@ -14,5 +14,5 @@
         </select>
     </td>
     <td><input form="new_checkin_{{ attendee.id }}" type="text" size="8" name="license_plate" placeholder="License" value="{{ attendee.license_plate }}" /></td>
-    {{ block.super }}
+    {{ super() }}
 {% endblock tablerows %}
