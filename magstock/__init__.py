@@ -85,6 +85,18 @@ class Attendee:
         return self.auto_food or self.purchased_food
 
     @presave_adjustment
+    def free_food_only(self):
+        """
+        Fixes a problem where if someone was marked as purchasing food, they'd be stuck owing money for food
+        even if they later qualified for free food.
+
+        Returns:
+            None
+        """
+        if self.auto_food:
+            self.purchased_food = False
+
+    @presave_adjustment
     def roughing_it(self):
         if self.site_type == c.PRIMITIVE and self.ribbon == c.NO_RIBBON:
             self.ribbon = c.ROUGHING_IT
