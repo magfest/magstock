@@ -98,8 +98,8 @@ class Attendee:
 
     @presave_adjustment
     def roughing_it(self):
-        if self.site_type == c.PRIMITIVE and self.ribbon == c.NO_RIBBON:
-            self.ribbon = c.ROUGHING_IT
+        if self.site_type == c.PRIMITIVE:
+            self.ribbon = add_opt(self.ribbon_ints, c.ROUGHING_IT)
 
     @property
     def addons(self):
