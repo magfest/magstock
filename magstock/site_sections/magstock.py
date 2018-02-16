@@ -22,7 +22,7 @@ class Root:
                     combined = lookup[list(names[word])[0]] | lookup[attendee]
                     for attendee in combined:
                         lookup[attendee] = combined
-                except:
+                except Exception:
                     pass
 
         def match(a):
