@@ -1,5 +1,8 @@
-from uber.common import *
-from sqlalchemy.sql.expression import cast
+from collections import defaultdict
+
+from uber.config import c
+from uber.decorators import ajax, all_renderable
+from uber.models import Attendee
 
 
 @all_renderable(c.PEOPLE)
@@ -27,8 +30,8 @@ class Root:
 
         def match(a):
             return ((not site or a.site_type == int(site))
-                and (not camp or a.camping_type == int(camp))
-                and (not noise or a.noise_level == int(noise)))
+                    and (not camp or a.camping_type == int(camp))
+                    and (not noise or a.noise_level == int(noise)))
 
         def any_match(group):
             return any(match(a) for a in group)
@@ -37,7 +40,8 @@ class Root:
             'camp': camp,
             'site': site,
             'noise': noise,
-            'grouped': sorted({frozenset(group) for group in lookup.values() if any_match(group)}, key=len, reverse=True)
+            'grouped': sorted(
+                {frozenset(group) for group in lookup.values() if any_match(group)}, key=len, reverse=True)
         }
 
     def food_consumers(self, session):
@@ -57,8 +61,10 @@ class Root:
 
         campsite_assignments = []
         for site_id, site_name in c.CAMPSITE_OPTS:
-            campsite_assignments.append({'site_name': site_name, 'attendees':
-                session.query(Attendee).filter(site_id == Attendee.site_number).all()})
+            campsite_assignments.append({
+                'site_name': site_name,
+                'attendees': session.query(Attendee).filter(site_id == Attendee.site_number).all()
+            })
 
         return {
             'campsite_assignments': campsite_assignments

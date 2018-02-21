@@ -1,5 +1,17 @@
-from uber.common import *
-from magstock._version import __version__
+from os.path import join
+
+from sideboard.lib import parse_config
+from sideboard.lib.sa import CoerceUTF8 as UnicodeText
+from sqlalchemy.types import Boolean
+from uber.config import c, Config
+from uber.decorators import cost_property, presave_adjustment, validation
+from uber.menu import MenuItem
+from uber.models import Choice, DefaultColumn as Column, Session
+from uber.jinja import template_overrides
+from uber.utils import add_opt, mount_site_sections, static_overrides
+
+from magstock._version import __version__  # noqa: F401
+
 
 config = parse_config(__file__)
 c.include_plugin_config(config)
@@ -53,20 +65,20 @@ class SessionMixin:
         """
         :return: list of anyone who paid money to get food
         """
-        return self.query(Attendee).filter(Attendee.purchased_food == True)
+        return self.query(Attendee).filter(Attendee.purchased_food == True)  # noqa: E712
 
 
 @Session.model_mixin
 class Attendee:
-    allergies      = Column(UnicodeText, default='')
-    coming_with    = Column(UnicodeText, default='')
-    coming_as      = Column(Choice(c.COMING_AS_OPTS), nullable=True)
-    site_type      = Column(Choice(c.SITE_TYPE_OPTS), nullable=True)
-    noise_level    = Column(Choice(c.NOISE_LEVEL_OPTS), nullable=True)
-    camping_type   = Column(Choice(c.CAMPING_TYPE_OPTS), nullable=True)
+    allergies = Column(UnicodeText, default='')
+    coming_with = Column(UnicodeText, default='')
+    coming_as = Column(Choice(c.COMING_AS_OPTS), nullable=True)
+    site_type = Column(Choice(c.SITE_TYPE_OPTS), nullable=True)
+    noise_level = Column(Choice(c.NOISE_LEVEL_OPTS), nullable=True)
+    camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), nullable=True)
     purchased_food = Column(Boolean, default=False)
-    license_plate  = Column(UnicodeText, default='', admin_only=True)
-    site_number    = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
+    license_plate = Column(UnicodeText, default='', admin_only=True)
+    site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
 
     @cost_property
     def food_cost(self):
@@ -77,8 +89,7 @@ class Attendee:
         """
         :return: True if this Attendee automatically gets free food, False if not
         """
-        return self.badge_type in [c.STAFF_BADGE, c.GUEST_BADGE] or \
-               hasattr(self, 'band') and self.band is not None
+        return self.badge_type in [c.STAFF_BADGE, c.GUEST_BADGE] or hasattr(self, 'band') and self.band is not None
 
     @property
     def gets_food(self):
@@ -87,8 +98,8 @@ class Attendee:
     @presave_adjustment
     def free_food_only(self):
         """
-        Fixes a problem where if someone was marked as purchasing food, they'd be stuck owing money for food
-        even if they later qualified for free food.
+        Fixes a problem where if someone was marked as purchasing food, they'd
+        be stuck owing money for food even if they later qualified for free food.
 
         Returns:
             None
