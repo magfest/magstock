@@ -1,7 +1,7 @@
 from os.path import join
 
+from residue import CoerceUTF8 as UnicodeText
 from sideboard.lib import parse_config
-from sideboard.lib.sa import CoerceUTF8 as UnicodeText
 from sqlalchemy.types import Boolean
 from uber.config import c, Config
 from uber.decorators import cost_property, presave_adjustment, validation
