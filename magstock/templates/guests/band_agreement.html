@@ -1,4 +1,4 @@
-{% extends "guests/agreement-base.html" %}
+{% extends "guests/band_agreement.html" %}
 
 {% block band_text_merch_inner %}
 Tables will be available in our concert tent throughout the weekend for performers' use.
@@ -10,10 +10,8 @@ to ensure that performances occur in a timely fashion.
 {% endblock %}
 
 {% block band_text_accommodations_inner %}
-{{ guest_info.performer_count|default(guest.estimated_performer_count) }}
-air-conditioned cabin space{{ guest_info.performer_count|default(guest.estimated_performer_count)|pluralize }}
-with instrument storage will be provided
-(arriving {{ c.EPOCH|datetime_local("%A, %B %d") }}, departing {{ c.ESCHATON|datetime_local("%A, %B %d") }}),
+An air-conditioned cabin space with instrument storage will be provided
+(arriving {{ c.EPOCH|datetime_local("%A, %B %-d") }}, departing {{ c.ESCHATON|datetime_local("%A, %B %-d") }}),
 for each performer.
     <br><br>
 Cabin space is limited, so cabins may be shared between performers.

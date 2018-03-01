@@ -61,7 +61,7 @@
     {% if c.PAGE_PATH == '/registration/form' or c.FOOD_AVAILABLE or not attendee.is_new and attendee.purchased_food or attendee.auto_food %}
         <div class="form-group">
             <label class="col-sm-3 optional-field control-label">Want to Buy Food?</label>
-            <div class="col-sm-6">
+            <div class="col-sm-6 checkbox">
                 {% if c.PAGE_PATH != '/registration/form' and attendee.purchased_food and not attendee.is_new and not attendee.amount_unpaid %}
                     <i>You have already purchased food.</i>
                     <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
@@ -71,7 +71,7 @@
                     <!-- We still place a checkbox on the page because we've written our Javascript to expect one. -->
                     <span style="display:none">{{ macros.checkbox(attendee, 'purchased_food') }}</span>
                 {% else %}
-                    {{ macros.checkbox(attendee, 'purchased_food') }} Pay an extra <b>${{ c.FOOD_PRICE }}</b> for food.
+                    {{ macros.checkbox(attendee, 'purchased_food', label='Pay an extra') }} <b>${{ c.FOOD_PRICE }}</b> for food.
                 {% endif %}
 
                 {{ macros.popup_link("../static/food_menu.html", "What's on the menu?") }}

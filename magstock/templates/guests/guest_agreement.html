@@ -1,0 +1,33 @@
+{% extends "guests/guest_agreement.html" %}
+
+{% block guest_text_merch_inner %}
+Tables will be available in our concert tent throughout the weekend for guests' use.
+{% endblock %}
+
+{% block guest_text_accommodations_inner %}
+An air-conditioned cabin space with equipment storage will be provided
+(arriving {{ c.EPOCH|datetime_local("%A, %B %-d") }}, departing {{ c.ESCHATON|datetime_local("%A, %B %-d") }}),
+for each guest.
+    <br><br>
+Cabin space is limited, so cabins may be shared between guests.
+    <br><br>
+Alternately, guests may choose to camp in a tent, if they desire.
+Air-conditioned equipment storage will still be provided.
+    <br><br>
+Additional space, and camping equipment will be the responsibility of the guest.
+    <br><br>
+<strong>Guests <em>must</em> be free and clear of guest cabins by noon Sunday.</strong>
+    <br><br>
+This is a requirement of the campground and non-negotiable.
+{% endblock %}
+
+{% block guest_text_parking_inner %}
+Available outside guest cabins, or in the campground parking lot.
+{% endblock %}
+
+{% block guest_text_admission_inner %}
+Each guest will receive one admission wristband, good for the duration of the event,
+and one additional complimentary wristband for their +1.
+<br><br>
+Additional complimentary wristbands may be issued on request.
+{% endblock %}
