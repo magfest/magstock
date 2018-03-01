@@ -17,6 +17,10 @@
                 case {{ c.SUPPORTER_LEVEL }}:
                     $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
                     break;
+                    break;
+                case {{ c.SEASON_LEVEL }}:
+                    $.extend(badgeType, {description: 'Supporter level plus CRAZY AWESOME swag! (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
+                    break;
             }
         });
 
