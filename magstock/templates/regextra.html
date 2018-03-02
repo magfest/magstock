@@ -116,8 +116,8 @@
                 {{ options(c.SITE_TYPE_OPTS, attendee.site_type) }}
             </select>
         </div>
-    </div>
         {% if c.PAGE_PATH != '/registration/form' %}
+        <div class="clearfix"></div>
         <p id="site_type-info" class="help-block col-sm-9 col-sm-offset-3">
             Primitive Sites, while offering NO at-site electricity or water, are located farther away from the main drag.
             This offers a quieter camping location with lake-side views, plus, you get a neat token expressing our thanks
@@ -135,6 +135,7 @@
             </select>
         </div>
         {% if c.PAGE_PATH != '/registration/form' %}
+        <div class="clearfix"></div>
         <p id="vehicle-warning" class="help-block col-sm-9 col-sm-offset-3">
             You will only be able to load/unload your vehicle at the campsites. No parking will be permitted without a
             parking pass. Limited parking passes will be $20/each, sold on-site, and are available on a
