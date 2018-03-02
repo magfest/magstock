@@ -117,6 +117,14 @@
             </select>
         </div>
     </div>
+        {% if c.PAGE_PATH != '/registration/form' %}
+        <p id="site_type-info" class="help-block col-sm-9 col-sm-offset-3">
+            Primitive Sites, while offering NO at-site electricity or water, are located farther away from the main drag.
+            This offers a quieter camping location with lake-side views, plus, you get a neat token expressing our thanks
+            in roughing it a little bit ;)
+        </p>
+        {% endif %}
+    </div>
 
     <div class="form-group">
         <label class="col-sm-3 control-label">How are you camping?</label>
