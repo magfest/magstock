@@ -2,35 +2,48 @@
 
 <script type="text/javascript">
     if (window.BADGE_TYPES) {
-        $.each(BADGE_TYPES.options, function (i, badgeType) {
-            switch (BADGE_TYPES.options[i].extra) {
-                case 0:
-                    $.extend(badgeType, {description: 'Includes four day admission and campground fees.'});
-                    break;
-                case {{ c.SHIRT_LEVEL }}:
-                    $.extend(badgeType, {
-                        title: 'Add a T-Shirt',
-                        description: 'Attendee level plus a MAGStock-themed t-shirt.',
-                        extra: {{ c.SHIRT_LEVEL }}
-                    });
-                    break;
-                case {{ c.SUPPORTER_LEVEL }}:
-                    $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
-                    break;
-                    break;
-                case {{ c.SEASON_LEVEL }}:
-                    $.extend(badgeType, {description: 'Supporter level plus CRAZY AWESOME swag! (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
-                    break;
-            }
-        });
 
-        $(function () {
-            if ($.field('amount_extra')) {
-                $.field('amount_extra').parents('.form-group').hide();
-                $('.affiliate-row').remove();
-            }
-        });
+      // New Style Kickin Levels
+      //
+      window.BADGE_TYPES.options[0].description = 'Allows access to the festival for its duration ({{ c.EPOCH|datetime_local("%b %-d") }}-{{ c.ESCHATON|datetime_local("%b %-d") }}). {{ price_notice("Preregistration",c.PREREG_TAKEDOWN) }}';
+      $(function() {
+          if ($(".badge-type-selector").size()) {
+              $(".badge-type-selector").parents('.form-group').hide();
+          }
+      })
+
+      // Old Style Badge Levels
+      //
+      // $.each(BADGE_TYPES.options, function (i, badgeType) {
+      //     switch (BADGE_TYPES.options[i].extra) {
+      //         case 0:
+      //             $.extend(badgeType, {description: 'Includes four day admission and campground fees.'});
+      //             break;
+      //         case {{ c.SHIRT_LEVEL }}:
+      //             $.extend(badgeType, {
+      //                 title: 'Add a T-Shirt',
+      //                 description: 'Attendee level plus a MAGStock-themed t-shirt.',
+      //                 extra: {{ c.SHIRT_LEVEL }}
+      //             });
+      //             break;
+      //         case {{ c.SUPPORTER_LEVEL }}:
+      //             $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
+      //             break;
+      //             break;
+      //         case {{ c.SEASON_LEVEL }}:
+      //             $.extend(badgeType, {description: 'Supporter level plus CRAZY AWESOME swag! (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
+      //             break;
+      //     }
+      // });
+      //
+      // $(function () {
+      //     if ($.field('amount_extra')) {
+      //         $.field('amount_extra').parents('.form-group').hide();
+      //         $('.affiliate-row').remove();
+      //     }
+      // });
     }
+
     var showOrHideAllergies = function () {
         setVisible('#allergies', ($.field('purchased_food') != null && $.field('purchased_food').is(':checked')) || {{ attendee.auto_food|yesno('true,false') }});
     };
