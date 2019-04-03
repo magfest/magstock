@@ -4,7 +4,7 @@ from residue import CoerceUTF8 as UnicodeText
 from sideboard.lib import parse_config
 from sqlalchemy.types import Boolean
 from uber.config import c, Config
-from uber.decorators import cost_property, presave_adjustment, validation
+from uber.decorators import cost_property, prereg_validation, presave_adjustment, validation
 from uber.menu import MenuItem
 from uber.models import Choice, DefaultColumn as Column, Session
 from uber.jinja import template_overrides
@@ -70,8 +70,8 @@ class SessionMixin:
 
 @Session.model_mixin
 class Attendee:
-    allergies = Column(UnicodeText, default='')
-    coming_with = Column(UnicodeText, default='')
+    allergies = Column(UnicodeText)
+    coming_with = Column(UnicodeText)
     coming_as = Column(Choice(c.COMING_AS_OPTS), nullable=True)
     site_type = Column(Choice(c.SITE_TYPE_OPTS), nullable=True)
     noise_level = Column(Choice(c.NOISE_LEVEL_OPTS), nullable=True)
@@ -79,6 +79,8 @@ class Attendee:
     purchased_food = Column(Boolean, default=False)
     license_plate = Column(UnicodeText, default='', admin_only=True)
     site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
+    waiver_signature = Column(UnicodeText)
+    waiver_consent = Column(Boolean, default=False)
 
     @cost_property
     def food_cost(self):
@@ -133,3 +135,14 @@ def camping_checks(attendee):
                 return 'Please tell us who is in your camping group'
             elif attendee.coming_as == c.TENT_FOLLOWER:
                 return 'Please tell us who your camp leader is'
+
+
+@prereg_validation.Attendee
+def waiver_consent(attendee):
+    if not attendee.waiver_signature:
+        return 'You must sign your full legal name to consent to the waiver'
+    elif attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
+        return 'Your waiver signature must match your full legal name, {}'.format(
+            attendee.legal_first_name + ' ' + attendee.legal_last_name)
+    elif not attendee.waiver_consent:
+        return 'You must check the waiver consent checkbox'
