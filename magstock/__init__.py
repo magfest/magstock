@@ -77,7 +77,7 @@ class Attendee:
     noise_level = Column(Choice(c.NOISE_LEVEL_OPTS), nullable=True)
     camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), nullable=True)
     purchased_food = Column(Boolean, default=False)
-    license_plate = Column(UnicodeText, default='', admin_only=True)
+    license_plate = Column(UnicodeText, default='')
     site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
 
     @cost_property
