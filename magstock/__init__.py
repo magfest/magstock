@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from os.path import join
 
 from residue import CoerceUTF8 as UnicodeText
 from sideboard.lib import parse_config
-from sqlalchemy.types import Boolean
+from sqlalchemy.types import Boolean, Date
 from uber.config import c, Config
 from uber.decorators import cost_property, prereg_validation, presave_adjustment, validation
 from uber.menu import MenuItem
@@ -81,6 +83,7 @@ class Attendee:
     site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
     waiver_signature = Column(UnicodeText)
     waiver_consent = Column(Boolean, default=False)
+    waiver_date = Column(Date, nullable=True, default=None)
 
     @cost_property
     def food_cost(self):
@@ -146,3 +149,5 @@ def waiver_consent(attendee):
             attendee.legal_first_name + ' ' + attendee.legal_last_name)
     elif not attendee.waiver_consent:
         return 'You must check the waiver consent checkbox'
+    elif attendee.waiver_date != datetime.utcnow().date():
+        return 'Your date of signature should be today'
