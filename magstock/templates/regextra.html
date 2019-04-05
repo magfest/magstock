@@ -225,6 +225,7 @@
     <label class="col-sm-3 control-label">Date of Signature</label>
     <div class="col-sm-6">
       <input type="text" class="form-control" value="{{ now()|datetime_local("%Y-%m-%d") }}" disabled />
+      {# The visible form input is in local time and we use the hidden input to store the real UTC date #}
       <input type="hidden" name="waiver_date" id="waiver_date" value="{{ now()|datetime("%Y-%m-%d") }}" />
     </div>
     </div>
