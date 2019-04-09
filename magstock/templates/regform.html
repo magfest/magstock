@@ -297,7 +297,6 @@
                 <p class="help-block col-sm-offset-3 col-sm-9">
                     Each level includes all lower levels. <br/>
                     Supporter level and higher {% if c.BEFORE_SUPPORTER_DEADLINE %}are{% else %}were{% endif %} only available until {{ c.SUPPORTER_DEADLINE|datetime_local }}.<br/>
-                    Shirt level up to Supporter level {% if c.BEFORE_SHIRT_DEADLINE %}are{% else %}were{% endif %} only available until {{ c.SHIRT_DEADLINE|datetime_local }}.
                 </p>
             </div>
         {% endif %}
