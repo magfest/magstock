@@ -214,7 +214,34 @@
     </script>
 {% endif %}
 
-{% if is_prereg_form or c.PAGE_PATH == '/preregistration/transfer_badge' or attendee.is_new %}
+{% if c.PAGE == 'confirm' and not attendee.placeholder %}
+  <div id="waiver_consent_wrapper">
+    <div class="col-sm-12"><br/>You signed the waiver: {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}.</div>
+  <div class="form-group">
+    <div class="clearfix"></div>
+    <label class="col-sm-3 control-label">Electronic Signature</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" name="waiver_signature" value="{{ attendee.waiver_signature }}" placeholder="Name exactly as it appears on Photo ID" required disabled />
+    </div>
+  </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Date of Signature</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" value="{{ attendee.waiver_date }}" disabled />
+      {# The visible form input is in local time and we use the hidden input to store the real UTC date #}
+      <input type="hidden" name="waiver_date" id="waiver_date" value="{{ attendee.waiver_date }}" />
+    </div>
+    </div>
+    <div class="form-group">
+      <div class="checkbox col-sm-9 col-sm-offset-3">
+        <label for="waiver_consent" class="checkbox-label">
+          <input type="checkbox" name="waiver_consent" id="waiver_consent" value="1" required checked disabled />
+          <strong>Yes</strong>, I understand that checking this box constitutes a legal signature confirming that I acknowledge and agree to the above waiver.
+        </label>
+      </div>
+    </div>
+  </div> 
+{% elif is_prereg_form or c.PAGE_PATH == '/preregistration/transfer_badge' or attendee.is_new %}
   <div id="waiver_consent_wrapper">
     <div class="col-sm-12"><br/><strong>We require all attendees to sign a waiver before registering.</strong> Please {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.</div>
   <div class="form-group">
