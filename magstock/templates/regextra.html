@@ -214,7 +214,7 @@
     </script>
 {% endif %}
 
-{% if c.PAGE == 'confirm' and not attendee.placeholder %}
+{% if c.PAGE_PATH == '/preregistration/confirm' and not attendee.placeholder %}
   <div id="waiver_consent_wrapper">
     <div class="col-sm-12"><br/>You signed the waiver: {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}.</div>
   <div class="form-group">
