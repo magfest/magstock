@@ -149,5 +149,5 @@ def waiver_consent(attendee):
             attendee.legal_first_name + ' ' + attendee.legal_last_name)
     elif not attendee.waiver_consent:
         return 'You must check the waiver consent checkbox'
-    elif attendee.waiver_date >= datetime.utcnow().date():
+    elif attendee.waiver_date <= datetime.utcnow().date():
         return 'Your date of signature should be in the past'
