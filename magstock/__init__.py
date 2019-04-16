@@ -142,10 +142,13 @@ def camping_checks(attendee):
 
 @prereg_validation.Attendee
 def waiver_consent(attendee):
-    if not attendee.waiver_signature:
-        return 'You must sign your full legal name to consent to the waiver'
-    elif attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
-        return 'Your waiver signature must match your full legal name, {}'.format(
-            attendee.legal_first_name + ' ' + attendee.legal_last_name)
-    elif not attendee.waiver_consent:
-        return 'You must check the waiver consent checkbox'
+    if attendee.is_new or attendee.placeholder:
+        if not attendee.waiver_signature:
+            return 'You must sign your full legal name to consent to the waiver'
+        elif attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
+            return 'Your waiver signature must match your full legal name, {}'.format(
+                attendee.legal_first_name + ' ' + attendee.legal_last_name)
+        elif not attendee.waiver_consent:
+            return 'You must check the waiver consent checkbox'
+        elif attendee.waiver_date != datetime.utcnow().date():
+            return 'Your date of signature should be today'
