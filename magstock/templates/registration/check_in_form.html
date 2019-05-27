@@ -23,9 +23,17 @@
             <td><a href="index?search_text={{ attendee.coming_with }}" target="_blank">Find Tent Leader</a></td>
         </tr>
     {% endif %}
+    {% if attendee.amount_extra %}
     <tr>
         <td><strong>Kick-in Level</strong></td>
         <td>{{ attendee.amount_extra_label }}</td>
     </tr>
+    {% endif %}
+    {% if attendee.amount_extra >= c.SHIRT_LEVEL %}
+    <tr>
+      <td><strong>T-Shirt Size</strong></td>
+      <td>{{ attendee.shirt_label or 'Not Selected' }}</td>
+    </tr>
+    {% endif %}
     {{ super() }}
 {% endblock checkin_fields %}

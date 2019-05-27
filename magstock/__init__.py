@@ -5,6 +5,7 @@ from os.path import join
 from residue import CoerceUTF8 as UnicodeText
 from sideboard.lib import parse_config
 from sqlalchemy.types import Boolean, Date
+from uber.api import AttendeeLookup
 from uber.config import c, Config
 from uber.decorators import cost_property, prereg_validation, presave_adjustment, validation
 from uber.menu import MenuItem
@@ -30,6 +31,7 @@ c.MENU.append_menu_item(
     ])
 )
 
+AttendeeLookup.fields_full['gets_food'] = True
 
 @Config.mixin
 class ExtraConfig:
