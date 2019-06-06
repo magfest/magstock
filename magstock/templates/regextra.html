@@ -78,7 +78,7 @@
 </script>
 
 <div id="food">
-    {% if is_prereg_form and c.FOOD_AVAILABLE or not attendee.is_new and (attendee.purchased_food or attendee.auto_food) %}
+    {% if admin_area or is_prereg_form and c.FOOD_AVAILABLE or not attendee.is_new and (attendee.purchased_food or attendee.auto_food) %}
         <div class="form-group">
             <label class="col-sm-3 optional-field control-label">Want to Buy Food?</label>
             <div class="col-sm-6 checkbox">
