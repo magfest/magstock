@@ -5,7 +5,7 @@ from uber.decorators import ajax, all_renderable
 from uber.models import Attendee
 
 
-@all_renderable(c.PEOPLE)
+@all_renderable()
 class Root:
     def grouped(self, session, noise=None, site=None, camp=None):
         attendees = session.query(Attendee).all()
