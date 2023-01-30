@@ -1,4 +1,4 @@
-FROM ghcr.io/magfest/magprime:main
+FROM ghcr.io/magfest/ubersystem:main
 
 # add our code
 COPY . plugins/magstock/
