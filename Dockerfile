@@ -1,6 +1,7 @@
 FROM ghcr.io/magfest/ubersystem:main
 
-# add our code
+# install plugins
 COPY . plugins/magstock/
-RUN if [ -d plugins/magstock/plugins ]; then mv plugins/magstock/plugins/* plugins/; fi
+# RUN git clone --depth 1 --branch main https://github.com/magfest/covid.git plugins/covid
+
 RUN /app/env/bin/paver install_deps
