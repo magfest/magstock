@@ -19,19 +19,8 @@ class Root:
             for attendee in xs:
                 lookup[attendee] = xs
 
-        for attendee in attendees:
-            for word in attendee.coming_with.lower().replace(',', ' ').split():
-                try:
-                    combined = lookup[list(names[word])[0]] | lookup[attendee]
-                    for attendee in combined:
-                        lookup[attendee] = combined
-                except Exception:
-                    pass
-
         def match(a):
-            return ((not site or a.site_type == int(site))
-                    and (not camp or a.camping_type == int(camp))
-                    and (not noise or a.noise_level == int(noise)))
+            return (not camp or a.camping_type == int(camp))
 
         def any_match(group):
             return any(match(a) for a in group)

@@ -18,21 +18,9 @@ this does mean that this report sometimes groups people together who have the sa
 
 <table style="width:100% ; margin-top:10px"><tr>
     <td width="33%" align="center">
-        <select id="site">
-            <option value="">Filter on Site Type</option>
-            {{ options(c.SITE_TYPE_OPTS,site) }}
-        </select>
-    </td>
-    <td width="33%" align="center">
         <select id="camp">
             <option value="">Filter on Camping Type</option>
             {{ options(c.CAMPING_TYPE_OPTS,camp) }}
-        </select>
-    </td>
-    <td width="33%" align="center">
-        <select id="noise">
-            <option value="">Filter on Noise Level</option>
-            {{ options(c.NOISE_LEVEL_OPTS,noise) }}
         </select>
     </td>
 </tr></table>
@@ -51,11 +39,7 @@ this does mean that this report sometimes groups people together who have the sa
             {% for attendee in attendees %}
                 <tr>
                     <td>{{ attendee|form_link }}</td>
-                    <td>{{ attendee.site_type_label }}</td>
                     <td>{{ attendee.camping_type_label }}</td>
-                    <td>{{ attendee.noise_level_label }}</td>
-                    <td>{{ attendee.coming_as_label }}</td>
-                    <td>{{ attendee.coming_with|linebreaksbr }}</td>
                 </tr>
             {% endfor %}
         </tbody>
