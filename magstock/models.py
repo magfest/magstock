@@ -66,7 +66,9 @@ class Attendee:
     
     @property
     def available_cabin_types(self):
-        return [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
+        if self.cabin_type:
+            return [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
+        return c.CABIN_TYPE_OPTS
 
     @property
     def purchased_food(self):
@@ -87,9 +89,9 @@ class Attendee:
     def addons(self):
         addon_list = []
         if self.brunch_tickets:
-            addon_list.append('{} brunch tickets (${}/ticket)'.format(self.brunch_tickets, c.FOOD_PRICE))
+            addon_list.append('{} brunch ticket(s) (${}/ticket)'.format(self.brunch_tickets, c.FOOD_PRICE))
         if self.dinner_tickets:
-            addon_list.append('{} dinner tickets (${}/ticket)'.format(self.dinner_tickets, c.FOOD_PRICE))
+            addon_list.append('{} dinner ticket(s) (${}/ticket)'.format(self.dinner_tickets, c.FOOD_PRICE))
         if self.camping_type == c.CABIN:
             addon_list.append(self.cabin_type_label)
         elif int(c.CAMPING_TYPE_PRICES[self.camping_type]):
