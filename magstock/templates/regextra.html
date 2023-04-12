@@ -79,8 +79,8 @@
             $('#no-early-checkin').insertBefore('#reg-types');
             $.field('acknowledged_checkin_policy').attr('form', 'prereg-form');
         }
-        if ($('#food').size() && $.field('amount_extra')) {
-            $('#food').insertAfter($.field('amount_extra').parents('.form-group'));
+        if ($('#food').size()) {
+            $('#food').insertAfter($('.extra-row').last().parents('.form-group'));
         }
         $('#camping-types').insertAfter($('#food'));
         $('#extra-fields').insertBefore($.field('staffing').parents('.form-group'));
