@@ -26,22 +26,6 @@ class ExtraConfig:
     def FOOD_COUNT(self):
         with Session() as session:
             return len(session.food_consumers())
-
-    @property
-    def PREREG_DONATION_OPTS(self):
-        """
-        We're overriding this so that we can cut off Supporter registrations
-        after we've sold a capped number and so that we can cut off shirt sales
-        after the supporter deadline (MAGStock doesn't assume inventory risk on
-        tshirts so they only sell them to people who preorder and do not sell
-        any on-site).
-        """
-        if self.AFTER_SUPPORTER_DEADLINE:
-            return [(amt, desc) for amt, desc in self.DONATION_TIER_OPTS if amt < self.SHIRT_LEVEL]
-        elif not self.SUPPORTER_AVAILABLE:
-            return [(amt, desc) for amt, desc in self.DONATION_TIER_OPTS if amt < self.SUPPORTER_LEVEL]
-        else:
-            return self.DONATION_TIER_OPTS
         
     @property
     def CAMPING_TYPE_BUTTONS(self):

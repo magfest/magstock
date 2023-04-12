@@ -95,6 +95,9 @@
         if ($.field('interests')) {
             $.field('interests').parents('.form-group').hide();
         }
+        if ($.field('onsite_contact')) {
+            $.field('onsite_contact').parents('.form-group').find('.control-label').text('MAGBuddy');
+        }
         {% if money_fields_ro %}
         if ($.field('brunch_tickets')) {
             $.field('brunch_tickets').on('change', function() { updateReceiptPreview('brunch_tickets', $.val('brunch_tickets')) });
