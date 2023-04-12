@@ -30,7 +30,7 @@ class Attendee:
     brunch_tickets = Column(Integer, default=0)
     dinner_tickets = Column(Integer, default=0)
     meal_restrictions = Column(MultiChoice(c.MEAL_TICKET_RESTRICTION_OPTS))
-    camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT)
+    camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT, nullable=True) # TODO: Make non-nullable next year BEFORE standing up servers
     cabin_type = Column(Choice(c.CABIN_TYPE_OPTS), nullable=True)
     license_plate = Column(UnicodeText, default='')
     site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)

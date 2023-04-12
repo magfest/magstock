@@ -57,12 +57,6 @@ def upgrade():
     op.add_column('attendee', sa.Column('cabin_type', sa.Integer(), nullable=True))
     op.add_column('attendee', sa.Column('dinner_tickets', sa.Integer(), server_default='0', nullable=False))
     op.add_column('attendee', sa.Column('meal_restrictions', sa.Unicode(), server_default='', nullable=False))
-    try:
-        op.alter_column('attendee', 'camping_type',
-                existing_type=sa.INTEGER(),
-                nullable=False)
-    except Exception:
-        pass # We don't care that much
     op.drop_column('attendee', 'noise_level')
     op.drop_column('attendee', 'allergies')
     op.drop_column('attendee', 'coming_with')
@@ -78,9 +72,6 @@ def downgrade():
     op.add_column('attendee', sa.Column('coming_with', sa.VARCHAR(), server_default=sa.text("''::character varying"), autoincrement=False, nullable=False))
     op.add_column('attendee', sa.Column('allergies', sa.VARCHAR(), server_default=sa.text("''::character varying"), autoincrement=False, nullable=False))
     op.add_column('attendee', sa.Column('noise_level', sa.INTEGER(), autoincrement=False, nullable=True))
-    op.alter_column('attendee', 'camping_type',
-               existing_type=sa.INTEGER(),
-               nullable=True)
     op.drop_column('attendee', 'meal_restrictions')
     op.drop_column('attendee', 'dinner_tickets')
     op.drop_column('attendee', 'cabin_type')
