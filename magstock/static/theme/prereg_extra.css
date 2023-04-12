@@ -3,5 +3,10 @@ body {
 }
 
 .masthead {
-    padding-top: 35%;
+    padding-top: 25%; /* The height is 25% of the width (750px / 3000px) */
+}
+
+@media
+only screen and (min-resolution:2dppx) {
+    .masthead { background-image: url("../theme/banner_2x.png"); }
 }
