@@ -57,9 +57,12 @@ def upgrade():
     op.add_column('attendee', sa.Column('cabin_type', sa.Integer(), nullable=True))
     op.add_column('attendee', sa.Column('dinner_tickets', sa.Integer(), server_default='0', nullable=False))
     op.add_column('attendee', sa.Column('meal_restrictions', sa.Unicode(), server_default='', nullable=False))
-    op.alter_column('attendee', 'camping_type',
-               existing_type=sa.INTEGER(),
-               nullable=False)
+    try:
+        op.alter_column('attendee', 'camping_type',
+                existing_type=sa.INTEGER(),
+                nullable=False)
+    except Exception:
+        pass # We don't care that much
     op.drop_column('attendee', 'noise_level')
     op.drop_column('attendee', 'allergies')
     op.drop_column('attendee', 'coming_with')
