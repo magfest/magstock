@@ -95,8 +95,8 @@ class Attendee:
             addon_list.append('{} brunch ticket(s) (${}/ticket)'.format(self.brunch_tickets, c.FOOD_PRICE))
         if self.dinner_tickets:
             addon_list.append('{} dinner ticket(s) (${}/ticket)'.format(self.dinner_tickets, c.FOOD_PRICE))
-        if self.camping_type == c.CABIN:
+        if self.camping_type and self.camping_type == c.CABIN and self.cabin_type:
             addon_list.append(self.cabin_type_label)
-        elif int(c.CAMPING_TYPE_PRICES[self.camping_type]):
+        elif self.camping_type and int(c.CAMPING_TYPE_PRICES[self.camping_type]):
             addon_list.append('{}{}'.format(self.camping_type_label, ' parking pass' if self.camping_type in [c.CAR, c.RV] else ''))
         return addon_list
