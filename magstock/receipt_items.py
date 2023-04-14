@@ -25,7 +25,10 @@ def dinner_tickets_cost(attendee):
 
 @cost_calculation.Attendee
 def camping_type_cost(attendee):
+    if not attendee.camping_type:
+        return
     if attendee.camping_type == c.CABIN:
+        if not attendee.cabin_type:
+            return
         return (attendee.cabin_type_label, int(c.CABIN_TYPE_PRICES[attendee.cabin_type]) * 100)
-    elif int(c.CAMPING_TYPE_PRICES[attendee.camping_type]):
-        return (attendee.camping_type_label, int(c.CAMPING_TYPE_PRICES[attendee.camping_type]) * 100)
+    return (attendee.camping_type_label, int(c.CAMPING_TYPE_PRICES[attendee.camping_type]) * 100)
