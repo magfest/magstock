@@ -60,7 +60,10 @@ class Attendee:
                 current_cost = c.CAMPING_TYPE_PRICES[self.camping_type]
             else:
                 current_cost = c.CABIN_TYPE_PRICES[self.cabin_type]
-            new_cost = c.CABIN_TYPE_PRICES[kwargs['cabin_type']]
+            if kwargs['cabin_type']:
+                new_cost = c.CABIN_TYPE_PRICES[kwargs['cabin_type']]
+            else:
+                new_cost = 0
 
         return int(current_cost) * 100, (int(new_cost) * 100) - (int(current_cost) * 100)
     
