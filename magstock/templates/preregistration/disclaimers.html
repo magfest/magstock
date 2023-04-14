@@ -1,0 +1,48 @@
+
+<h4 class="text-danger">Disclaimers</h4>
+<ul>
+  <li>
+    Please review our registration policies and other
+    <a href="https://magstock.org/faq/" target="_blank">frequently asked questions</a>
+    prior to purchasing your registration for important information.
+  </li>
+  <li>
+    If you don't pay for your registration, it will be deleted and you will
+    have to pay full price at the door.
+  </li>
+  <li>
+    {{ c.EVENT_NAME }} has a <a href="https://magstock.org/faq/#does-magstock-offer-refunds" target="_blank">limited refund policy</a>
+    but you may <a href="https://magstock.org/faq/#how-do-i-sell-or-transfer-my-badge" target="_blank">sell/transfer your registration</a>.
+  </li>
+  <li>
+    MAGFest has a <a href="https://magstock.org/faq/#i-bought-more-than-one-wristband-in-my-name-will-multiple-wristbands-be-a-problem" target="_blank">one wristband per person policy</a>.
+    If you purchase multiple wristbands (for your family, as a gift), please
+    ensure that each wristband is purchased in the name of the individual who the
+    wristband is intended for. You may use the same email address for multiple
+    wristbands so any surprises aren't ruined.
+  </li>
+  <li>
+    Attendees (including {{ c.DEALER_TERM }}s) must abide by our
+    <a href="https://magstock.org/rules/" target="_blank">code of conduct</a>.
+  </li>
+  {% if c.CONSENT_FORM_URL %}
+    <li>
+      Attendees under 18 MUST bring a
+      <a href="http://super.magfest.org/parentalconsentform" target="_blank">signed parental consent form</a>,
+      which MUST be notarized if the parent is not with the minor when the
+      wristband is picked up. Also, all children 12 and under will need to be
+      accompanied by an adult with a paid registration.
+    </li>
+  {% endif %}
+  {% if c.DEALER_REG_START and attendee and attendee.is_dealer %}
+    <li>
+      Submitting this form to vend does not guarantee you will be selected for the Marketplace - it is only the application.
+    </li>
+  {% endif %}
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        window.scrollTo(0,0);
+    });
+</script>

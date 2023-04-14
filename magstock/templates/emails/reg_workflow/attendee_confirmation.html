@@ -8,22 +8,17 @@ You ({{ attendee.full_name }}) have preregistered for {{ c.EVENT_NAME }}
 {% else %}
     and your payment of ${{ attendee.amount_paid }} has been received.
 {% endif %}
-Your registration confirmation number is {{ attendee.id }}, and you can update your information or kick in
-{% if attendee.amount_extra %}
-    even more
-{% endif %}
+Your registration confirmation number is {{ attendee.id }}, and you can update your information, preorder merch, or donate
 extra money <a href="{{ c.URL_BASE }}/preregistration/confirm?id={{ attendee.id }}">here</a>.
 
 <br/> <br/>
 
-No registration materials are physically mailed before the event, so you should check in at the registration desk when you arrive at MAGStock. Simply bring a photo ID to the registration desk, where you'll be provided with your admission wristband. If you ordered bonus items such as a t-shirt or supporter package, you can also pick those up at the registration desk. The location and hours of the registration desk will be e-mailed prior to the event.
-
-<br/><br/>
-Please note: due to space restrictions, there will NO Parking allowed in the campsites this year. All vehicles must be in the designated parking lot.
+No registration materials are physically mailed before the event, so you should check in at the registration desk when you arrive at MAGStock. Simply bring a photo ID and <a href="{{ c.COVID_POLICIES_URL }}" target="_blank">proof of vaccination</a> to the registration desk, where you'll be provided with your admission wristband.
+If you pre-ordered merch such as a t-shirt package, you can also pick those up at the registration desk. The location and hours of the registration desk will be e-mailed prior to the event.
 
 {% if attendee.donation_swag|list + attendee.addons|list %}
     <br/> <br/>
-    Your additional contribution of ${{ attendee.amount_extra + attendee.food_cost }} provides you with these bonuses:
+    Your additional payment of {{ (attendee.amount_extra + attendee.default_brunch_tickets_cost + attendee.default_dinner_tickets_cost + attendee.default_camping_type_cost)|format_currency }} provides you with these add-ons:
     <ul>
     {% for swag in attendee.donation_swag|list + attendee.addons|list %}
         <li>{{ swag }}</li>

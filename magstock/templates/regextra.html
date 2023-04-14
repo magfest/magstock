@@ -55,6 +55,8 @@
         } else {
             $.field('cabin_type').parents('.form-group').hide();
         }
+        setVisible($.field('license_plate').parents('.form-group'),
+                    ($.val('camping_type') == '{{ c.CAR }}' || $.val('camping_type') == '{{ c.RV }}'));
         $.each($("input:radio[name='camping_type']"), function() {
         $(this).parents('.btn').removeClass('active btn-primary');
         $(this).parents('.btn').addClass('btn-default');
@@ -176,7 +178,7 @@
                 {% endfor %}
             </div>
             <p class="help-block">
-                Cars and RVs must park in a large lot behind the public bathrooms.
+                Car and RV camping is restricted to a field adjacent to the communal bathrooms.
                 Please review the information about camping options, including cabin type descriptions, <a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.
             </p>
         </div>
@@ -220,7 +222,7 @@
         <div class="col-sm-6 form-control-static">
             {% if attendee.camping_type != c.CABIN %}{{ attendee.camping_type_label }}{% else %}{{ attendee.cabin_type_label }}{% endif %} {{ macros.upgrade_button('camping-type') }}
             <p class="help-block">
-                Cars and RVs must park in a large lot behind the public bathrooms.
+                Car and RV camping is restricted to a field adjacent to the communal bathrooms.
                 Please review the information about camping options, including cabin type descriptions, <a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.
             </p>
         </div>
@@ -230,9 +232,11 @@
         <label class="col-sm-3 control-label optional-field">License Plate #</label>
         <div class="col-sm-6">
           <input type="text" class="form-control" name="license_plate" value="{{ attendee.license_plate }}" placeholder="XXX-XXXX" />
+          {% if not admin_area %}
           <p class="help-block">
             Get through registration faster on-site! If you don't know which vehicle you'll be using, you can come back and update this later.
           </p>
+          {% endif %}
         </div>
     </div>
   
