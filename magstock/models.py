@@ -105,7 +105,7 @@ class Attendee:
         elif self.camping_type and int(c.CAMPING_TYPE_PRICES[self.camping_type]):
             addon_list.append('{}{}{}'.format(self.camping_type_label,
                                             ' parking pass' if self.camping_type in [c.CAR, c.RV] else '',
-                                            '$({})'.format(c.CAMPING_TYPE_PRICES[self.camping_type]) if c.CAMPING_TYPE_PRICES[self.camping_type] else ''))
+                                            ' (${})'.format(c.CAMPING_TYPE_PRICES[self.camping_type]) if c.CAMPING_TYPE_PRICES[self.camping_type] else ''))
         return addon_list
     
     @property
