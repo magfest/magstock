@@ -67,6 +67,11 @@ class Attendee:
 
         return int(current_cost) * 100, (int(new_cost) * 100) - (int(current_cost) * 100)
     
+    @presave_adjustment
+    def no_cabin_if_not_cabin_camping(self):
+        if self.camping_type != c.CABIN:
+            self.cabin_type = None
+
     @property
     def available_cabin_types(self):
         if self.cabin_type:
@@ -92,11 +97,38 @@ class Attendee:
     def addons(self):
         addon_list = []
         if self.brunch_tickets:
-            addon_list.append('{} brunch ticket(s) (${}/ticket)'.format(self.brunch_tickets, c.FOOD_PRICE))
+            addon_list.append('{} brunch ticket(s) (${} at ${}/ticket)'.format(self.brunch_tickets, self.brunch_tickets * c.FOOD_PRICE, c.FOOD_PRICE))
         if self.dinner_tickets:
-            addon_list.append('{} dinner ticket(s) (${}/ticket)'.format(self.dinner_tickets, c.FOOD_PRICE))
+            addon_list.append('{} dinner ticket(s) (${} at ${}/ticket)'.format(self.dinner_tickets, self.dinner_tickets * c.FOOD_PRICE, c.FOOD_PRICE))
         if self.camping_type and self.camping_type == c.CABIN and self.cabin_type:
-            addon_list.append(self.cabin_type_label)
+            addon_list.append('{}'.format(self.cabin_type_label))
         elif self.camping_type and int(c.CAMPING_TYPE_PRICES[self.camping_type]):
-            addon_list.append('{}{}'.format(self.camping_type_label, ' parking pass' if self.camping_type in [c.CAR, c.RV] else ''))
+            addon_list.append('{}{}{}'.format(self.camping_type_label,
+                                            ' parking pass' if self.camping_type in [c.CAR, c.RV] else '',
+                                            '$({})'.format(c.CAMPING_TYPE_PRICES[self.camping_type]) if c.CAMPING_TYPE_PRICES[self.camping_type] else ''))
         return addon_list
+    
+    @property
+    def donation_swag(self):
+        donation_items = []
+        if self.amount_extra:
+            donation_items.append('{} (${})'.format(c.DONATION_TIERS[self.amount_extra], self.amount_extra))
+        extra_donations = ['Extra donation of ${}'.format(self.extra_donation)] if self.extra_donation else []
+        return donation_items + extra_donations
+    
+    @property
+    def has_extras(self):
+        return self.amount_extra or self.extra_donation or self.badge_type in c.BADGE_TYPE_PRICES \
+                or self.camping_type != c.TENT or self.cabin_type or self.brunch_tickets or self.dinner_tickets
+
+    def undo_extras(self):
+        if self.active_receipt:
+            return "Could not undo extras, this attendee has an open receipt!"
+        self.amount_extra = 0
+        self.extra_donation = 0
+        if self.badge_type in c.BADGE_TYPE_PRICES:
+            self.badge_type = c.ATTENDEE_BADGE
+        self.camping_type = c.TENT
+        self.cabin_type = None
+        self.brunch_tickets = 0
+        self.dinner_tickets = 0

@@ -37,6 +37,19 @@ class ExtraConfig:
         camping_types[c.CABIN] = ("Cabin ($600+)", c.CAMPING_TYPE_PRICES[c.CABIN], "Select a cabin option below. Cabins are limited availability.")
         return camping_types
     
+    @property
+    def CAMPING_CABIN_TYPES(self):
+        # For use with camping and cabin-related cost changes
+        return {**c.CAMPING_TYPES, **c.CABIN_TYPES}
+
+    @property
+    def MEAL_TICKETS(self):
+        # Similar to the above, this is so our cost change system can accurately report how many brunch/dinner tickets you're buying
+        num_dict = {}
+        for i in range(1, 11):
+            num_dict[i] = str(i)
+        return num_dict
+    
     @request_cached_property
     @dynamic
     def CABIN_AVAILABILITY_MATRIX(self):

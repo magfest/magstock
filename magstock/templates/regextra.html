@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% import 'macros.html' as macros with context %}
 
 <script type="text/javascript">
     if (window.BADGE_TYPES) {
@@ -57,14 +57,17 @@
         }
         setVisible($.field('license_plate').parents('.form-group'),
                     ($.val('camping_type') == '{{ c.CAR }}' || $.val('camping_type') == '{{ c.RV }}'));
-        $.each($("input:radio[name='camping_type']"), function() {
-        $(this).parents('.btn').removeClass('active btn-primary');
-        $(this).parents('.btn').addClass('btn-default');
-        if ($(this).val() == $.val('camping_type')) {
-            $(this).parents('.btn').removeClass('btn-default');
-            $(this).parents('.btn').addClass('active btn-primary');
+        
+        if ($("input:radio[name='camping_type']")) {
+            $.each($("input:radio[name='camping_type']"), function() {
+                $(this).parents('.btn').removeClass('active btn-primary');
+                $(this).parents('.btn').addClass('btn-default');
+                if ($(this).val() == $.val('camping_type')) {
+                    $(this).parents('.btn').removeClass('btn-default');
+                    $(this).parents('.btn').addClass('active btn-primary');
+                }
+            });
         }
-    });
     }
     $(function () {
         if ($.field('camping_type')) {
@@ -77,13 +80,11 @@
             {% endif %}
             {% endfor %}
         }
-        if ($('#no-early-checkin') && $('#no-early-checkin').size()) {
-            $('#no-early-checkin').insertBefore('#reg-types');
-            $.field('acknowledged_checkin_policy').attr('form', 'prereg-form');
-        }
         if ($('#food').size()) {
             {% if money_fields_ro %}
             $('#food').insertAfter($('#upgradeModal .extra-row').last());
+            {% elif admin_area %}
+            $('#food').insertBefore($.field('amount_extra').parents('.form-group'));
             {% else %}
             $('#food').insertAfter($('.extra-row').last());
             {% endif %}
@@ -128,6 +129,7 @@
     });
 </script>
 
+{% if c.PAGE_PATH != '/preregistration/transfer_badge' %}
 <div id="food">
     <div class="form-group">
         <label class="col-sm-3 optional-field control-label">Meal Tickets (${{ c.FOOD_PRICE }}/ticket)</label>
@@ -156,6 +158,13 @@
 <div id="camping-types">
     <div class="form-group">
         <label class="col-sm-3 control-label">How are you camping?</label>
+        {% if admin_area %}
+        <div class="col-sm-6">
+            <select name="camping_type" class="form-control" onchange="campingChanged();">
+              {{ options(c.CAMPING_TYPE_OPTS,attendee.camping_type) }}
+            </select>
+        </div>
+        {% else %}
         <div class="col-sm-9">
             <div data-toggle="buttons" class="btn-group-inline">
                 {% for key, dict in c.CAMPING_TYPE_BUTTONS.items() %}
@@ -177,11 +186,14 @@
                 {% endif %}
                 {% endfor %}
             </div>
+            {% if not admin_area %}
             <p class="help-block">
                 Car and RV camping is restricted to a field adjacent to the communal bathrooms.
                 Please review the information about camping options, including cabin type descriptions, <a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.
             </p>
+            {% endif %}
         </div>
+        {% endif %}
     </div>
 
     <div class="form-group">
@@ -192,12 +204,15 @@
                 {% set cabin_types = c.CABIN_TYPE_OPTS if not money_fields_ro else attendee.available_cabin_types %}
                 {{ options(cabin_types, attendee.cabin_type) }}
             </select>
+            {% if not admin_area %}
             <p class="help-block">
                 We will reach out closer to the event to discuss assignment preferences.
             </p>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endif %}
 <div id="extra-fields">
     {% if money_fields_ro %}
     <div class="form-group">
@@ -206,7 +221,9 @@
             You have <strong>{{ attendee.brunch_tickets }}</strong> brunch ticket(s) and <strong>{{ attendee.dinner_tickets }}</strong> dinner ticket(s).
         {{ macros.upgrade_button('meal-tickets', "Add") }}
     </div>
+        {% if not admin_area %}
         <div class="help-block col-sm-9 col-sm-offset-3">Ramblewood's kitchen will serve 6 meals: Thursday dinner, Friday & Saturday brunch & dinner, and Sunday brunch. Please choose the number of meal tickets you would like to buy.</div>
+        {% endif %}
     </div>
 
     <div class="form-group" id="meal_restrictions">
@@ -244,7 +261,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label optional-field">Site Number</label>
             <div class="col-sm-6">
-                <select name="site_number">
+                <select name="site_number" class="form-control">
                     <option value="">Choose a campsite, if applicable</option>
                     {{ options(c.CAMPSITE_OPTS, attendee.site_number) }}
                 </select>
