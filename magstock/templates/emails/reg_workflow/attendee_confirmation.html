@@ -6,7 +6,7 @@ You ({{ attendee.full_name }}) have preregistered for {{ c.EVENT_NAME }}
 {% if attendee.group %}
     by claiming one of the badges in the {{ attendee.group.name }} group.
 {% else %}
-    and your payment of ${{ attendee.amount_paid }} has been received.
+    and your payment of {{ (attendee.amount_paid / 100)|format_currency }} has been received.
 {% endif %}
 Your registration confirmation number is {{ attendee.id }}, and you can update your information, preorder merch, or donate
 extra money <a href="{{ c.URL_BASE }}/preregistration/confirm?id={{ attendee.id }}">here</a>.
