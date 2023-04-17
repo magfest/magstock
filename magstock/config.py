@@ -12,6 +12,7 @@ c.include_plugin_config(config)
 
 c.MENU.append_menu_item(
     MenuItem(name='MAGStock', submenu=[
+        MenuItem(name='Add-Ons Purchased', href='../magstock/addons'),
         MenuItem(name='Tent Groupings', href='../magstock/grouped'),
         MenuItem(name='Food Report', href='../magstock/food_consumers'),
         MenuItem(name='Campsite Assignments', href='../magstock/campsite_assignments'),
@@ -52,12 +53,35 @@ class ExtraConfig:
     
     @request_cached_property
     @dynamic
+    def CAMPING_TYPES_BOUGHT(self):
+        camping_types = {}
+        with Session() as session:
+            for type in c.CAMPING_TYPES.keys():
+                camping_types[type] = session.valid_attendees().filter_by(camping_type=type).count()
+        return camping_types
+    
+    @request_cached_property
+    @dynamic
+    def CABIN_TYPES_BOUGHT(self):
+        cabin_types = {}
+        with Session() as session:
+            for type in c.CABIN_TYPES.keys():
+                cabin_types[type] = session.valid_attendees().filter_by(cabin_type=type).count()
+        return cabin_types
+
+    @property
     def CABIN_AVAILABILITY_MATRIX(self):
         cabins_left = {}
-        with Session() as session:
-            for cabin in c.CABIN_TYPES.keys():
-                cabin_count = session.query(Attendee).filter_by(cabin_type=cabin).count()
-                cabins_left[cabin] = max(0, int(c.CABIN_TYPE_STOCKS[cabin]) - cabin_count)
+        for type in c.CABIN_TYPES.keys():
+            cabins_left[type] = max(0, int(c.CABIN_TYPE_STOCKS[type]) - c.CABIN_TYPES_BOUGHT[type])
         return cabins_left
+    
+    @property
+    def CABIN_TOTAL(self):
+        running_total = 0
+        for key, val in c.CABIN_TYPES_BOUGHT.items():
+            running_total += val * int(c.CABIN_TYPE_PRICES[key])
+        return running_total
+
 
 c.CABIN_TYPE_OPTS = [(key, '{} (${})'.format(desc, int(c.CABIN_TYPE_PRICES[key])) if int(c.CABIN_TYPE_PRICES.get(key, 0)) else desc) for key, desc in c.CABIN_TYPE_OPTS]

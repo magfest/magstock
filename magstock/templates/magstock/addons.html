@@ -1,0 +1,80 @@
+{% extends "base.html" %}{% set admin_area=True %}
+{% block title %}Parties{% endblock %}
+{% block content %}
+
+<h2 class="center">MAGStock Add-Ons Summary</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Camping Type and Cabins</div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td colspan="2">Item Name</td>
+                    <td>Price</td>
+                    <td># Stock</td>
+                    <td># Bought</td>
+                    <td># Left</td>
+                    <td>Total $</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, val in c.CAMPING_TYPES.items() %}
+                <tr>
+                    <td colspan="2">{{ val }}</td>
+                    <td>{% if key != c.CABIN %}{{ c.CAMPING_TYPE_PRICES[key]|format_currency }}{% endif %}</td>
+                    <td>{% if key == c.CABIN %}{{ all_cabins_stock }}{% else %}Unlimited{% endif %}</td>
+                    <td>{{ c.CAMPING_TYPES_BOUGHT[key] }}</td>
+                    <td>{% if key == c.CABIN %}{{ all_cabins_stock - c.CAMPING_TYPES_BOUGHT[key] }}{% else %}N/A{% endif %}</td>
+                    <td>{% if key == c.CABIN %}{{ c.CABIN_TOTAL|format_currency }}{% else %}{{ (c.CAMPING_TYPES_BOUGHT[key] * c.CAMPING_TYPE_PRICES[key])|format_currency }}{% endif %}</td>
+                </tr>
+                    {% if key == c.CABIN %}
+                        {% for key, val in c.CABIN_AVAILABILITY_MATRIX.items() %}
+                        <tr>
+                            <td></td>
+                            <td>{{ c.CABIN_TYPES[key] }}</td>
+                            <td>{{ c.CABIN_TYPE_PRICES[key]|format_currency }}</td>
+                            <td>{{ c.CABIN_TYPE_STOCKS[key] }}</td>
+                            <td>{{ c.CABIN_TYPE_STOCKS[key]|int - val }}</td>
+                            <td>{{ val }}</td>
+                            <td>{{ c.CABIN_TOTAL|format_currency }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Meal Tickets</div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Item Name</td>
+                    <td>Price</td>
+                    <td># Bought</td>
+                    <td>Total $</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Brunch Ticket</td>
+                    <td>{{ c.FOOD_PRICE|format_currency }}</td>
+                    <td>{{ brunch_ticket_count }}</td>
+                    <td>{{ (brunch_ticket_count * c.FOOD_PRICE)|format_currency }}</td>
+                </tr>
+                <tr>
+                    <td>Dinner Ticket</td>
+                    <td>{{ c.FOOD_PRICE|format_currency }}</td>
+                    <td>{{ dinner_ticket_count }}</td>
+                    <td>{{ (dinner_ticket_count * c.FOOD_PRICE)|format_currency }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

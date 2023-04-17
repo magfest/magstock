@@ -1,4 +1,5 @@
 from collections import defaultdict
+from sqlalchemy import func
 
 from uber.config import c
 from uber.decorators import ajax, all_renderable
@@ -75,3 +76,10 @@ class Root:
         attendee.license_plate = license_plate
         session.commit()
         return {'message': 'success'}
+    
+    def addons(self, session):
+        return {
+            'all_cabins_stock': sum([int(val) for key, val in c.CABIN_TYPE_STOCKS.items()]),
+            'brunch_ticket_count': session.valid_attendees().with_entities(func.sum(Attendee.brunch_tickets)).scalar(),
+            'dinner_ticket_count': session.valid_attendees().with_entities(func.sum(Attendee.dinner_tickets)).scalar(),
+        }
