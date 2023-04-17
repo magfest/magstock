@@ -26,7 +26,7 @@
                     <td>{% if key == c.CABIN %}{{ all_cabins_stock }}{% else %}Unlimited{% endif %}</td>
                     <td>{{ c.CAMPING_TYPES_BOUGHT[key] }}</td>
                     <td>{% if key == c.CABIN %}{{ all_cabins_stock - c.CAMPING_TYPES_BOUGHT[key] }}{% else %}N/A{% endif %}</td>
-                    <td>{% if key == c.CABIN %}{{ c.CABIN_TOTAL|format_currency }}{% else %}{{ (c.CAMPING_TYPES_BOUGHT[key] * c.CAMPING_TYPE_PRICES[key])|format_currency }}{% endif %}</td>
+                    <td>{% if key == c.CABIN %}{{ c.CABIN_TOTAL|format_currency }}{% else %}{{ (c.CAMPING_TYPES_BOUGHT[key] * c.CAMPING_TYPE_PRICES[key]|int)|format_currency }}{% endif %}</td>
                 </tr>
                     {% if key == c.CABIN %}
                         {% for key, val in c.CABIN_AVAILABILITY_MATRIX.items() %}
@@ -37,7 +37,7 @@
                             <td>{{ c.CABIN_TYPE_STOCKS[key] }}</td>
                             <td>{{ c.CABIN_TYPE_STOCKS[key]|int - val }}</td>
                             <td>{{ val }}</td>
-                            <td>{{ c.CABIN_TOTAL|format_currency }}</td>
+                            <td>{{ (c.CABIN_TYPE_PRICES[key]|int * (c.CABIN_TYPE_STOCKS[key]|int - val)) |format_currency }}</td>
                         </tr>
                         {% endfor %}
                     {% endif %}
