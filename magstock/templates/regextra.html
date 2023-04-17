@@ -50,15 +50,15 @@
             ($.field('dinner_tickets') != null && $.field('dinner_tickets').val() > 0));
     };
     var campingChanged = function () {
-        if ($.val('camping_type') == '{{ c.CABIN }}') {
+        if ($.val('camping_type') && $.val('camping_type') == '{{ c.CABIN }}') {
             $.field('cabin_type').parents('.form-group').show('fast');
         } else {
             $.field('cabin_type').parents('.form-group').hide();
-        }
-        setVisible($.field('license_plate').parents('.form-group'),
+            setVisible($.field('license_plate').parents('.form-group'),
                     ($.val('camping_type') == '{{ c.CAR }}' || $.val('camping_type') == '{{ c.RV }}'));
+        }
         
-        if ($("input:radio[name='camping_type']")) {
+        if ($.val('camping_type') && $("input:radio[name='camping_type']")) {
             $.each($("input:radio[name='camping_type']"), function() {
                 $(this).parents('.btn').removeClass('active btn-primary');
                 $(this).parents('.btn').addClass('btn-default');
