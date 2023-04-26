@@ -132,3 +132,18 @@ class Attendee:
         self.cabin_type = None
         self.brunch_tickets = 0
         self.dinner_tickets = 0
+
+
+@Session.model_mixin
+class Group:
+    @property
+    def min_badges_addable(self):
+        if not c.PRE_CON:
+            return 0
+
+        if self.can_add:
+            return 1
+        elif self.guest and self.guest.group_type != c.MIVS:
+            return 0
+        else:
+            return c.MIN_GROUP_ADDITION
