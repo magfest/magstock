@@ -137,13 +137,5 @@ class Attendee:
 @Session.model_mixin
 class Group:
     @property
-    def min_badges_addable(self):
-        if not c.PRE_CON or (self.is_dealer and not self.can_add):
-            return 0
-
-        if self.can_add:
-            return 1
-        elif self.guest and self.guest.group_type != c.MIVS:
-            return 0
-        else:
-            return c.MIN_GROUP_ADDITION
+    def dealer_badges_remaining(self):
+        return 0
