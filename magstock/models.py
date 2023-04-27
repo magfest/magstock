@@ -138,7 +138,7 @@ class Attendee:
 class Group:
     @property
     def min_badges_addable(self):
-        if not c.PRE_CON:
+        if not c.PRE_CON or (self.is_dealer and not self.can_add):
             return 0
 
         if self.can_add:
