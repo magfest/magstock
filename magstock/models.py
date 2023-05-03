@@ -62,6 +62,8 @@ class Attendee:
                 current_cost = c.CABIN_TYPE_PRICES[self.cabin_type]
             if kwargs['cabin_type']:
                 new_cost = c.CABIN_TYPE_PRICES[kwargs['cabin_type']]
+            elif not self.cabin_type:
+                new_cost = c.CAMPING_TYPE_PRICES[self.camping_type]
             else:
                 new_cost = 0
 
