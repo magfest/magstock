@@ -122,6 +122,13 @@ class Attendee:
     def has_extras(self):
         return self.amount_extra or self.extra_donation or self.badge_type in c.BADGE_TYPE_PRICES \
                 or self.camping_type != c.TENT or self.cabin_type or self.brunch_tickets or self.dinner_tickets
+    
+    @property
+    def shift_prereqs_complete(self):
+        return not self.placeholder and (self.food_restrictions_filled_out or not c.PRE_CON) and (
+            not c.VOLUNTEER_AGREEMENT_ENABLED or self.agreed_to_volunteer_agreement) and (
+            not c.EMERGENCY_PROCEDURES_ENABLED or self.reviewed_emergency_procedures) \
+            and c.SHIFTS_CREATED
 
     def undo_extras(self):
         if self.active_receipt:
