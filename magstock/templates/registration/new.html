@@ -1,18 +1,11 @@
 {% extends "registration/new_base.html" %}
 
 {% block tableheadings %}
-    <th>Site Number</th>
     <th>License Plate</th>
     {{ super() }}
 {% endblock tableheadings %}
 
 {% block tablerows %}
-    <td>
-        <select form="new_checkin_{{ attendee.id }}" name="site_number">
-            <option value="">Choose a campsite, if applicable</option>
-            {{ options(c.CAMPSITE_OPTS,attendee.site_number) }}
-        </select>
-    </td>
     <td><input form="new_checkin_{{ attendee.id }}" type="text" size="8" name="license_plate" placeholder="License" value="{{ attendee.license_plate }}" /></td>
     {{ super() }}
 {% endblock tablerows %}

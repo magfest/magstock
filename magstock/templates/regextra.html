@@ -35,13 +35,6 @@
       //             break;
       //     }
       // });
-      //
-      // $(function () {
-      //     if ($.field('amount_extra')) {
-      //         $.field('amount_extra').parents('.form-group').hide();
-      //         $('.affiliate-row').remove();
-      //     }
-      // });
     }
 
     var showOrHideAllergies = function () {
@@ -256,18 +249,6 @@
           {% endif %}
         </div>
     </div>
-  
-    {% if c.PAGE_PATH == '/registration/form' %}
-        <div class="form-group">
-            <label class="col-sm-3 control-label optional-field">Site Number</label>
-            <div class="col-sm-6">
-                <select name="site_number" class="form-control">
-                    <option value="">Choose a campsite, if applicable</option>
-                    {{ options(c.CAMPSITE_OPTS, attendee.site_number) }}
-                </select>
-            </div>
-        </div>
-    {% endif %}
 </div>
 
 {% if c.AT_THE_CON and is_prereg_form %}

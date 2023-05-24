@@ -33,7 +33,6 @@ class Attendee:
     camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT, nullable=True) # TODO: Make non-nullable next year BEFORE standing up servers
     cabin_type = Column(Choice(c.CABIN_TYPE_OPTS), nullable=True)
     license_plate = Column(UnicodeText, default='')
-    site_number = Column(Choice(c.CAMPSITE_OPTS), nullable=True, admin_only=True)
     acknowledged_checkin_policy = Column(Boolean, default=False)
     waiver_signature = Column(UnicodeText)
     waiver_consent = Column(Boolean, default=False)
