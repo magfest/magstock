@@ -1,14 +1,14 @@
 {% extends "registration/index_base.html" %}
 
 {% block tableheadings %}
-    <th><a href="index?order={{ order.site_number }}">Site Number</a></th>
+    <th><a href="index?order={{ order.camping_type }}">Camping/Cabin Type</a></th>
     <th>Gets Food</th>
     {{ super() }}
 {% endblock tableheadings %}
 
 {% block tablerows %}
     <td>
-        {% if attendee.site_number %}{{ attendee.site_number_label }}{% endif %}
+        {{ attendee.camping_type_label }}{% if attendee.camping_type == c.CABIN %} ({{ attendee.cabin_type_label }}){% endif %}
     </td>
     <td>
         {{ attendee.gets_food|yesno("Yes,No") }}
