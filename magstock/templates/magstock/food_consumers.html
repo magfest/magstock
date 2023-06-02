@@ -14,38 +14,32 @@
                 <th></th>
                 <th># Attendees</th>
                 <th># Tickets</th>
-                <th>Meal Restrictions</th>
+                {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}<th>{{ label }}</th>{% endfor %}
             </thead>
             <tbody>
                 <tr>
                     <th>Brunch</th>
                     <td>{{ brunch_data['attendee_count'] }}</td>
                     <td>{{ brunch_data['ticket_count'] }}</td>
-                    <td>
-                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
-                        {{ label }}: {{ brunch_data[restriction]|default('0', true) }}
-                        {% endfor %}
-                    </td>
+                    {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        <td>{{ brunch_data[restriction]|default('0', true) }}</td>
+                    {% endfor %}
                 </tr>
                 <tr>
                     <th>Dinner</th>
                     <td>{{ dinner_data['attendee_count'] }}</td>
                     <td>{{ dinner_data['ticket_count'] }}</td>
-                    <td>
-                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
-                        {{ label }}: {{ dinner_data[restriction]|default('0', true) }}
-                        {% endfor %}
-                    </td>
+                    {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        <td>{{ dinner_data[restriction]|default('0', true) }}</td>
+                    {% endfor %}
                 </tr>
                 <tr>
                     <th>All</th>
                     <td>{{ total_data['attendee_count'] }}</td>
                     <td>{{ brunch_data['ticket_count'] + dinner_data['ticket_count'] }}</td>
-                    <td>
-                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
-                        {{ label }}: {{ total_data[allergen]|default('0', true) }}
-                        {% endfor %}
-                    </td>
+                    {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        <td>{{ total_data[restriction]|default('0', true) }}</td>
+                    {% endfor %}
                 </tr>
             </tbody>
         </table>
@@ -70,7 +64,7 @@
                     <td>{{ attendee.brunch_tickets }}</td>
                     <td>{{ attendee.dinner_tickets }}</td>
                     <td>
-                        {% for restriction in attendee.meal_restrictions %}
+                        {% for restriction in attendee.meal_restrictions_ints %}
                         {{ c.MEAL_TICKET_RESTRICTIONS[restriction] }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     </td>

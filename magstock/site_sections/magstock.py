@@ -22,16 +22,12 @@ def camp_food_report(session):
         if attendee.brunch_tickets:
             brunch_data['attendee_count'] += 1
             brunch_data['ticket_count'] += attendee.brunch_tickets
-            for restriction in attendee.meal_restrictions:
-                brunch_data[restriction] += 1
 
         if attendee.dinner_tickets:
             dinner_data['attendee_count'] += 1
             dinner_data['ticket_count'] += attendee.dinner_tickets
-            for restriction in attendee.meal_restrictions:
-                dinner_data[restriction] += 1
         
-        for restriction in attendee.meal_restrictions:
+        for restriction in attendee.meal_restrictions_ints:
             total_data[restriction] += 1
             brunch_data[restriction] += bool(attendee.brunch_tickets > 0)
             dinner_data[restriction] += bool(attendee.dinner_tickets > 0)
