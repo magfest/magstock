@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from residue import CoerceUTF8 as UnicodeText
 from sqlalchemy.types import Boolean, Date, Integer
 from uber.api import AttendeeLookup
@@ -9,21 +11,6 @@ from uber.utils import add_opt
 from magstock._version import __version__  # noqa: F401
 
 AttendeeLookup.fields_full['gets_food'] = True
-
-@Session.model_mixin
-class SessionMixin:
-    def food_consumers(self):
-        """
-        :return: list of anyone who gets food, regardless of if they're comp'd food or if they paid for it
-        """
-        return [a for a in self.query(Attendee).all() if a.gets_food]
-
-    def food_purchasers(self):
-        """
-        :return: list of anyone who paid money to get food
-        """
-        return self.query(Attendee).filter(Attendee.purchased_food == True)  # noqa: E712
-
 
 @Session.model_mixin
 class Attendee:
@@ -72,27 +59,19 @@ class Attendee:
     def no_cabin_if_not_cabin_camping(self):
         if self.camping_type != c.CABIN:
             self.cabin_type = None
+    
+    @presave_adjustment
+    def meal_tickets_if_guest(self):
+        if self.badge_type == c.GUEST_BADGE and (
+                self.is_new or self.orig_value_of('badge_type') != c.GUEST_BADGE or self.last_updated.when < datetime(2023, 6, 1, 21)):
+            self.brunch_tickets += 1
+            self.dinner_tickets += 1
 
     @property
     def available_cabin_types(self):
         if self.cabin_type:
             return [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
         return c.CABIN_TYPE_OPTS
-
-    @property
-    def purchased_food(self):
-        return self.brunch_tickets or self.dinner_tickets
-
-    @property
-    def auto_food(self):
-        """
-        :return: True if this Attendee automatically gets free food, False if not
-        """
-        return self.badge_type in [c.GUEST_BADGE] or hasattr(self, 'band') and self.band is not None
-
-    @property
-    def gets_food(self):
-        return self.auto_food or self.purchased_food
 
     @property
     def addons(self):

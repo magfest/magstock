@@ -1,10 +1,42 @@
 from collections import defaultdict
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from uber.config import c
-from uber.decorators import ajax, all_renderable
+from uber.decorators import ajax, all_renderable, csv_file
 from uber.models import Attendee
 
+
+def camp_food_report(session):
+    attendees_with_meal_tickets = sorted(session.attendees_with_badges().filter(
+        or_(Attendee.brunch_tickets > 0, Attendee.dinner_tickets > 0)), key=lambda a: a.full_name)
+    brunch_data = defaultdict(int)
+    dinner_data = defaultdict(int)
+    total_data = defaultdict(int)
+
+    total_data['attendees'] = []
+
+    for attendee in attendees_with_meal_tickets:
+        total_data['attendees'].append(attendee)
+        total_data['attendee_count'] += 1
+
+        if attendee.brunch_tickets:
+            brunch_data['attendee_count'] += 1
+            brunch_data['ticket_count'] += attendee.brunch_tickets
+            for restriction in attendee.meal_restrictions:
+                brunch_data[restriction] += 1
+
+        if attendee.dinner_tickets:
+            dinner_data['attendee_count'] += 1
+            dinner_data['ticket_count'] += attendee.dinner_tickets
+            for restriction in attendee.meal_restrictions:
+                dinner_data[restriction] += 1
+        
+        for restriction in attendee.meal_restrictions:
+            total_data[restriction] += 1
+            brunch_data[restriction] += bool(attendee.brunch_tickets > 0)
+            dinner_data[restriction] += bool(attendee.dinner_tickets > 0)
+
+    return brunch_data, dinner_data, total_data
 
 @all_renderable()
 class Root:
@@ -35,14 +67,36 @@ class Root:
         }
 
     def food_consumers(self, session):
-        attendees = sorted(session.food_consumers(), key=lambda a: a.full_name)
-        paid_food_count = len([a for a in attendees if a.purchased_food])
-        free_food_count = len(attendees) - paid_food_count
+        brunch_data, dinner_data, total_data = camp_food_report(session)
         return {
-            'attendees': attendees,
-            'paid_food_count': paid_food_count,
-            'free_food_count': free_food_count,
+            'brunch_data': brunch_data,
+            'dinner_data': dinner_data,
+            'total_data': total_data,
         }
+    
+    @csv_file
+    def food_consumers_report(self, out, session):
+        brunch_data, dinner_data, total_data = camp_food_report(session)
+        header_row = [
+            '# Attendees',
+            'Brunch Tickets',
+            'Dinner Tickets',
+            'Total Tickets',
+        ]
+
+        data_row = [
+            total_data['attendee_count'],
+            brunch_data['ticket_count'],
+            dinner_data['ticket_count'],
+            brunch_data['ticket_count'] + dinner_data['ticket_count']
+            ]
+
+        for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS:
+            header_row.append(label)
+            data_row.append(total_data[restriction])
+
+        out.writerow(header_row)
+        out.writerow(data_row)
 
     def parking(self, session):
         """
