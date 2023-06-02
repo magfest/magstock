@@ -63,7 +63,8 @@ class Attendee:
     @presave_adjustment
     def meal_tickets_if_guest(self):
         if self.badge_type == c.GUEST_BADGE and (
-                self.is_new or self.orig_value_of('badge_type') != c.GUEST_BADGE or self.last_updated.when < datetime(2023, 6, 1, 21)):
+                self.is_new or self.orig_value_of('badge_type') != c.GUEST_BADGE or (
+                self.last_updated and self.last_updated.when < datetime(2023, 6, 1, 21, tzinfo=c.EVENT_TIMEZONE))):
             self.brunch_tickets += 1
             self.dinner_tickets += 1
 
