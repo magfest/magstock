@@ -1,55 +1,86 @@
 {% extends "base.html" %}{% set admin_area=True %}
 {% block title %}Magstock Food Report{% endblock %}
 {% block content %}
-
-<style>
-table {
-    width: 100%;
-}
-th, td {
-    border-left:solid 10px transparent;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid #ddd;
-}
-
-tr:hover {background-color: #f5f5f5}
-
-/* make printing this page not include the literal URLs */
-a[href]:after {
-   content:"" !important;
-}
-</style>
-
 <h2 class="center">MAGStock Food Report</h2>
 
-<p>
-    {{ attendees|length }} attendees are consuming food. Of those:<br/>
-    <ul>
-        <li>{{ paid_food_count }} paid money for their food</li>
-        <li>{{ free_food_count }} are receving their food for free</li>
-    </ul>
-</p>
-
-<table>
-    <thead>
-        <th>Attendee</th>
-        <th>Allergies</th>
-        <th>Group Name</th>
-        <th>Badge Type</th>
-        <th>Receives Free Food?</th>
-    </thead>
-    <tbody>
-        {% for attendee in attendees %}
-            <tr>
-                <td>{{ attendee|form_link }}</td>
-                <td>{{ attendee.allergies }}</td>
-                <td>{{ attendee.group.name }}</td>
-                <td>{{ attendee.badge_type_label }}</td>
-                <td>{% if attendee.auto_food %}Yes{% else %}{% endif %}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="panel panel-default">
+    <div class="panel-heading">Brunch/Dinner Ticket Totals</div>
+    <div class="panel-body">
+        <a href="food_consumers_report">
+            <span class="glyphicon glyphicon-download"></span> Download CSV
+        </a>
+        <table class="table">
+            <thead>
+                <th></th>
+                <th># Attendees</th>
+                <th># Tickets</th>
+                <th>Meal Restrictions</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Brunch</th>
+                    <td>{{ brunch_data['attendee_count'] }}</td>
+                    <td>{{ brunch_data['ticket_count'] }}</td>
+                    <td>
+                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        {{ label }}: {{ brunch_data[restriction]|default('0', true) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Dinner</th>
+                    <td>{{ dinner_data['attendee_count'] }}</td>
+                    <td>{{ dinner_data['ticket_count'] }}</td>
+                    <td>
+                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        {{ label }}: {{ dinner_data[restriction]|default('0', true) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>All</th>
+                    <td>{{ total_data['attendee_count'] }}</td>
+                    <td>{{ brunch_data['ticket_count'] + dinner_data['ticket_count'] }}</td>
+                    <td>
+                        {% for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS %}
+                        {{ label }}: {{ total_data[allergen]|default('0', true) }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Attendees with Meal Tickets</div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <th>Attendee</th>
+                <th># Brunch Tickets</th>
+                <th># Dinner Tickets</th>
+                <th>Meal Restrictions</th>
+                <th>Group Name</th>
+                <th>Badge Type</th>
+            </thead>
+            <tbody>
+                {% for attendee in total_data['attendees'] %}
+                <tr>
+                    <td>{{ attendee|form_link }}</td>
+                    <td>{{ attendee.brunch_tickets }}</td>
+                    <td>{{ attendee.dinner_tickets }}</td>
+                    <td>
+                        {% for restriction in attendee.meal_restrictions %}
+                        {{ c.MEAL_TICKET_RESTRICTIONS[restriction] }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ attendee.group.name }}</td>
+                    <td>{{ attendee.badge_type_label }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

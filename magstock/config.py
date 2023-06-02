@@ -24,11 +24,6 @@ c.MENU.append_menu_item(
 @Config.mixin
 class ExtraConfig:
     @property
-    def FOOD_COUNT(self):
-        with Session() as session:
-            return len(session.food_consumers())
-        
-    @property
     def CAMPING_TYPE_BUTTONS(self):
         # With apologies to future-me
         camping_types = {}
