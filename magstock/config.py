@@ -24,6 +24,22 @@ c.MENU.append_menu_item(
 @Config.mixin
 class ExtraConfig:
     @property
+    def FORMATTED_CAMPING_TYPES(self):
+        # Returns camping type options for the 'card_select' form macro.
+
+        return [
+            {'name': 'Tent', 'icon': '', 'link': '', 'value': c.TENT, 'price': 0,
+             'desc': 'Included in your registration! Tent camping is first come, first serve.'},
+            {'name': 'Car', 'icon': '', 'link': '', 'value': c.CAR, 'price': c.CAMPING_TYPE_PRICES[c.CAR],
+             'desc': 'Price is per vehicle.'},
+            {'name': 'RV', 'icon': '', 'link': '', 'value': c.RV, 'price': c.CAMPING_TYPE_PRICES[c.RV],
+             'desc': 'Price is per vehicle, and there are no power or sewage hookups.'},
+            {'name': 'Cabin ($600+)', 'icon': '', 'link': '', 'value': c.CABIN,
+             'price': 0,
+             'desc': 'Select a cabin option below. Cabins are limited availability.'}
+        ]
+    
+    @property
     def CAMPING_TYPE_BUTTONS(self):
         # With apologies to future-me
         camping_types = {}

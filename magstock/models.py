@@ -34,7 +34,7 @@ class Attendee:
             new_cost = int(kwargs['dinner_tickets']) * c.FOOD_PRICE * 100
 
         return current_cost, new_cost - current_cost
-    
+
     def calc_camping_type_change(self, **kwargs):
         if 'camping_type' in kwargs:
             if kwargs['camping_type'] == c.CABIN:
@@ -54,7 +54,12 @@ class Attendee:
                 new_cost = 0
 
         return int(current_cost) * 100, (int(new_cost) * 100) - (int(current_cost) * 100)
-    
+
+    def auto_update_receipt(self, params):
+        if params.get('camping_type') and params['camping_type'] != c.CABIN:
+            params['cabin_type'] = 0
+        return params
+
     @presave_adjustment
     def no_cabin_if_not_cabin_camping(self):
         if self.camping_type != c.CABIN:

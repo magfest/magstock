@@ -1,0 +1,9 @@
+{% extends 'uber/templates/forms/attendee/other_info.html' %}
+
+{% block accessibility %}
+{% if not admin_area %}
+<div class="row mt-3 mb-3">
+    <div class="col-12">For accessibility-related needs or questions, please contact {{ "accessibility@magstock.org"|email_to_link }}.</div>
+</div>
+{% endif %}
+{% endblock %}
