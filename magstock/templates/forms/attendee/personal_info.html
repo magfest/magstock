@@ -1,0 +1,13 @@
+{% extends 'uber/templates/forms/attendee/personal_info.html' %}
+
+{% block address %}
+{% if attendee.badge_type == c.PSEUDO_DEALER_BADGE %}
+{# Hack to get around WTForms requiring a selection for choice fields #}
+<input type="hidden" name="cabin_type" value="0" />
+{% endif %}
+
+<div class="row g-sm-3">
+    {{ super() }}
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(personal_info.license_plate) }}</div>
+</div>
+{% endblock %}

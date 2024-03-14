@@ -13,36 +13,15 @@ from uber.models import Choice, DefaultColumn as Column, Session
 from uber.jinja import template_overrides
 from uber.utils import add_opt, mount_site_sections, static_overrides
 
-@validation.Attendee
-def camping_checks(attendee):
-    if not attendee.placeholder and not attendee.camping_type:
-        return 'Please tell us how you are camping'
-
 
 @prereg_validation.Attendee
 def waiver_consent(attendee):
     if attendee.is_new or attendee.placeholder:
-        if not attendee.waiver_signature:
-            return 'You must sign your full legal name to consent to the waiver'
-        elif attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
+        if attendee.waiver_signature and attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
             return 'Your waiver signature must match your full legal name, {}'.format(
                 attendee.legal_first_name + ' ' + attendee.legal_last_name)
-        elif not attendee.waiver_consent:
-            return 'You must check the waiver consent checkbox'
-        elif attendee.waiver_date != datetime.utcnow().date():
+        elif attendee.waiver_date and attendee.waiver_date != datetime.utcnow().date():
             return 'Your date of signature should be today'
-
-
-@prereg_validation.Attendee
-def no_early_checkin(attendee):
-    if (attendee.is_new or attendee.placeholder) and not attendee.acknowledged_checkin_policy:
-        return 'You must acknowledge that early check-in is not possible.'
-    
-
-@validation.Attendee
-def must_pick_cabin(attendee):
-    if attendee.camping_type == c.CABIN and not attendee.cabin_type:
-        return 'Please select a cabin type.'
     
 
 @prereg_validation.Attendee

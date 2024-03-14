@@ -1,78 +1,14 @@
 {% import 'macros.html' as macros with context %}
 
 <script type="text/javascript">
-    if (window.BADGE_TYPES) {
-
-      // New Style Kickin Levels
-      //
-      window.BADGE_TYPES.options[0].description = 'Allows access to the festival for its duration ({{ c.EPOCH|datetime_local("%b %-d") }}-{{ c.ESCHATON|datetime_local("%b %-d") }}). {{ price_notice("Preregistration",c.PREREG_TAKEDOWN) }}';
-      $(function() {
-          if ($(".badge-type-selector").size()) {
-              $(".badge-type-selector").parents('.form-group').hide();
-          }
-      });
-
-      // Old Style Badge Levels
-      //
-      // $.each(BADGE_TYPES.options, function (i, badgeType) {
-      //     switch (BADGE_TYPES.options[i].extra) {
-      //         case 0:
-      //             $.extend(badgeType, {description: 'Includes four day admission and campground fees.'});
-      //             break;
-      //         case {{ c.SHIRT_LEVEL }}:
-      //             $.extend(badgeType, {
-      //                 title: 'Add a T-Shirt',
-      //                 description: 'Attendee level plus a MAGStock-themed t-shirt.',
-      //                 extra: {{ c.SHIRT_LEVEL }}
-      //             });
-      //             break;
-      //         case {{ c.SUPPORTER_LEVEL }}:
-      //             $.extend(badgeType, {description: 'T-shirt level plus additional swag. (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
-      //             break;
-      //             break;
-      //         case {{ c.SEASON_LEVEL }}:
-      //             $.extend(badgeType, {description: 'Supporter level plus CRAZY AWESOME swag! (Available until {{ c.SUPPORTER_DEADLINE|datetime_local('%b %d') }}. Limited quantities.)'});
-      //             break;
-      //     }
-      // });
-    }
 
     var showOrHideAllergies = function () {
         setVisible('#meal_restrictions', 
             ($.field('brunch_tickets') != null && $.field('brunch_tickets').val() > 0) || 
             ($.field('dinner_tickets') != null && $.field('dinner_tickets').val() > 0));
     };
-    var campingChanged = function () {
-        if ($.val('camping_type') && $.val('camping_type') == '{{ c.CABIN }}') {
-            $.field('cabin_type').parents('.form-group').show('fast');
-        } else {
-            $.field('cabin_type').parents('.form-group').hide();
-            setVisible($.field('license_plate').parents('.form-group'),
-                    ($.val('camping_type') == '{{ c.CAR }}' || $.val('camping_type') == '{{ c.RV }}'));
-        }
-        
-        if ($.val('camping_type') && $("input:radio[name='camping_type']")) {
-            $.each($("input:radio[name='camping_type']"), function() {
-                $(this).parents('.btn').removeClass('active btn-primary');
-                $(this).parents('.btn').addClass('btn-default');
-                if ($(this).val() == $.val('camping_type')) {
-                    $(this).parents('.btn').removeClass('btn-default');
-                    $(this).parents('.btn').addClass('active btn-primary');
-                }
-            });
-        }
-    }
+
     $(function () {
-        if ($.field('camping_type')) {
-            campingChanged();
-            {% for cabin in c.CABIN_AVAILABILITY_MATRIX %}
-            {% if c.CABIN_AVAILABILITY_MATRIX[cabin] < 1 %}
-            $('select[name="cabin_type"] option[value="{{ cabin }}"').text(
-                $('select[name="cabin_type"] option[value="{{ cabin }}"').text() + " SOLD OUT!"
-            );
-            {% endif %}
-            {% endfor %}
-        }
         if ($('#food').size()) {
             {% if money_fields_ro %}
             $('#food').insertAfter($('#upgradeModal .extra-row').last());
@@ -82,174 +18,21 @@
             $('#food').insertAfter($('.extra-row').last());
             {% endif %}
         }
-        $('#camping-types').insertAfter($('#food'));
-        $('#extra-fields').insertBefore($.field('staffing').parents('.form-group'));
-        showOrHideAllergies();
+
+        //showOrHideAllergies();
         if ($.field('brunch_tickets')) {
             $.field('brunch_tickets').on('change', showOrHideAllergies);
             $.field('dinner_tickets').on('change', showOrHideAllergies);
         }
-        if ($.field('badge_printed_name')) {
-            $.field('badge_printed_name').parents('.form-group').find("label").text("Name Printed on Customized Items");
-        }
-        if ($.field('interests')) {
-            $.field('interests').parents('.form-group').hide();
-        }
-        if ($.field('onsite_contact')) {
-            $.field('onsite_contact').parents('.form-group').find('.control-label').text('MAGBuddy');
-        }
+        
         {% if money_fields_ro %}
         if ($.field('brunch_tickets')) {
             $.field('brunch_tickets').on('change', function() { updateReceiptPreview('brunch_tickets', $.val('brunch_tickets')) });
             $.field('dinner_tickets').on('change', function() { updateReceiptPreview('dinner_tickets', $.val('dinner_tickets')) });
         }
-        if ($.field('camping_type')) {
-            var lastCampingType; // Still hate JavaScript
-            $.field('camping_type').on('change', function() {
-                if (lastCampingType !== undefined && $.val('camping_type') == lastCampingType) {
-                    return;
-                } else {
-                    if (lastCampingType == "{{ c.CABIN }}" && $.val('camping_type') != "{{ c.CABIN }}") {
-                        updateReceiptPreview('cabin_type', '');
-                    }
-                    lastCampingType = $.val('camping_type');
-                }
-                updateReceiptPreview('camping_type', $.val('camping_type'));
-            });
-            $.field('cabin_type').on('change', function() { updateReceiptPreview('cabin_type', $.val('cabin_type')) });
-        }
         {% endif %}
     });
 </script>
-
-{% if c.PAGE_PATH != '/preregistration/transfer_badge' %}
-<div id="food">
-    <div class="form-group">
-        <label class="col-sm-3 optional-field control-label">Meal Tickets (${{ c.FOOD_PRICE }}/ticket)</label>
-        <div class="col-sm-3">
-            <div class="input-group">
-                <span class="input-group-addon">Brunch</span><input type="number" name="brunch_tickets" class="form-control" value="{{ attendee.brunch_tickets }}" />
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group">
-                <span class="input-group-addon">Dinner</span><input type="number" name="dinner_tickets" class="form-control" value="{{ attendee.dinner_tickets }}" />
-            </div>
-        </div>
-        <div class="help-block col-sm-9 col-sm-offset-3">Ramblewood's kitchen will serve 6 meals: Thursday dinner, Friday & Saturday brunch & dinner, and Sunday brunch. Please choose the number of meal tickets you would like to buy.</div>
-    </div>
-
-    <div class="form-group" id="meal_restrictions">
-        <label class="col-sm-3 control-label optional-field">Dietary Restrictions</label>
-        <div class="col-sm-9">
-            {{ macros.checkgroup(attendee, 'meal_restrictions') }}
-        </div>
-        <div class="help-block col-sm-9 col-sm-offset-3">Ramblewood's kitchen labels allergens at meals but can only specifically accommodate the above restrictions.</div>
-    </div>
-</div>
-
-<div id="camping-types">
-    <div class="form-group">
-        <label class="col-sm-3 control-label">How are you camping?</label>
-        {% if admin_area %}
-        <div class="col-sm-6">
-            <select name="camping_type" class="form-control" onchange="campingChanged();">
-              {{ options(c.CAMPING_TYPE_OPTS,attendee.camping_type) }}
-            </select>
-        </div>
-        {% else %}
-        <div class="col-sm-9">
-            <div data-toggle="buttons" class="btn-group-inline">
-                {% for key, dict in c.CAMPING_TYPE_BUTTONS.items() %}
-                {% if not money_fields_ro or 
-                    (c.CAMPING_TYPE_PRICES[attendee.camping_type]|int <= dict[1]|int and attendee.camping_type != c.CABIN) or
-                    key == c.CABIN %}
-                <label class="btn btn-default btn-inline" style="min-width: 125px; white-space: normal;">
-                    <input type="radio"
-                        name="camping_type"
-                        autocomplete="off"
-                        value="{{ key }}"
-                        onchange="campingChanged();"
-                        {% if attendee.camping_type == key %}checked{% endif %} />
-                        <div class="title">
-                            <h4>{{ dict[0] }}{% if dict[1] != '0' %} (${{ dict[1] }}){% endif %}</h4>
-                        </div>
-                        <div>{{ dict[2] }}</div>
-                </label>
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% if not admin_area %}
-            <p class="help-block">
-                Car and RV camping is restricted to a field adjacent to the communal bathrooms.
-                Please review the information about camping options, including cabin type descriptions, <a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.
-            </p>
-            {% endif %}
-        </div>
-        {% endif %}
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Cabin Type</label>
-        <div class="col-sm-6">
-            <select name="cabin_type" class="form-control">
-                <option value="">Select a cabin type</option>
-                {% set cabin_types = c.CABIN_TYPE_OPTS if not money_fields_ro else attendee.available_cabin_types %}
-                {{ options(cabin_types, attendee.cabin_type) }}
-            </select>
-            {% if not admin_area %}
-            <p class="help-block">
-                We will reach out closer to the event to discuss assignment preferences.
-            </p>
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-<div id="extra-fields">
-    {% if money_fields_ro %}
-    <div class="form-group">
-        <label class="col-sm-3 optional-field control-label">Meal Tickets (${{ c.FOOD_PRICE }}/ticket)</label>
-        <div class="col-sm-6 form-control-static">
-            You have <strong>{{ attendee.brunch_tickets }}</strong> brunch ticket(s) and <strong>{{ attendee.dinner_tickets }}</strong> dinner ticket(s).
-        {{ macros.upgrade_button('meal-tickets', "Add") }}
-    </div>
-        {% if not admin_area %}
-        <div class="help-block col-sm-9 col-sm-offset-3">Ramblewood's kitchen will serve 6 meals: Thursday dinner, Friday & Saturday brunch & dinner, and Sunday brunch. Please choose the number of meal tickets you would like to buy.</div>
-        {% endif %}
-    </div>
-
-    <div class="form-group" id="meal_restrictions">
-        <label class="col-sm-3 control-label optional-field">Dietary Restrictions</label>
-        <div class="col-sm-9">
-            {{ macros.checkgroup(attendee, 'meal_restrictions') }}
-        </div>
-        <div class="help-block col-sm-9 col-sm-offset-3">Ramblewood's kitchen labels allergens at meals but can only specifically accommodate the above restrictions.</div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">How are you camping?</label>
-        <div class="col-sm-6 form-control-static">
-            {% if attendee.camping_type != c.CABIN %}{{ attendee.camping_type_label }}{% else %}{{ attendee.cabin_type_label }}{% endif %} {{ macros.upgrade_button('camping-type') }}
-            <p class="help-block">
-                Car and RV camping is restricted to a field adjacent to the communal bathrooms.
-                Please review the information about camping options, including cabin type descriptions, <a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.
-            </p>
-        </div>
-    </div>
-    {% endif %}
-    <div class="form-group">
-        <label class="col-sm-3 control-label optional-field">License Plate #</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="license_plate" value="{{ attendee.license_plate }}" placeholder="XXX-XXXX" />
-          {% if not admin_area %}
-          <p class="help-block">
-            Get through registration faster on-site! If you don't know which vehicle you'll be using, you can come back and update this later.
-          </p>
-          {% endif %}
-        </div>
-    </div>
-</div>
 
 {% if c.AT_THE_CON and is_prereg_form %}
     <script>
@@ -259,50 +42,4 @@
             .append('MAGStock preregistration is closed, but you can register at the campground entrance');
             // .append('<a href="../registration/register">here</a>.');  // disable for 2015
     </script>
-{% endif %}
-
-{% if not admin_area %}
-    <div class="form-group">
-    <div class="col-sm-9 col-sm-offset-3">For accessibility-related needs or questions, please contact {{ "accessibility@magstock.org"|email_to_link }}.</div>
-    </div>
-{% endif %}
-
-{% if is_prereg_form or c.PAGE_PATH == '/preregistration/transfer_badge' or (attendee.placeholder or attendee.is_new) and not admin_area %}
-  <div id="no-early-checkin">
-    <div class="form-group">
-        <div class="checkbox col-sm-offset-3 col-sm-9">
-            <label class="checkbox-label">
-            {{ macros.checkbox(attendee, 'acknowledged_checkin_policy', is_readonly=read_only, clientside_bool=clientside_bool, is_required=True) }}
-            <strong>I acknowledge that there is NO early check-in and if I show up on Wednesday night then I will probably be asked to leave the campground.</strong>
-            </label>
-        </div>
-    </div>
-  </div>
-
-  <div id="waiver_consent_wrapper">
-    <div class="col-sm-12"><br/><strong>We require all attendees to sign a waiver before registering.</strong> Please {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.</div>
-  <div class="form-group">
-    <div class="clearfix"></div>
-    <label class="col-sm-3 control-label">Electronic Signature</label>
-    <div class="col-sm-6">
-      <input type="text" class="form-control" name="waiver_signature" value="{{ attendee.waiver_signature }}" placeholder="Name exactly as it appears on Photo ID" required />
-    </div>
-  </div>
-    <div class="form-group">
-    <label class="col-sm-3 control-label">Date of Signature</label>
-    <div class="col-sm-6">
-      <input type="text" class="form-control" value="{{ now()|datetime_local("%Y-%m-%d") }}" disabled />
-      {# The visible form input is in local time and we use the hidden input to store the real UTC date #}
-      <input type="hidden" name="waiver_date" id="waiver_date" value="{{ now()|datetime("%Y-%m-%d") }}" />
-    </div>
-    </div>
-    <div class="form-group">
-      <div class="checkbox col-sm-9 col-sm-offset-3">
-        <label for="waiver_consent" class="checkbox-label">
-          <input type="checkbox" name="waiver_consent" id="waiver_consent" value="1" required{% if attendee.waiver_consent %} checked{% endif %} />
-          <strong>Yes</strong>, I understand that checking this box constitutes a legal signature confirming that I acknowledge and agree to the above waiver.
-        </label>
-      </div>
-    </div>
-  </div>
 {% endif %}

@@ -1,0 +1,63 @@
+{% extends 'uber/templates/forms/attendee/badge_extras.html' %}
+
+{% set id_upgrade_prepend = "upgrade_" if upgrade_modal else "" %}
+
+{% block badge_type %}
+{{ super() }}
+{{ badge_extras.camping_type(id=id_upgrade_prepend ~ "camping_type") }}
+
+{% if not receipt or upgrade_modal %}
+    <div class="row g-sm-3">
+    {{ form_macros.card_select(badge_extras.camping_type,
+                               c.FORMATTED_CAMPING_TYPES, disabled_opts=[],
+                               target_field_id=id_upgrade_prepend ~ "camping_type") }}
+    </div>
+    {{ form_macros.toggle_fields_js(badge_extras.camping_type, [badge_extras.cabin_type], on_values=["267506057"], toggle_required=True, 
+                                    closest_hide_selector='.row',
+                                    source_field_id=id_upgrade_prepend ~ "camping_type",
+                                    target_field_prepend=id_upgrade_prepend) }}
+{% elif not is_prereg_attendee %}
+    <div class="row g-sm-3">
+        <div class="col-12 col-sm-6">
+            <div class="form-text">{{ badge_extras.camping_type.label.text }}</div>
+            <div class="form-control-plaintext h5">{{ attendee.camping_type_label }}{% if attendee.camping_type != c.CABIN %}{{ macros.upgrade_button('camping-type') }}{% endif %}</div>
+        </div>
+    </div>
+{% endif %}
+
+{% if not receipt or upgrade_modal %}
+<div class="row g-sm-3">
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type, required=True, id=id_upgrade_prepend ~ "cabin_type") }}</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block upgrade_modal_js %}
+{{ super() }}
+
+{% if upgrade_modal %}
+<script type="text/javascript">
+    $(function () {
+        var lastCampingType; // Still hate JavaScript
+        $("#upgrade_camping_type").on('change', function() {
+            if (lastCampingType !== undefined && this.value == lastCampingType) {
+                return;
+            } else {
+                if (lastCampingType == "{{ c.CABIN }}" && this.value != "{{ c.CABIN }}") {
+                    updateReceiptPreview('cabin_type', '');
+                }
+                lastCampingType = this.value;
+            }
+            updateReceiptPreview('camping_type', this.value);
+        });
+
+        var lastCabinType;
+        $("#upgrade_cabin_type").on('change', function() {
+            if ($("#upgrade_camping_type").val() == "{{ c.CABIN }}") {
+                updateReceiptPreview('cabin_type', this.value);
+            }
+        })
+    });
+</script>
+{% endif %}
+{% endblock %}
