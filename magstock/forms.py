@@ -61,7 +61,7 @@ class Consents:
         validators=[validators.DataRequired("You must sign your full legal name to consent to the waiver.")])
     waiver_date_display = DateField('Date of Signature', render_kw={'disabled': True})
     waiver_date = HiddenField('Date of Signature (UTC)',
-                              validators=[validators.DataRequired("No date of signature."
+                              validators=[validators.DataRequired("No date of signature. "
                                                                   "Please refresh the page or contact us.")])
     waiver_consent = BooleanField(
         Markup('<strong>Yes</strong>, I understand that checking this box constitutes a legal signature '
