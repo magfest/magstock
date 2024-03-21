@@ -3,7 +3,7 @@
 {% block required %}
 {{ super() }}
 
-{% if not attendee.is_new and attendee.badge_status != c.PENDING_STATUS %}
+{% if 'transfer_badge' in c.PAGE_PATH or (not attendee.is_new and attendee.badge_status != c.PENDING_STATUS) %}
 <div class="row g-sm-3">
     <div class="col-12">{{ form_macros.form_input(consents.acknowledged_checkin_policy) }}</div>
 </div>

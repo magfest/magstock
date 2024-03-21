@@ -1,7 +1,7 @@
 {% extends 'uber/templates/forms/attendee/personal_info.html' %}
 
 {% block address %}
-{% if attendee.badge_type == c.PSEUDO_DEALER_BADGE %}
+{% if attendee.badge_type == c.PSEUDO_DEALER_BADGE or 'transfer_badge' in c.PAGE_PATH %}
 {# Hack to get around WTForms requiring a selection for choice fields #}
 <input type="hidden" name="cabin_type" value="0" />
 {% endif %}

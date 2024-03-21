@@ -9,7 +9,7 @@ from wtforms.widgets import html_params
 from pockets.autolog import log
 
 from uber.config import c
-from uber.forms import (AddressForm, NumberInputGroup, MagForm, IntSelect, SwitchInput, HiddenIntField, SelectAvailableField, CustomValidation)
+from uber.forms import (MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, CustomValidation)
 from uber.custom_tags import popup_link, format_currency, pluralize, table_prices, email_to_link
 
 
@@ -51,6 +51,11 @@ class BadgeExtras:
 
 
 @MagForm.form_mixin
+class AdminBadgeExtras:
+    camping_type = SelectField('Camping Type', coerce=int, choices=c.CAMPING_TYPE_OPTS)
+
+
+@MagForm.form_mixin
 class Consents:
     acknowledged_checkin_policy = BooleanField(
         Markup('<strong>I acknowledge that there is NO early check-in and if I show up on Wednesday night '
@@ -83,6 +88,13 @@ class Consents:
                                     'waiver_signature', 'waiver_consent'])
 
         return optional_fields
+
+
+@MagForm.form_mixin
+class AdminConsents:
+    acknowledged_checkin_policy = HiddenBoolField()
+    waiver_consent = HiddenBoolField()
+    waiver_date = DateField('Date of Signature')
 
 
 @MagForm.form_mixin

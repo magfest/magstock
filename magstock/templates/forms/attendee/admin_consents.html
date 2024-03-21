@@ -1,0 +1,12 @@
+{% extends 'uber/templates/forms/attendee/admin_consents.html' %}
+
+{% block required %}
+{{ super() }}
+{{ consents.acknowledged_checkin_policy }}
+{{ consents.waiver_consent }}
+
+<div class="row g-sm-3">
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature, readonly=True) }}</div>
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_date, readonly=True) }}</div>
+</div>
+{% endblock %}
