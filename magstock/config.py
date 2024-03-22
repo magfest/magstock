@@ -28,7 +28,7 @@ class ExtraConfig:
         # Returns camping type options for the 'card_select' form macro.
 
         return [
-            {'name': 'Tent', 'icon': '', 'link': '', 'value': c.TENT, 'price': 0,
+            {'name': 'Tent', 'icon': '', 'link': '', 'value': c.TENT, 'price': c.CAMPING_TYPE_PRICES[c.TENT],
              'desc': 'Included in your registration! Tent camping is first come, first serve.'},
             {'name': 'Car', 'icon': '', 'link': '', 'value': c.CAR, 'price': c.CAMPING_TYPE_PRICES[c.CAR],
              'desc': 'Price is per vehicle.'},
@@ -40,28 +40,23 @@ class ExtraConfig:
         ]
     
     @property
-    def CAMPING_TYPE_BUTTONS(self):
-        # With apologies to future-me
-        camping_types = {}
-        camping_types[c.TENT] = ("Tent", c.CAMPING_TYPE_PRICES[c.TENT], "Included in your registration! Tent camping is first come, first serve.")
-        camping_types[c.CAR] = ("Car", c.CAMPING_TYPE_PRICES[c.CAR], "Price is per vehicle.")
-        camping_types[c.RV] = ("RV", c.CAMPING_TYPE_PRICES[c.RV], "Price is per vehicle, and there are no power or sewage hookups.")
-        camping_types[c.CABIN] = ("Cabin ($600+)", c.CAMPING_TYPE_PRICES[c.CABIN], "Select a cabin option below. Cabins are limited availability.")
-        return camping_types
-    
+    def FORMATTED_MEAL_PLANS(self):
+        return [
+            {'name': 'No thanks', 'icon': '', 'link': '', 'value': c.NO_FOOD,
+             'price': c.MEAL_PLAN_PRICES[c.NO_FOOD], 'desc': 'No food or beverage mess hall access.'},
+            {'name': 'Beverage Plan', 'icon': '', 'link': '', 'value': c.BEVERAGE,
+             'price': c.MEAL_PLAN_PRICES[c.BEVERAGE], 'desc': 'Full event mess hall beverage access.'},
+            {'name': 'Full Meal Plan', 'icon': '', 'link': '', 'value': c.FULL_FOOD,
+             'price': c.MEAL_PLAN_PRICES[c.FULL_FOOD],
+             'desc': 'Includes 6 meals (Dinner THU, Brunch and Dinner FRI+SAT, Brunch SUN) '
+             'AND full event mess hall beverage access.'},
+        ]
+
     @property
     def CAMPING_CABIN_TYPES(self):
         # For use with camping and cabin-related cost changes
         return {**c.CAMPING_TYPES, **c.CABIN_TYPES}
 
-    @property
-    def MEAL_TICKETS(self):
-        # Similar to the above, this is so our cost change system can accurately report how many brunch/dinner tickets you're buying
-        num_dict = {}
-        for i in range(1, 11):
-            num_dict[i] = str(i)
-        return num_dict
-    
     @request_cached_property
     @dynamic
     def CAMPING_TYPES_BOUGHT(self):

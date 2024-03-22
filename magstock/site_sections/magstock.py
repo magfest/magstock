@@ -7,32 +7,25 @@ from uber.models import Attendee
 
 
 def camp_food_report(session):
-    attendees_with_meal_tickets = sorted(session.attendees_with_badges().filter(
-        or_(Attendee.brunch_tickets > 0, Attendee.dinner_tickets > 0)), key=lambda a: a.full_name)
-    brunch_data = defaultdict(int)
-    dinner_data = defaultdict(int)
+    attendees_with_meal_plan = sorted(session.attendees_with_badges().filter(
+        Attendee.meal_plan != c.NO_FOOD), key=lambda a: a.full_name)
     total_data = defaultdict(int)
 
     total_data['attendees'] = []
 
-    for attendee in attendees_with_meal_tickets:
+    for attendee in attendees_with_meal_plan:
         total_data['attendees'].append(attendee)
         total_data['attendee_count'] += 1
 
-        if attendee.brunch_tickets:
-            brunch_data['attendee_count'] += 1
-            brunch_data['ticket_count'] += attendee.brunch_tickets
+        if attendee.meal_plan == c.BEVERAGE:
+            total_data['beverage'] += 1
+        elif attendee.meal_plan == c.FULL_FOOD:
+            total_data['full_food'] += 1
 
-        if attendee.dinner_tickets:
-            dinner_data['attendee_count'] += 1
-            dinner_data['ticket_count'] += attendee.dinner_tickets
-        
-        for restriction in attendee.meal_restrictions_ints:
-            total_data[restriction] += 1
-            brunch_data[restriction] += bool(attendee.brunch_tickets > 0)
-            dinner_data[restriction] += bool(attendee.dinner_tickets > 0)
+            for restriction in attendee.meal_restrictions_ints:
+                total_data[restriction] += 1
 
-    return brunch_data, dinner_data, total_data
+    return total_data
 
 @all_renderable()
 class Root:
@@ -63,28 +56,24 @@ class Root:
         }
 
     def food_consumers(self, session):
-        brunch_data, dinner_data, total_data = camp_food_report(session)
+        total_data = camp_food_report(session)
         return {
-            'brunch_data': brunch_data,
-            'dinner_data': dinner_data,
             'total_data': total_data,
         }
     
     @csv_file
     def food_consumers_report(self, out, session):
-        brunch_data, dinner_data, total_data = camp_food_report(session)
+        total_data = camp_food_report(session)
         header_row = [
             '# Attendees',
-            'Brunch Tickets',
-            'Dinner Tickets',
-            'Total Tickets',
+            '# Beverage Plans'
+            '# Full Meal Plans',
         ]
 
         data_row = [
             total_data['attendee_count'],
-            brunch_data['ticket_count'],
-            dinner_data['ticket_count'],
-            brunch_data['ticket_count'] + dinner_data['ticket_count']
+            total_data['beverage'],
+            total_data['full_food'],
             ]
 
         for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS:
@@ -113,6 +102,6 @@ class Root:
     def addons(self, session):
         return {
             'all_cabins_stock': sum([int(val) for key, val in c.CABIN_TYPE_STOCKS.items()]),
-            'brunch_ticket_count': session.valid_attendees().with_entities(func.sum(Attendee.brunch_tickets)).scalar(),
-            'dinner_ticket_count': session.valid_attendees().with_entities(func.sum(Attendee.dinner_tickets)).scalar(),
+            'beverage_plan_count': session.valid_attendees().filter(Attendee.meal_plan == c.BEVERAGE).count(),
+            'full_plan_count': session.valid_attendees().filter(Attendee.meal_plan == c.FULL_FOOD).count(),
         }

@@ -29,9 +29,3 @@ def cabin_sold_out(attendee):
     if (attendee.is_new or attendee.orig_value_of('cabin_type') != attendee.cabin_type) \
         and attendee.cabin_type and c.CABIN_AVAILABILITY_MATRIX[attendee.cabin_type] < 1:
         return "The type of cabin you have selected is sold out."
-
-
-@validation.Attendee
-def meal_tickets(attendee):
-    if attendee.brunch_tickets < 0 or attendee.dinner_tickets < 0:
-        return "You cannot buy negative meal tickets."

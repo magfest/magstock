@@ -1,39 +1,4 @@
 {% import 'macros.html' as macros with context %}
-
-<script type="text/javascript">
-
-    var showOrHideAllergies = function () {
-        setVisible('#meal_restrictions', 
-            ($.field('brunch_tickets') != null && $.field('brunch_tickets').val() > 0) || 
-            ($.field('dinner_tickets') != null && $.field('dinner_tickets').val() > 0));
-    };
-
-    $(function () {
-        if ($('#food').size()) {
-            {% if money_fields_ro %}
-            $('#food').insertAfter($('#upgradeModal .extra-row').last());
-            {% elif admin_area %}
-            $('#food').insertBefore($.field('amount_extra').parents('.form-group'));
-            {% else %}
-            $('#food').insertAfter($('.extra-row').last());
-            {% endif %}
-        }
-
-        //showOrHideAllergies();
-        if ($.field('brunch_tickets')) {
-            $.field('brunch_tickets').on('change', showOrHideAllergies);
-            $.field('dinner_tickets').on('change', showOrHideAllergies);
-        }
-        
-        {% if money_fields_ro %}
-        if ($.field('brunch_tickets')) {
-            $.field('brunch_tickets').on('change', function() { updateReceiptPreview('brunch_tickets', $.val('brunch_tickets')) });
-            $.field('dinner_tickets').on('change', function() { updateReceiptPreview('dinner_tickets', $.val('dinner_tickets')) });
-        }
-        {% endif %}
-    });
-</script>
-
 {% if c.AT_THE_CON and is_prereg_form %}
     <script>
         $('.panel')

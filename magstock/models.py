@@ -14,8 +14,7 @@ AttendeeLookup.fields_full['gets_food'] = True
 
 @Session.model_mixin
 class Attendee:
-    brunch_tickets = Column(Integer, default=0)
-    dinner_tickets = Column(Integer, default=0)
+    meal_plan = Column(Choice(c.MEAL_PLAN_OPTS), default=c.NO_FOOD)
     meal_restrictions = Column(MultiChoice(c.MEAL_TICKET_RESTRICTION_OPTS))
     camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT)
     cabin_type = Column(Choice(c.CABIN_TYPE_OPTS), nullable=True)
@@ -25,13 +24,9 @@ class Attendee:
     waiver_consent = Column(Boolean, default=False)
     waiver_date = Column(Date, nullable=True, default=None)
     
-    def calc_meal_ticket_change(self, **kwargs):
-        if 'brunch_tickets' in kwargs:
-            current_cost = self.brunch_tickets * c.FOOD_PRICE * 100
-            new_cost = int(kwargs['brunch_tickets']) * c.FOOD_PRICE * 100
-        elif 'dinner_tickets' in kwargs:
-            current_cost = self.dinner_tickets * c.FOOD_PRICE * 100
-            new_cost = int(kwargs['dinner_tickets']) * c.FOOD_PRICE * 100
+    def calc_meal_plan_change(self, meal_plan):
+        current_cost = int(c.MEAL_PLAN_PRICES[self.meal_plan]) * 100
+        new_cost = int(c.MEAL_PLAN_PRICES[meal_plan]) * 100
 
         return current_cost, new_cost - current_cost
 
@@ -66,12 +61,13 @@ class Attendee:
             self.cabin_type = None
     
     @presave_adjustment
-    def meal_tickets_if_guest(self):
+    def meal_plan_if_guest(self):
+        """
         if self.badge_type == c.GUEST_BADGE and (
-                self.is_new or self.orig_value_of('badge_type') != c.GUEST_BADGE or (
-                self.last_updated and self.last_updated.when < datetime(2023, 6, 1, 21, tzinfo=c.EVENT_TIMEZONE))):
-            self.brunch_tickets += 1
-            self.dinner_tickets += 1
+                self.is_new or self.orig_value_of('badge_type') != c.GUEST_BADGE):
+            self.meal_plan == c.BEVERAGE
+        """
+        pass
 
     @property
     def num_free_event_shirts(self):
@@ -86,16 +82,14 @@ class Attendee:
     @property
     def addons(self):
         addon_list = []
-        if self.brunch_tickets:
-            addon_list.append('{} brunch ticket(s) (${} at ${}/ticket)'.format(self.brunch_tickets, self.brunch_tickets * c.FOOD_PRICE, c.FOOD_PRICE))
-        if self.dinner_tickets:
-            addon_list.append('{} dinner ticket(s) (${} at ${}/ticket)'.format(self.dinner_tickets, self.dinner_tickets * c.FOOD_PRICE, c.FOOD_PRICE))
+        if self.meal_plan:
+            addon_list.append(f'{self.meal_plan_label} (${c.MEAL_PLAN_PRICES[self.meal_plan]})')
         if self.camping_type and self.camping_type == c.CABIN and self.cabin_type:
-            addon_list.append('{}'.format(self.cabin_type_label))
+            addon_list.append(f'{self.cabin_type_label} (${c.CABIN_TYPE_PRICES[self.cabin_type]})')
         elif self.camping_type and int(c.CAMPING_TYPE_PRICES[self.camping_type]):
             addon_list.append('{}{}{}'.format(self.camping_type_label,
                                             ' parking pass' if self.camping_type in [c.CAR, c.RV] else '',
-                                            ' (${})'.format(c.CAMPING_TYPE_PRICES[self.camping_type]) if c.CAMPING_TYPE_PRICES[self.camping_type] else ''))
+                                            ' (${})'.format(c.CAMPING_TYPE_PRICES[self.camping_type])))
         return addon_list
     
     @property
@@ -109,7 +103,7 @@ class Attendee:
     @property
     def has_extras(self):
         return self.amount_extra or self.extra_donation or self.badge_type in c.BADGE_TYPE_PRICES \
-                or self.camping_type != c.TENT or self.cabin_type or self.brunch_tickets or self.dinner_tickets
+                or self.camping_type != c.TENT or self.cabin_type or self.meal_plan != c.NO_FOOD
     
     @property
     def shift_prereqs_complete(self):
@@ -127,8 +121,7 @@ class Attendee:
             self.badge_type = c.ATTENDEE_BADGE
         self.camping_type = c.TENT
         self.cabin_type = None
-        self.brunch_tickets = 0
-        self.dinner_tickets = 0
+        self.meal_plan = c.NO_FOOD
 
 
 @Session.model_mixin

@@ -9,7 +9,7 @@ from wtforms.widgets import html_params
 from pockets.autolog import log
 
 from uber.config import c
-from uber.forms import (MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, CustomValidation)
+from uber.forms import (MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, MultiCheckbox)
 from uber.custom_tags import popup_link, format_currency, pluralize, table_prices, email_to_link
 
 
@@ -41,7 +41,11 @@ class BadgeExtras:
                                       default=0, coerce=int,
                                       sold_out_list_func=lambda: [cabin for cabin in c.CABIN_AVAILABILITY_MATRIX
                                                                   if c.CABIN_AVAILABILITY_MATRIX[cabin] < 1])
-    # Meal tickets go here
+    meal_plan = HiddenIntField('Beverage/Meal Plan')
+    meal_restrictions = SelectMultipleField('Dietary Restrictions', choices=c.MEAL_TICKET_RESTRICTION_OPTS,
+                                            coerce=int, widget=MultiCheckbox(),
+                                            description="Ramblewood's kitchen labels allergens at meals "
+                                            "but can only specifically accommodate the above restrictions.")
 
     def camping_type_desc(self):
         return Markup(

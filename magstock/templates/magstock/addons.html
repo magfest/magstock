@@ -4,9 +4,9 @@
 
 <h2 class="center">MAGStock Add-Ons Summary</h2>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Camping Type and Cabins</div>
-    <div class="panel-body">
+<div class="card">
+    <div class="card-heading">Camping Type and Cabins</div>
+    <div class="card-body">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -47,9 +47,9 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Meal Tickets</div>
-    <div class="panel-body">
+<div class="card card-default">
+    <div class="card-heading">Meal Plans</div>
+    <div class="card-body">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -61,16 +61,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Brunch Ticket</td>
-                    <td>{{ c.FOOD_PRICE|format_currency }}</td>
-                    <td>{{ brunch_ticket_count }}</td>
-                    <td>{{ (brunch_ticket_count * c.FOOD_PRICE)|format_currency }}</td>
+                    <td>Beverage Plan</td>
+                    <td>{{ c.MEAL_PLAN_PRICES[c.BEVERAGE]|format_currency }}</td>
+                    <td>{{ beverage_plan_count }}</td>
+                    <td>{{ (beverage_plan_count * c.MEAL_PLAN_PRICES[c.BEVERAGE])|format_currency }}</td>
                 </tr>
                 <tr>
-                    <td>Dinner Ticket</td>
-                    <td>{{ c.FOOD_PRICE|format_currency }}</td>
-                    <td>{{ dinner_ticket_count }}</td>
-                    <td>{{ (dinner_ticket_count * c.FOOD_PRICE)|format_currency }}</td>
+                    <td>Full Meal Plan</td>
+                    <td>{{ c.MEAL_PLAN_PRICES[c.FULL_FOOD]|format_currency }}</td>
+                    <td>{{ full_plan_count }}</td>
+                    <td>{{ (full_plan_count * c.MEAL_PLAN_PRICES[c.FULL_FOOD])|format_currency }}</td>
                 </tr>
             </tbody>
         </table>

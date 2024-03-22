@@ -18,7 +18,7 @@ If you pre-ordered merch such as a t-shirt package, you can also pick those up a
 
 {% if attendee.donation_swag|list + attendee.addons|list %}
     <br/> <br/>
-    Your additional payment of {{ (attendee.amount_extra + attendee.default_brunch_tickets_cost + attendee.default_dinner_tickets_cost + attendee.default_camping_type_cost)|format_currency }} provides you with these add-ons:
+    Your additional payment of {{ (attendee.amount_extra + attendee.default_meal_plan_cost + attendee.default_camping_type_cost)|format_currency }} provides you with these add-ons:
     <ul>
     {% for swag in attendee.donation_swag|list + attendee.addons|list %}
         <li>{{ swag }}</li>
