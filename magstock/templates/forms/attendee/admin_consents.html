@@ -2,8 +2,9 @@
 
 {% block required %}
 {{ super() }}
-{{ consents.acknowledged_checkin_policy }}
-{{ consents.waiver_consent }}
+
+{{ form_macros.form_input(consents.acknowledged_checkin_policy, force_hidden=True)}}
+{{ form_macros.form_input(consents.waiver_consent, force_hidden=True)}}
 
 <div class="row g-sm-3">
     <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature, readonly=True) }}</div>

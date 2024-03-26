@@ -22,10 +22,3 @@ def waiver_consent(attendee):
                 attendee.legal_first_name + ' ' + attendee.legal_last_name)
         elif attendee.waiver_date and attendee.waiver_date != datetime.utcnow().date():
             return 'Your date of signature should be today'
-    
-
-@prereg_validation.Attendee
-def cabin_sold_out(attendee):
-    if (attendee.is_new or attendee.orig_value_of('cabin_type') != attendee.cabin_type) \
-        and attendee.cabin_type and c.CABIN_AVAILABILITY_MATRIX[attendee.cabin_type] < 1:
-        return "The type of cabin you have selected is sold out."

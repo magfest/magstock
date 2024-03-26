@@ -51,7 +51,7 @@ class Attendee:
         return int(current_cost) * 100, (int(new_cost) * 100) - (int(current_cost) * 100)
 
     def auto_update_receipt(self, params):
-        if params.get('camping_type') and params['camping_type'] != c.CABIN:
+        if params.get('camping_type') and int(params['camping_type']) != c.CABIN:
             params['cabin_type'] = 0
         return params
 
@@ -82,13 +82,13 @@ class Attendee:
     @property
     def addons(self):
         addon_list = []
-        if self.meal_plan:
+        if self.meal_plan and self.meal_plan != c.NO_FOOD:
             addon_list.append(f'{self.meal_plan_label} (${c.MEAL_PLAN_PRICES[self.meal_plan]})')
         if self.camping_type and self.camping_type == c.CABIN and self.cabin_type:
-            addon_list.append(f'{self.cabin_type_label} (${c.CABIN_TYPE_PRICES[self.cabin_type]})')
+            addon_list.append(f'{self.cabin_type_label}')
         elif self.camping_type and int(c.CAMPING_TYPE_PRICES[self.camping_type]):
             addon_list.append('{}{}{}'.format(self.camping_type_label,
-                                            ' parking pass' if self.camping_type in [c.CAR, c.RV] else '',
+                                            ' Parking Pass' if self.camping_type in [c.CAR, c.RV] else '',
                                             ' (${})'.format(c.CAMPING_TYPE_PRICES[self.camping_type])))
         return addon_list
     

@@ -17,6 +17,9 @@
                                     closest_hide_selector='.row',
                                     source_field_id=id_upgrade_prepend ~ "camping_type",
                                     target_field_prepend=id_upgrade_prepend) }}
+    <div class="row g-sm-3">
+        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type, required=True, id=id_upgrade_prepend ~ "cabin_type") }}</div>
+    </div>
 
     <div class="row g-sm-3">
         {{ form_macros.card_select(badge_extras.meal_plan,
@@ -27,12 +30,22 @@
                                     closest_hide_selector='.row',
                                     source_field_id=id_upgrade_prepend ~ "meal_plan",
                                     target_field_prepend=id_upgrade_prepend) }}
+
+    <div class="row g-sm-3">
+        <div class="col-12">{{ form_macros.form_input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
+    </div>
 {% elif not is_prereg_attendee %}
     <div class="row g-sm-3">
         <div class="col-12 col-sm-6">
             <div class="form-text">{{ badge_extras.camping_type.label.text }}</div>
             <div class="form-control-plaintext h5">{{ attendee.camping_type_label }}{% if attendee.camping_type != c.CABIN %}{{ macros.upgrade_button('camping-type') }}{% endif %}</div>
         </div>
+        {% if attendee.camping_type == c.CABIN %}
+        <div class="col-12 col-sm-6">
+            <div class="form-text">{{ badge_extras.cabin_type.label.text }}</div>
+            <div class="form-control-plaintext h5">{{ attendee.cabin_type_label }}{% if attendee.cabin_type != c.PRIVATE %}{{ macros.upgrade_button('cabin-type') }}{% endif %}</div>
+        </div>
+        {% endif %}
     </div>
     <div class="row g-sm-3">
         <div class="col-12 col-sm-6">
@@ -46,15 +59,6 @@
             </div>
         {% endif %}
     </div>
-{% endif %}
-
-{% if not receipt or upgrade_modal %}
-<div class="row g-sm-3">
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type, required=True, id=id_upgrade_prepend ~ "cabin_type") }}</div>
-</div>
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
-</div>
 {% endif %}
 {% endblock %}
 

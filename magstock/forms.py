@@ -9,7 +9,7 @@ from wtforms.widgets import html_params
 from pockets.autolog import log
 
 from uber.config import c
-from uber.forms import (MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, MultiCheckbox)
+from uber.forms import (CustomValidation, MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, MultiCheckbox)
 from uber.custom_tags import popup_link, format_currency, pluralize, table_prices, email_to_link
 
 
@@ -35,6 +35,8 @@ class PersonalInfo:
 
 @MagForm.form_mixin
 class BadgeExtras:
+    new_or_changed_validation = CustomValidation()
+
     camping_type = HiddenIntField('How are you camping?')
     cabin_type = SelectAvailableField('Cabin Type',
                                       choices=[(0, 'Please select a cabin type')] + c.CABIN_TYPE_OPTS,
@@ -52,6 +54,11 @@ class BadgeExtras:
             'Car and RV camping is restricted to a field adjacent to the communal bathrooms. '
             'Please review the information about camping options, including cabin type descriptions, '
             '<a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.')
+    
+    @new_or_changed_validation.cabin_type
+    def cabin_sold_out(form, field):
+        if field.data in field.get_sold_out_list():
+            raise ValidationError(f"Sorry, we're sold out of {c.CABIN_TYPES[field.data].lower()}s!")
 
 
 @MagForm.form_mixin
@@ -96,8 +103,6 @@ class Consents:
 
 @MagForm.form_mixin
 class AdminConsents:
-    acknowledged_checkin_policy = HiddenBoolField()
-    waiver_consent = HiddenBoolField()
     waiver_date = DateField('Date of Signature')
 
 
