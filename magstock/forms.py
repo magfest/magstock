@@ -115,3 +115,8 @@ class PreregOtherInfo:
     waiver_date_display = Consents.waiver_date_display
     waiver_date = Consents.waiver_date
     waiver_consent = Consents.waiver_consent
+
+    def staffing_label(self):
+        return ("We already have enough volunteers to run MAGStock this year. If you'd like to be added "
+                "to our waitlist, click here and indicate your areas of interest. If we can accommodate more "
+                "volunteers, Staffing Operations will reach out to you in mid-May")

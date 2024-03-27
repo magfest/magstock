@@ -1,0 +1,26 @@
+{% extends 'uber/templates/forms/attendee/staffing_info.html' %}
+
+{% block staffing %}
+{% set staffing_message = "" %}
+{% set label_text = "" %}
+{% if not admin_area %}
+    {% if attendee.badge_type in [c.CONTRACTOR_BADGE, c.STAFF_BADGE] %}
+    {% set staffing_message = "This checkbox is required for Contractors, Volunteers, and Staff. Please contact Staffing Operations if you wish to change your status." %}
+    {% elif attendee.shifts %}
+    {% set staffing_message = "Please " ~ 'see Staffing Operations to change your volunteer status.' if c.AT_THE_CON else 'unassign yourself from shifts before changing your volunteer status.' %}
+    {% endif %}
+    {% if not attendee.assigned_depts %}
+        {% set label_text = "We already have enough volunteers to run MAGStock this year. If you'd like to be added to our waitlist, click here and indicate your areas of interest. If we can accommodate more volunteers, Staffing Operations will reach out to you in mid-May." %}
+    {% endif %}
+{% endif %}
+<div class="row g-sm-3">
+    <div class="col-12">{{ form_macros.toggle_checkbox(staffing_info.staffing, 
+        [staffing_info.requested_depts_ids], toggle_required=True, label_text=label_text, help_text=staffing_message) }}</div>
+</div>
+
+{% if c.PUBLIC_DEPARTMENT_OPTS_WITH_DESC|length > 1 %}
+<div class="row g-sm-3">
+    <div class="col-12">{{ form_macros.form_input(staffing_info.requested_depts_ids) }}</div>
+</div>
+{% endif %}
+{% endblock %}
