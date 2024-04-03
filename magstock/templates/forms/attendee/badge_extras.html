@@ -35,6 +35,7 @@
         <div class="col-12">{{ form_macros.form_input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
     </div>
 {% elif not is_prereg_attendee %}
+{{ form_macros.form_input(badge_extras.cabin_type, force_hidden=True, default=0) }}
     <div class="row g-sm-3">
         <div class="col-12 col-sm-6">
             <div class="form-text">{{ badge_extras.camping_type.label.text }}</div>
