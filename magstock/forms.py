@@ -110,6 +110,7 @@ class AdminConsents:
 class PreregOtherInfo:
     first_name = HiddenField('First Name')
     last_name = HiddenField('Last Name')
+    legal_name = HiddenField('Legal Name')
     acknowledged_checkin_policy = Consents.acknowledged_checkin_policy
     waiver_signature = Consents.waiver_signature
     waiver_date_display = Consents.waiver_date_display

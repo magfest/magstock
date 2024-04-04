@@ -29,7 +29,7 @@
     <div class="col-12">{{ form_macros.form_input(consents.waiver_consent) }}</div>
 </div>
 {% else %}
-{{ form_macros.form_input(consents.acknowledged_checkin_policy, force_hidden=True)}}
-{{ form_macros.form_input(consents.waiver_consent, force_hidden=True)}}
+{{ form_macros.form_input(consents.acknowledged_checkin_policy, force_hidden=True, default="false") }}
+{{ form_macros.form_input(consents.waiver_consent, force_hidden=True, default="false") }}
 {% endif %}
 {% endblock %}

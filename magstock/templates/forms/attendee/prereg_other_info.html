@@ -19,6 +19,7 @@
 {# The waiver validation needs to check first/last name, so they need to exist on this form. #}
 {{ other_info.first_name }}
 {{ other_info.last_name }}
+{{ other_info.legal_name }}
 
 <div class="row g-sm-3">
     <div class="col-12 col-sm-6">{{ form_macros.form_input(other_info.waiver_signature) }}</div>
