@@ -75,10 +75,10 @@ class Consents:
     waiver_signature = StringField(
         'Electronic Signature',
         validators=[validators.DataRequired("You must sign your full legal name to consent to the waiver.")])
-    waiver_date_display = DateField('Date of Signature', render_kw={'disabled': True})
-    waiver_date = HiddenField('Date of Signature (UTC)',
-                              validators=[validators.DataRequired("No date of signature. "
-                                                                  "Please refresh the page or contact us.")])
+    waiver_date = DateField('Date of Signature',
+                            validators=[validators.DataRequired("No date of signature. "
+                                                                "Please refresh the page or contact us.")],
+                            render_kw={'readonly': True})
     waiver_consent = BooleanField(
         Markup('<strong>Yes</strong>, I understand that checking this box constitutes a legal signature '
                'confirming that I acknowledge and agree to the above waiver.'),
@@ -113,7 +113,6 @@ class PreregOtherInfo:
     legal_name = HiddenField('Legal Name')
     acknowledged_checkin_policy = Consents.acknowledged_checkin_policy
     waiver_signature = Consents.waiver_signature
-    waiver_date_display = Consents.waiver_date_display
     waiver_date = Consents.waiver_date
     waiver_consent = Consents.waiver_consent
 

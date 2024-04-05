@@ -20,8 +20,7 @@
 <div class="row g-sm-3">
     <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature) }}</div>
     <div class="col-12 col-sm-6">
-        {{ form_macros.form_input(consents.waiver_date_display, value=now()|datetime_local("%Y-%m-%d")) }}
-        {{ form_macros.form_input(consents.waiver_date, value=now()|datetime("%Y-%m-%d")) }}
+        {{ form_macros.form_input(consents.waiver_date, value=now()|datetime_local("%Y-%m-%d")) }}
     </div>
 </div>
 
