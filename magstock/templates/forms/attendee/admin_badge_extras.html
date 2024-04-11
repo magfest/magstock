@@ -7,6 +7,9 @@
     <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.camping_type) }}</div>
     <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type) }}</div>
 </div>
-
+<div class="row g-sm-3">
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.meal_plan) }}</div>
+    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.meal_restrictions) }}</div>
+</div>
 {{ super() }}
 {% endblock %}

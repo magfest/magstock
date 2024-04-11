@@ -128,4 +128,6 @@ class Attendee:
 class Group:
     @property
     def dealer_badges_remaining(self):
-        return 0
+        if self.status != c.APPROVED:
+            return 0
+        return 10

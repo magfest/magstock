@@ -64,6 +64,7 @@ class BadgeExtras:
 @MagForm.form_mixin
 class AdminBadgeExtras:
     camping_type = SelectField('Camping Type', coerce=int, choices=c.CAMPING_TYPE_OPTS)
+    meal_plan = SelectField('Beverage/Meal Plan', coerce=int, choices=c.MEAL_PLAN_OPTS)
 
 
 @MagForm.form_mixin
