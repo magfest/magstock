@@ -3,7 +3,6 @@ from datetime import datetime
 from os.path import join
 
 from residue import CoerceUTF8 as UnicodeText
-from sideboard.lib import parse_config
 from sqlalchemy.types import Boolean, Date
 from uber.api import AttendeeLookup
 from uber.config import c, Config
