@@ -1,13 +1,13 @@
 from os.path import join
+from pathlib import Path
 
-from sideboard.lib import parse_config, request_cached_property
-from uber.config import c, Config, dynamic
+from uber.config import c, Config, dynamic, parse_config, request_cached_property
 from uber.menu import MenuItem
 from uber.models import Attendee, Session
 
 from magstock._version import __version__  # noqa: F401
 
-config = parse_config(__file__)
+config = parse_config("magstock", Path(__file__).parents[0])
 c.include_plugin_config(config)
 
 c.MENU.append_menu_item(

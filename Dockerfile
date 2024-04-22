@@ -1,6 +1,7 @@
 FROM ghcr.io/magfest/ubersystem:main
+ENV uber_plugins=["magstock"]
 
 # install plugins
 COPY . plugins/magstock/
 
-RUN /app/env/bin/paver install_deps
+RUN uv pip install --system -r plugins/magstock/requirements.txt
