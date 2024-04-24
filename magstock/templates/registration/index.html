@@ -2,7 +2,7 @@
 
 {% block tableheadings %}
     <th><a href="index?order={{ order.camping_type }}">Camping/Cabin Type</a></th>
-    <th>Gets Food</th>
+    <th><a href="index?order={{ order.meal_plan }}">Meal Plan</a></th>
     {{ super() }}
 {% endblock tableheadings %}
 
@@ -11,7 +11,7 @@
         {{ attendee.camping_type_label }}{% if attendee.camping_type == c.CABIN %} ({{ attendee.cabin_type_label }}){% endif %}
     </td>
     <td>
-        {{ attendee.gets_food|yesno("Yes,No") }}
+        {{ attendee.meal_plan_label }}
     </td>
     {{ super() }}
 {% endblock tablerows %}

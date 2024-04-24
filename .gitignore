@@ -11,5 +11,5 @@ dist
 .cache
 .eggs/
 .coverage
-development.ini
+config.ini
 test.ini
