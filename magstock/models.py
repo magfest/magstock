@@ -10,8 +10,6 @@ from uber.utils import add_opt
 
 from magstock._version import __version__  # noqa: F401
 
-AttendeeLookup.fields_full['gets_food'] = True
-
 @Session.model_mixin
 class Attendee:
     meal_plan = Column(Choice(c.MEAL_PLAN_OPTS), default=c.NO_FOOD)
@@ -131,3 +129,5 @@ class Group:
         if self.status != c.APPROVED:
             return 0
         return 10
+    
+AttendeeLookup.fields_full['gets_food'] = True
