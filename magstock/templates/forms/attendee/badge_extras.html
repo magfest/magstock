@@ -10,7 +10,7 @@
 {% if not receipt or upgrade_modal %}
     <div class="row g-sm-3">
     {{ form_macros.card_select(badge_extras.camping_type,
-                               c.FORMATTED_CAMPING_TYPES, disabled_opts=[],
+                               c.FORMATTED_CAMPING_TYPES, disabled_opts=c.SOLD_OUT_CAMPING_TYPES,
                                target_field_id=id_upgrade_prepend ~ "camping_type") }}
     </div>
     {{ form_macros.toggle_fields_js(badge_extras.camping_type, [badge_extras.cabin_type], on_values=["267506057"], toggle_required=True, 

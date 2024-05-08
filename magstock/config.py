@@ -26,7 +26,6 @@ class ExtraConfig:
     @property
     def FORMATTED_CAMPING_TYPES(self):
         # Returns camping type options for the 'card_select' form macro.
-
         return [
             {'name': 'Tent', 'icon': '', 'link': '', 'value': c.TENT, 'price': c.CAMPING_TYPE_PRICES[c.TENT],
              'desc': 'Included in your registration! Tent camping is first come, first serve.'},
@@ -38,7 +37,18 @@ class ExtraConfig:
              'price': 0,
              'desc': 'Select a cabin option below. Cabins are limited availability.'}
         ]
-    
+
+    @property
+    def SOLD_OUT_CAMPING_TYPES(self):
+        sold_out_types = []
+        if c.CAR_STOCK and c.CAMPING_TYPES_BOUGHT[c.CAR] <= int(c.CAR_STOCK):
+            sold_out_types.append(c.CAR)
+        if c.RV_STOCK and c.CAMPING_TYPES_BOUGHT[c.RV] <= int(c.RV_STOCK):
+            sold_out_types.append(c.RV)
+        if not any(c.CABIN_AVAILABILITY_MATRIX.values()):
+            sold_out_types.append(c.CABIN)
+        return sold_out_types
+
     @property
     def FORMATTED_MEAL_PLANS(self):
         return [
