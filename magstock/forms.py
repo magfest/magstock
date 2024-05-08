@@ -54,7 +54,14 @@ class BadgeExtras:
             'Car and RV camping is restricted to a field adjacent to the communal bathrooms. '
             'Please review the information about camping options, including cabin type descriptions, '
             '<a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.')
-    
+
+    @new_or_changed_validation.camping_type
+    def car_or_rv_sold_out(form, field):
+        if field.data == c.CAR and c.CAR in c.SOLD_OUT_CAMPING_TYPES:
+            raise ValidationError(f"Sorry, we're sold out of car camping spaces!")
+        if field.data == c.RV and c.RV in c.SOLD_OUT_CAMPING_TYPES:
+            raise ValidationError(f"Sorry, we're sold out of RV spaces!")
+
     @new_or_changed_validation.cabin_type
     def cabin_sold_out(form, field):
         if field.data in field.get_sold_out_list():
