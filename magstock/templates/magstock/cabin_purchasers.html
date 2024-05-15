@@ -1,0 +1,53 @@
+{% extends "uber/templates/base.html" %}{% set admin_area=True %}
+{% block title %}MAGStock Cabin Report{% endblock %}
+{% block content %}
+<h2 class="center">MAGStock Cabin Report</h2>
+
+<div class="card">
+    <div class="card-header">Cabin Totals</div>
+    <div class="card-body">
+        <a href="cabin_purchasers_report">
+            <span class="glyphicon glyphicon-download"></span> Download CSV
+        </a>
+        <p><strong>{{ total_data['attendee_count'] }}</strong> attendees with cabins</p>
+        <p>Cabin type counts:
+            <ul>
+                {% for type, label in c.CABIN_TYPE_OPTS %}
+                <li><strong>{{ label }}</strong>: {{ total_data[type] }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+        {% if total_data['discrepancy_count'] %}
+        <p>
+            <strong>{{ total_data['discrepancy_count'] }} attendees are marked as having a cabin but do not have a specific cabin type.</strong>
+            Please check the list below for attendees without a cabin type.
+        </p>
+        {% endif %}
+    </div>
+</div>
+<br/>
+<div class="card">
+    <div class="card-header">Attendees with Cabins</div>
+    <div class="card-body">
+        <table class="table table-striped datatable">
+            <thead>
+                <th>Attendee</th>
+                <th>Cabin Type</th>
+                <th>Group Name</th>
+                <th>Badge Type</th>
+            </thead>
+            <tbody>
+                {% for attendee in total_data['attendees'] %}
+                <tr>
+                    <td>{{ attendee|form_link }}</td>
+                    <td>{{ attendee.cabin_type_label }}</td>
+                    <td>{{ attendee.group.name }}</td>
+                    <td>{{ attendee.badge_type_label }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

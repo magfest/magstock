@@ -86,7 +86,7 @@ class Consents:
     waiver_date = DateField('Date of Signature',
                             validators=[validators.DataRequired("No date of signature. "
                                                                 "Please refresh the page or contact us.")],
-                            render_kw={'readonly': True})
+                            render_kw={'readonly': True, 'tabIndex': -1})
     waiver_consent = BooleanField(
         Markup('<strong>Yes</strong>, I understand that checking this box constitutes a legal signature '
                'confirming that I acknowledge and agree to the above waiver.'),

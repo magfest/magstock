@@ -27,6 +27,21 @@ def camp_food_report(session):
 
     return total_data
 
+def camp_cabin_report(session):
+    attendees_with_cabins = session.attendees_with_badges().filter(Attendee.camping_type == c.CABIN)
+    total_data = defaultdict(int)
+    
+    total_data['attendees'] = sorted(attendees_with_cabins.all(), key=lambda a: a.full_name)
+    total_data['attendee_count'] = attendees_with_cabins.count()
+
+    for cabin_type in c.CABIN_TYPES.keys():
+        total_data[cabin_type] = attendees_with_cabins.filter(Attendee.cabin_type == cabin_type).count()
+        total_data['type_total'] += total_data[cabin_type]
+    
+    total_data['discrepancy_count'] = total_data['attendee_count'] - total_data['type_total']
+    
+    return total_data
+
 @all_renderable()
 class Root:
     def grouped(self, session, noise=None, site=None, camp=None):
@@ -79,6 +94,34 @@ class Root:
         for restriction, label in c.MEAL_TICKET_RESTRICTION_OPTS:
             header_row.append(label)
             data_row.append(total_data[restriction])
+
+        out.writerow(header_row)
+        out.writerow(data_row)
+    
+    def cabin_purchasers(self, session):
+        total_data = camp_cabin_report(session)
+        return {
+            'total_data': total_data,
+        }
+    
+    @csv_file
+    def cabin_purchasers_report(self, out, session):
+        total_data = camp_cabin_report(session)
+        header_row = [
+            '# Attendees',
+        ]
+
+        data_row = [
+            total_data['attendee_count'],
+            ]
+
+        for type, label in c.CABIN_TYPE_OPTS:
+            header_row.append(label)
+            data_row.append(total_data[type])
+
+        if total_data['discrepancy_count']:
+            header_row.append("Attendees With Null Cabins")
+            data_row.append(total_data['discrepancy_count'])
 
         out.writerow(header_row)
         out.writerow(data_row)

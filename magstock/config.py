@@ -15,6 +15,7 @@ c.MENU.append_menu_item(
         MenuItem(name='Add-Ons Purchased', href='../magstock/addons'),
         MenuItem(name='Tent Groupings', href='../magstock/grouped'),
         MenuItem(name='Food Report', href='../magstock/food_consumers'),
+        MenuItem(name='Cabin Report', href='../magstock/cabin_purchasers'),
         MenuItem(name='Campsite Assignments', href='../magstock/campsite_assignments'),
         MenuItem(name='Parking Info', href='../magstock/parking'),
     ])

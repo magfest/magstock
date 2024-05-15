@@ -1,8 +1,8 @@
 {% extends "uber/templates/registration/index_base.html" %}
 
 {% block tableheadings %}
-    <th><a href="index?order={{ order.camping_type }}">Camping/Cabin Type</a></th>
-    <th><a href="index?order={{ order.meal_plan }}">Meal Plan</a></th>
+    <th><a href="index?order={{ order.camping_type }}&page={{ page }}&search_text={{ search_text|urlencode }}&invalid={{ invalid }}">Camping/Cabin Type</a></th>
+    <th><a href="index?order={{ order.meal_plan }}&page={{ page }}&search_text={{ search_text|urlencode }}&invalid={{ invalid }}">Meal Plan</a></th>
     {{ super() }}
 {% endblock tableheadings %}
 

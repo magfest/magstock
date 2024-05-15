@@ -11,5 +11,5 @@ dist
 .cache
 .eggs/
 .coverage
-config.ini
+magstock.ini
 test.ini
