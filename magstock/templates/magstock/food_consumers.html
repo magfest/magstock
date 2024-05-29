@@ -32,6 +32,7 @@
                 <th>Meal Restrictions</th>
                 <th>Group Name</th>
                 <th>Badge Type</th>
+                <th>Paid?</th>
             </thead>
             <tbody>
                 {% for attendee in total_data['attendees'] %}
@@ -49,6 +50,10 @@
                     </td>
                     <td>{{ attendee.group.name }}</td>
                     <td>{{ attendee.badge_type_label }}</td>
+                    <td data-sort="{{ total_data['owe_money'][attendee.id] }}">
+                        {% if total_data['owe_money'][attendee.id] %}No (owes {{ total_data['owe_money'][attendee.id]|format_currency }})
+                        {% else %}Yes{% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

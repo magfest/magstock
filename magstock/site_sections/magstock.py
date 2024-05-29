@@ -7,15 +7,19 @@ from uber.models import Attendee
 
 
 def camp_food_report(session):
-    attendees_with_meal_plan = sorted(session.attendees_with_badges().filter(
+    attendees_with_meal_plan = sorted(session.valid_attendees().filter(
         Attendee.meal_plan != c.NO_FOOD), key=lambda a: a.full_name)
     total_data = defaultdict(int)
 
     total_data['attendees'] = []
+    total_data['owe_money'] = {}
 
     for attendee in attendees_with_meal_plan:
         total_data['attendees'].append(attendee)
         total_data['attendee_count'] += 1
+
+        if attendee.amount_unpaid:
+            total_data['owe_money'][attendee.id] =  attendee.amount_unpaid
 
         if attendee.meal_plan == c.BEVERAGE:
             total_data['beverage'] += 1
@@ -28,11 +32,15 @@ def camp_food_report(session):
     return total_data
 
 def camp_cabin_report(session):
-    attendees_with_cabins = session.attendees_with_badges().filter(Attendee.camping_type == c.CABIN)
+    attendees_with_cabins = session.valid_attendees().filter(Attendee.camping_type == c.CABIN)
     total_data = defaultdict(int)
     
     total_data['attendees'] = sorted(attendees_with_cabins.all(), key=lambda a: a.full_name)
     total_data['attendee_count'] = attendees_with_cabins.count()
+    total_data['owe_money'] = {}
+
+    for attendee in [a for a in attendees_with_cabins if a.amount_unpaid]:
+        total_data['owe_money'][attendee.id] = attendee.amount_unpaid
 
     for cabin_type in c.CABIN_TYPES.keys():
         total_data[cabin_type] = attendees_with_cabins.filter(Attendee.cabin_type == cabin_type).count()
