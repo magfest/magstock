@@ -26,7 +26,7 @@
     <div class="row g-sm-3">
         {{ form_macros.card_select(badge_extras.meal_plan,
                                    c.FORMATTED_MEAL_PLANS,
-                                   help_text="" if not c.MEAL_PLAN_DEADLINE else "You can purchase a beverage or meal plan any time before " ~ c.MEAL_PLAN_DEADLINE|datetime_local,
+                                   help_text="" if not c.MEAL_PLAN_DEADLINE else "You can purchase a beverage or meal plan any time before " ~ c.MEAL_PLAN_DEADLINE|datetime_local ~ ".",
                                    disabled_opts=[],
                                    target_field_id=id_upgrade_prepend ~ "meal_plan") }}
     </div>
