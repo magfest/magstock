@@ -6,6 +6,7 @@
 {{ super() }}
 {{ badge_extras.camping_type(id=id_upgrade_prepend ~ "camping_type") }}
 {{ badge_extras.meal_plan(id=id_upgrade_prepend ~ "meal_plan") }}
+{% set show_meal_plans = not c.MEAL_PLAN_DEADLINE or c.BEFORE_MEAL_PLAN_DEADLINE %}
 
 {% if not receipt or upgrade_modal %}
     <div class="row g-sm-3">
@@ -21,9 +22,12 @@
         <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type, required=True, id=id_upgrade_prepend ~ "cabin_type") }}</div>
     </div>
 
+    {% if show_meal_plans %}
     <div class="row g-sm-3">
         {{ form_macros.card_select(badge_extras.meal_plan,
-                                   c.FORMATTED_MEAL_PLANS, disabled_opts=[],
+                                   c.FORMATTED_MEAL_PLANS,
+                                   help_text="" if not c.MEAL_PLAN_DEADLINE else "You can purchase a beverage or meal plan any time before " ~ c.MEAL_PLAN_DEADLINE|datetime_local,
+                                   disabled_opts=[],
                                    target_field_id=id_upgrade_prepend ~ "meal_plan") }}
     </div>
     {{ form_macros.toggle_fields_js(badge_extras.meal_plan, [badge_extras.meal_restrictions], on_values=[c.FULL_FOOD|string],
@@ -34,6 +38,24 @@
     <div class="row g-sm-3">
         <div class="col-12">{{ form_macros.form_input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
     </div>
+    {% else %}
+    <div class="row g-sm-3">
+        <div class="col-12">
+            <div class="form-text">{{ badge_extras.meal_plan.label }}</div>
+            {% if attendee.meal_plan != c.NO_FOOD %}
+            <div class="form-control-plaintext h5">{{ attendee.meal_plan_label }}</div>
+            {% endif %}
+            {% if attendee.meal_plan != c.FULL_FOOD %}
+            <div class="form-control-plaintext">
+                <em>
+                    The deadline to purchase a beverage or meal plan was {{ c.MEAL_PLAN_DEADLINE|datetime_local }}.
+                    Individual meal tickets can be purchased through Ramblewood's Dining Hall for $20 per meal. Cash and digital payments are accepted.
+                </em>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 {% elif not is_prereg_attendee %}
 {{ form_macros.form_input(badge_extras.cabin_type, force_hidden=True, default=0) }}
     <div class="row g-sm-3">
@@ -51,7 +73,9 @@
     <div class="row g-sm-3">
         <div class="col-12 col-sm-6">
             <div class="form-text">{{ badge_extras.meal_plan.label.text }}</div>
-            <div class="form-control-plaintext h5">{{ attendee.meal_plan_label }}{% if attendee.meal_plan != c.FULL_FOOD %}{{ macros.upgrade_button('meal-plan') }}{% endif %}</div>
+            <div class="form-control-plaintext h5">
+                {{ attendee.meal_plan_label }}{% if attendee.meal_plan != c.FULL_FOOD and show_meal_plans %}{{ macros.upgrade_button('meal-plan') }}{% endif %}
+            </div>
         </div>
         {% if attendee.meal_plan == c.FULL_FOOD %}
             <div class="col-12 col-sm-6">
