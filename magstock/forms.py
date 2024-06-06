@@ -128,3 +128,10 @@ class PreregOtherInfo:
         return ("We already have enough volunteers to run MAGStock this year. If you'd like to be added "
                 "to our waitlist, click here and indicate your areas of interest. If we can accommodate more "
                 "volunteers, Staffing Operations will reach out to you in mid-May")
+
+@MagForm.form_mixin
+class CheckInForm:
+    camping_type = HiddenField('Camping Type')
+    cabin_type = HiddenField('Cabin Type')
+    meal_plan = HiddenField('Meal Plan')
+    license_plate = PersonalInfo.license_plate
