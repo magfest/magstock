@@ -68,10 +68,6 @@ class Attendee:
         pass
 
     @property
-    def num_free_event_shirts(self):
-        return 0
-
-    @property
     def available_cabin_types(self):
         if self.cabin_type:
             return [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
