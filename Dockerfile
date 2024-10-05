@@ -1,4 +1,4 @@
-FROM ghcr.io/magfest/ubersystem:main
+FROM ghcr.io/magfest/ubersystem:stock2024
 ENV uber_plugins=["magstock"]
 
 # install plugins
