@@ -9,7 +9,7 @@ Create Date: 2017-04-24 09:30:24.914513
 
 # revision identifiers, used by Alembic.
 revision = 'bb334f039eac'
-down_revision = '1ed43776064f'
+down_revision = '691be8fa880d'
 branch_labels = ('magstock',)
 depends_on = None
 
