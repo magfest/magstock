@@ -4,11 +4,13 @@
 
 {% block badge_type %}
 {{ super() }}
+{% if c.ADDONS_ENABLED %}
 {{ badge_extras.camping_type(id=id_upgrade_prepend ~ "camping_type") }}
 {{ badge_extras.meal_plan(id=id_upgrade_prepend ~ "meal_plan") }}
 {% set show_meal_plans = not c.MEAL_PLAN_DEADLINE or c.BEFORE_MEAL_PLAN_DEADLINE %}
+{% endif %}
 
-{% if not receipt or upgrade_modal %}
+{% if c.ADDONS_ENABLED and not receipt or upgrade_modal %}
     <div class="row g-sm-3">
     {{ form_macros.card_select(badge_extras.camping_type,
                                c.FORMATTED_CAMPING_TYPES, disabled_opts=c.SOLD_OUT_CAMPING_TYPES,
@@ -56,7 +58,7 @@
         </div>
     </div>
     {% endif %}
-{% elif not is_prereg_attendee %}
+{% elif c.ADDONS_ENABLED and not is_prereg_attendee %}
 {{ form_macros.form_input(badge_extras.cabin_type, force_hidden=True, default=0) }}
     <div class="row g-sm-3">
         <div class="col-12 col-sm-6">

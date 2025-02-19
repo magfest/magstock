@@ -5,9 +5,12 @@
 {# Hack to get around WTForms requiring a selection for choice fields #}
 <input type="hidden" name="cabin_type" value="0" />
 {% endif %}
-
+{% if c.AT_THE_CON %}
 <div class="row g-sm-3">
     {{ super() }}
     <div class="col-12 col-sm-6">{{ form_macros.form_input(personal_info.license_plate) }}</div>
 </div>
+{% else %}
+{{ super() }}
+{% endif %}
 {% endblock %}
