@@ -1,9 +1,9 @@
 body {
-    background-color: white;
+    background-color: black;
 }
 
 .masthead {
-    padding-top: 21.02%; /* The height is 21.02% of the width (378 / 1798px) */
+    padding-top: 30.86%; /* The height is 30.86% of the width (500 / 1620px) */
 }
 
 @media
