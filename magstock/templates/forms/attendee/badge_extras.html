@@ -122,3 +122,17 @@
 </script>
 {% endif %}
 {% endblock %}
+
+{% block perk_info %}
+{% if (c.ADDONS_ENABLED and (not receipt or upgrade_modal)) or attendee.gets_any_kind_of_shirt or admin_area %}
+<div class="row g-sm-3{% if c.STAFF_SHIRTS_OPTIONAL %} mb-3{% endif %}">
+    {% if attendee.gets_staff_shirt and not c.STAFF_SHIRTS_OPTIONAL and c.SHIRT_OPTS != c.STAFF_SHIRT_OPTS %}
+        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.staff_shirt, required=True) }}</div>
+    {% endif %}
+    {% if (c.ADDONS_ENABLED and (not receipt or upgrade_modal)) or attendee.num_event_shirts_owed > 0 or (attendee.gets_staff_shirt and c.SHIRT_OPTS == c.STAFF_SHIRT_OPTS) or admin_area %}
+        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.shirt, extra_field=macros.popup_link("../static/swag/shirt_guide.png", "[size guide]")) }}
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
