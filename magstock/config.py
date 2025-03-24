@@ -42,9 +42,9 @@ class ExtraConfig:
     @property
     def SOLD_OUT_CAMPING_TYPES(self):
         sold_out_types = []
-        if c.CAR_STOCK and c.CAMPING_TYPES_BOUGHT[c.CAR] <= int(c.CAR_STOCK):
+        if c.CAR_STOCK and c.CAMPING_TYPES_BOUGHT[c.CAR] >= int(c.CAR_STOCK):
             sold_out_types.append(c.CAR)
-        if c.RV_STOCK and c.CAMPING_TYPES_BOUGHT[c.RV] <= int(c.RV_STOCK):
+        if c.RV_STOCK and c.CAMPING_TYPES_BOUGHT[c.RV] >= int(c.RV_STOCK):
             sold_out_types.append(c.RV)
         if not any(c.CABIN_AVAILABILITY_MATRIX.values()):
             sold_out_types.append(c.CABIN)

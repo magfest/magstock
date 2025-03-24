@@ -68,10 +68,28 @@ class Attendee:
         pass
 
     @property
+    def available_camping_type_opts(self):
+        if self.is_new or self.camping_type == c.TENT or self.is_unpaid:
+            return c.FORMATTED_CAMPING_TYPES
+
+        if self.camping_type == c.CABIN:
+            return [opt for opt in c.FORMATTED_CAMPING_TYPES if opt['value'] == c.CABIN]
+
+        camping_type_opts = []
+
+        for opt in c.FORMATTED_CAMPING_TYPES:
+            if 'price' not in opt or int(c.CAMPING_TYPE_PRICES[self.camping_type]
+                                         ) <= int(opt['price']) or opt['value'] == c.CABIN:
+                camping_type_opts.append(opt)
+
+        return camping_type_opts
+
+    @property
     def available_cabin_types(self):
+        cabin_opts = [(0, 'Please select a cabin type')]
         if self.cabin_type:
-            return [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
-        return c.CABIN_TYPE_OPTS
+            return cabin_opts + [(key, desc) for key, desc in c.CABIN_TYPE_OPTS if int(c.CABIN_TYPE_PRICES[key]) >= int(c.CABIN_TYPE_PRICES[self.cabin_type])]
+        return cabin_opts + c.CABIN_TYPE_OPTS
 
     @property
     def addons(self):

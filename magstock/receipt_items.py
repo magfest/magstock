@@ -29,10 +29,11 @@ def meal_plan_cost(attendee, new_attendee=None):
 
 @receipt_calculation.Attendee
 def camping_type_cost(attendee, new_attendee=None):
-    if not new_attendee and not int(c.CAMPING_TYPE_PRICES[attendee.camping_type]) * 100:
-        return
-    elif not new_attendee and attendee.camping_type == c.CABIN:
-        return
+    if not new_attendee:
+        if attendee.camping_type == c.CABIN or not int(c.CAMPING_TYPE_PRICES[attendee.camping_type]) * 100:
+            return
+        return (f"Add {attendee.camping_type_label} Camping",
+                int(c.CAMPING_TYPE_PRICES[attendee.camping_type]) * 100, 'camping_type')
         
     if attendee.camping_type == c.CABIN or new_attendee.camping_type == c.CABIN:
         return
@@ -50,10 +51,11 @@ def camping_type_cost(attendee, new_attendee=None):
 
 @receipt_calculation.Attendee
 def cabin_type_cost(attendee, new_attendee=None):
-    if not new_attendee and not attendee.cabin_type:
-        return
-    elif not new_attendee and attendee.camping_type != c.CABIN:
-        return
+    if not new_attendee:
+        if not attendee.cabin_type or attendee.camping_type != c.CABIN:
+            return
+        return (f"Add {attendee.cabin_type_label}",
+            int(c.CABIN_TYPE_PRICES[attendee.cabin_type]) * 100, ('camping_type', 'cabin_type'))
 
     old_cost = (int(c.CABIN_TYPE_PRICES[attendee.cabin_type]) * 100) if attendee.cabin_type else None
     new_cost = (int(c.CABIN_TYPE_PRICES[new_attendee.cabin_type]) * 100) if new_attendee.cabin_type else None
