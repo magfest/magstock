@@ -96,7 +96,11 @@
 <script type="text/javascript">
     $(function () {
         $("#upgrade_camping_type").on('change', function() {
-            updateReceiptPreview(["camping_type", "cabin_type"], [this.value, $("#upgrade_cabin_type").val()]);
+            if (this.value == "{{ c.CABIN }}") {
+                updateReceiptPreview(["camping_type", "cabin_type"], [this.value, $("#upgrade_cabin_type").val()], 'cabin_type');
+            } else {
+                updateReceiptPreview(["camping_type", "cabin_type"], [this.value, $("#upgrade_cabin_type").val()], 'camping_type');
+            }
         });
 
         var lastCabinType;
@@ -105,7 +109,7 @@
                 return;
             } else {
                 if ($("#upgrade_camping_type").val() == "{{ c.CABIN }}") {
-                    updateReceiptPreview(["camping_type", "cabin_type"], ["{{ c.CABIN }}", this.value]);
+                    updateReceiptPreview(["camping_type", "cabin_type"], ["{{ c.CABIN }}", this.value], 'cabin_type');
                 }
                 lastCabinType = this.value;
             }
