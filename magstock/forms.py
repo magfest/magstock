@@ -35,7 +35,7 @@ class PersonalInfo:
 
 @MagForm.form_mixin
 class BadgeExtras:
-    new_or_changed_validation = CustomValidation()
+    field_validation, new_or_changed_validation = CustomValidation(), CustomValidation()
 
     camping_type = HiddenIntField('How are you camping?')
     cabin_type = SelectAvailableField('Cabin Type',
@@ -54,6 +54,11 @@ class BadgeExtras:
             'Car and RV camping is restricted to a field adjacent to the communal bathrooms. '
             'Please review the information about camping options, including cabin type descriptions, '
             '<a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.')
+
+    @field_validation.cabin_type
+    def required_if_cabin(form, field):
+        if form.camping_type.data and form.camping_type.data == c.CABIN and (not field.data or field.data == 0):
+            raise ValidationError("Please select a cabin type.")
 
     @new_or_changed_validation.camping_type
     def car_or_rv_sold_out(form, field):
