@@ -23,9 +23,21 @@
                 <tr>
                     <td colspan="2">{{ val }}</td>
                     <td>{% if key != c.CABIN %}{{ c.CAMPING_TYPE_PRICES[key]|format_currency }}{% endif %}</td>
-                    <td>{% if key == c.CABIN %}{{ all_cabins_stock }}{% else %}Unlimited{% endif %}</td>
+                    <td>
+                        {% if key == c.CABIN %}
+                        {{ all_cabins_stock }}
+                        {% elif key == c.CAR and c.CAR_STOCK %}{{ c.CAR_STOCK }}
+                        {% elif key == c.RV and c.RV_STOCK %}{{ c.RV_STOCK }}
+                        {% elif key == c.TENT and c.TENT_STOCK %}{{ c.TENT_STOCK }}
+                        {% else %}Unlimited{% endif %}
+                    </td>
                     <td>{{ c.CAMPING_TYPES_BOUGHT[key] }}</td>
-                    <td>{% if key == c.CABIN %}{{ all_cabins_stock - c.CAMPING_TYPES_BOUGHT[key] }}{% else %}N/A{% endif %}</td>
+                    <td>
+                        {% if key == c.CABIN %}{{ all_cabins_stock - c.CAMPING_TYPES_BOUGHT[key] }}
+                        {% elif key == c.CAR and c.CAR_STOCK %}{{ c.CAR_STOCK|int - c.CAMPING_TYPES_BOUGHT[key] }}
+                        {% elif key == c.RV and c.RV_STOCK %}{{ c.RV_STOCK|int - c.CAMPING_TYPES_BOUGHT[key] }}
+                        {% elif key == c.TENT and c.TENT_STOCK %}{{ c.TENT_STOCK|int - c.CAMPING_TYPES_BOUGHT[key] }}
+                        {% else %}N/A{% endif %}</td>
                     <td>{% if key == c.CABIN %}{{ c.CABIN_TOTAL|format_currency }}{% else %}{{ (c.CAMPING_TYPES_BOUGHT[key] * c.CAMPING_TYPE_PRICES[key]|int)|format_currency }}{% endif %}</td>
                 </tr>
                     {% if key == c.CABIN %}
