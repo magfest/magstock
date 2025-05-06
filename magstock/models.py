@@ -122,7 +122,7 @@ class Attendee:
         return not self.placeholder and (self.food_restrictions_filled_out or not c.PRE_CON) and (
             not c.VOLUNTEER_AGREEMENT_ENABLED or self.agreed_to_volunteer_agreement) and (
             not c.EMERGENCY_PROCEDURES_ENABLED or self.reviewed_emergency_procedures) \
-            and c.SHIFTS_CREATED
+            and c.AFTER_SHIFTS_CREATED
 
     def undo_extras(self):
         if self.active_receipt:
