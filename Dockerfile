@@ -1,4 +1,4 @@
-FROM ghcr.io/magfest/ubersystem:weststock2025
+FROM ghcr.io/magfest/ubersystem:main
 ENV uber_plugins=["magstock"]
 
 # install plugins
