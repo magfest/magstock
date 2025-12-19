@@ -1,0 +1,9 @@
+{% extends "uber/templates/preregistration/start_badge_transfer.html" %}
+
+{% block badge_details %}
+    The original badge cost was {{ transfer_badge.badge_cost|format_currency }}{% if transfer_badge.camping_type != c.TENT %}, plus a
+    {% if transfer_badge.camping_type == c.CABIN %}{{ c.CABIN_TYPES[transfer_badge.cabin_type] }} ({{ c.CABIN_TYPE_PRICES[transfer_badge.cabin_type]|format_currency }})
+    {% else %}{{ transfer_badge.camping_type_label }} ({{ c.CAMPING_TYPE_PRICES[transfer_badge.camping_type]|format_currency }}){% endif %}{% endif %}{% if transfer_badge.meal_plan != c.NO_FOOD %}
+    and a {{ transfer_badge.meal_plan_label }} ({{ c.MEAL_PLAN_PRICES[transfer_badge.meal_plan]|format_currency }}){% endif %}.
+    {% if transfer_badge.amount_extra %}This badge also includes a {{ c.DONATION_TIERS[transfer_badge.amount_extra] }} merch package ({{ transfer_badge.amount_extra|format_currency }}).{% endif %}
+{% endblock %}
