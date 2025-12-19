@@ -1,15 +1,11 @@
 {% extends 'uber/templates/forms/attendee/admin_badge_extras.html' %}
 
 {% block add_ons %}
-{{ form_macros.toggle_fields_js(badge_extras.camping_type, [badge_extras.cabin_type], on_values=["267506057"], toggle_required=True, 
-                                    closest_hide_selector='.form-floating') }}
-<div class="row g-sm-3">
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.camping_type) }}</div>
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type) }}</div>
+    <div class="col-sm">{{ form_macros.input(badge_extras.camping_type) }}</div>
+    <div class="col-sm" x-show="cabinTypes">{{ form_macros.input(badge_extras.cabin_type, required_if="cabinTypes") }}</div>
 </div>
-<div class="row g-sm-3">
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.meal_plan) }}</div>
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.meal_restrictions) }}</div>
-</div>
+<div class="row g-sm-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(badge_extras.meal_plan) }}</div>
+    <div class="col-sm" x-show="showFoodRestrictions">{{ form_macros.input(badge_extras.meal_restrictions) }}</div>
 {{ super() }}
 {% endblock %}

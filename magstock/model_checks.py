@@ -20,4 +20,4 @@ def waiver_consent(attendee):
             return 'Your waiver signature must match your full legal name, {}'.format(
                 attendee.legal_first_name + ' ' + attendee.legal_last_name)
         elif attendee.waiver_date and attendee.waiver_date != localized_now().date():
-            return 'Your date of signature should be today'
+            return 'Your date of signature should be today.'

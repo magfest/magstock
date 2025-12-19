@@ -13,14 +13,13 @@
         {% set label_text = "We already have enough volunteers to run MAGStock this year. If you'd like to be added to our waitlist, click here and indicate your areas of interest. If we can accommodate more volunteers, Staffing Operations will reach out to you in mid-May." %}
     {% endif %}
 {% endif %}
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.toggle_checkbox(staffing_info.staffing, 
-        [staffing_info.requested_depts_ids], toggle_required=True, label_text=label_text, help_text=staffing_message) }}</div>
+<div class="row g-sm-3 mb-3">
+    <div class="col-12">{{ form_macros.input(staffing_info.staffing, label_text=label_text, help_text=staffing_message) }}</div>
 </div>
 
 {% if c.PUBLIC_DEPARTMENT_OPTS_WITH_DESC|length > 1 %}
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(staffing_info.requested_depts_ids) }}</div>
+<div class="row g-sm-3 mb-3">
+    <div class="col-12">{{ form_macros.input(staffing_info.requested_depts_ids) }}</div>
 </div>
 {% endif %}
 {% endblock %}

@@ -1,47 +1,51 @@
 {% extends 'uber/templates/forms/attendee/badge_extras.html' %}
 
+{% block x_data %}
+{{ super() }}
+camping_type: {{ badge_extras.camping_type.data|tojson }},
+meal_plan: {{ badge_extras.meal_plan.data|tojson }},
+get cabinTypes() { return this.camping_type == {{ c.CABIN|tojson }} },
+get showFoodRestrictions() { return this.meal_plan == {{ c.FULL_FOOD|tojson }} },
+{% endblock %}
+
 {% set id_upgrade_prepend = "upgrade_" if upgrade_modal else "" %}
 
 {% block badge_type %}
 {{ super() }}
 {% if c.ADDONS_ENABLED %}
-{{ badge_extras.camping_type(id=id_upgrade_prepend ~ "camping_type") }}
-{{ badge_extras.meal_plan(id=id_upgrade_prepend ~ "meal_plan") }}
+{{ badge_extras.camping_type(id=id_upgrade_prepend ~ "camping_type", **{'x-model': "camping_type"}) }}
+{{ badge_extras.meal_plan(id=id_upgrade_prepend ~ "meal_plan", **{'x-model.number': "meal_plan"}) }}
 {% set show_meal_plans = not c.MEAL_PLAN_DEADLINE or c.BEFORE_MEAL_PLAN_DEADLINE %}
+{% else %}
+<input type="hidden" name="camping_type" value="{{ c.TENT }}" />
+<input type="hidden" name="cabin_type" value="0" />
+<input type="hidden" name="meal_plan" value="{{ c.NO_FOOD }}" />
 {% endif %}
 
 {% if c.ADDONS_ENABLED and not receipt or upgrade_modal %}
-    <div class="row g-sm-3">
+    </div>
+    <div class="row g-sm-3 mb-3">
     {{ form_macros.card_select(badge_extras.camping_type,
                                attendee.available_camping_type_opts, disabled_opts=c.SOLD_OUT_CAMPING_TYPES,
                                target_field_id=id_upgrade_prepend ~ "camping_type") }}
     </div>
-    {{ form_macros.toggle_fields_js(badge_extras.camping_type, [badge_extras.cabin_type], on_values=["267506057"], toggle_required=True, 
-                                    closest_hide_selector='.row',
-                                    source_field_id=id_upgrade_prepend ~ "camping_type",
-                                    target_field_prepend=id_upgrade_prepend) }}
-    <div class="row g-sm-3">
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.cabin_type, required=True, id=id_upgrade_prepend ~ "cabin_type") }}</div>
-    </div>
+    <div class="row g-sm-3 mb-3" x-show="cabinTypes">
+        <div class="col-sm">{{ form_macros.input(badge_extras.cabin_type, id=id_upgrade_prepend ~ "cabin_type", required_if="cabinTypes") }}</div>
 
     {% if show_meal_plans %}
-    <div class="row g-sm-3">
+    </div>
+    <div class="row g-sm-3 mb-3">
         {{ form_macros.card_select(badge_extras.meal_plan,
                                    c.FORMATTED_MEAL_PLANS,
                                    help_text="" if not c.MEAL_PLAN_DEADLINE else "You can prepurchase a beverage or meal plan any time before " ~ c.MEAL_PLAN_DEADLINE|datetime_local ~ ". Beverage plans can be purchased at registration on-site.",
                                    disabled_opts=[],
                                    target_field_id=id_upgrade_prepend ~ "meal_plan") }}
     </div>
-    {{ form_macros.toggle_fields_js(badge_extras.meal_plan, [badge_extras.meal_restrictions], on_values=[c.FULL_FOOD|string],
-                                    closest_hide_selector='.row',
-                                    source_field_id=id_upgrade_prepend ~ "meal_plan",
-                                    target_field_prepend=id_upgrade_prepend) }}
-
-    <div class="row g-sm-3">
-        <div class="col-12">{{ form_macros.form_input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
-    </div>
+    <div class="row g-sm-3 mb-3" x-show="showFoodRestrictions">
+        <div class="col-12">{{ form_macros.input(badge_extras.meal_restrictions, id=id_upgrade_prepend ~ "meal_restrictions") }}</div>
     {% else %}
-    <div class="row g-sm-3">
+    </div>
+    <div class="row g-sm-3 mb-3">
         <div class="col-12">
             <div class="form-text">{{ badge_extras.meal_plan.label }}</div>
             {% if attendee.meal_plan != c.NO_FOOD %}
@@ -56,36 +60,36 @@
             </div>
             {% endif %}
         </div>
-    </div>
     {% endif %}
 {% elif c.ADDONS_ENABLED and not is_prereg_attendee %}
-{{ form_macros.form_input(badge_extras.cabin_type, force_hidden=True, default=0) }}
-    <div class="row g-sm-3">
-        <div class="col-12 col-sm-6">
+    </div>
+    <div class="row g-sm-3 mb-3">
+        <div class="col-sm">
             <div class="form-text">{{ badge_extras.camping_type.label.text }}</div>
             <div class="form-control-plaintext h5">{{ attendee.camping_type_label }}{% if attendee.camping_type != c.CABIN %}{{ macros.upgrade_button('camping-type') }}{% endif %}</div>
         </div>
         {% if attendee.camping_type == c.CABIN %}
-        <div class="col-12 col-sm-6">
+        <div class="col-sm">
             <div class="form-text">{{ badge_extras.cabin_type.label.text }}</div>
             <div class="form-control-plaintext h5">{{ attendee.cabin_type_label }}{% if attendee.cabin_type != c.PRIVATE %}{{ macros.upgrade_button('cabin-type') }}{% endif %}</div>
         </div>
+        {% else %}
+        <input type="hidden" name="{{ badge_extras.cabin_type.name }}" value="0" />
         {% endif %}
     </div>
-    <div class="row g-sm-3">
-        <div class="col-12 col-sm-6">
+    <div class="row g-sm-3 mb-3">
+        <div class="col-sm">
             <div class="form-text">{{ badge_extras.meal_plan.label.text }}</div>
             <div class="form-control-plaintext h5">
                 {{ attendee.meal_plan_label }}{% if attendee.meal_plan != c.FULL_FOOD and show_meal_plans %}{{ macros.upgrade_button('meal-plan') }}{% endif %}
             </div>
         </div>
         {% if attendee.meal_plan == c.FULL_FOOD %}
-            <div class="col-12 col-sm-6">
+            <div class="col-sm">
                 <div class="form-text">{{ badge_extras.meal_restrictions.label.text }}</div>
                 <div class="form-control-plaintext h5">{{ attendee.meal_restrictions_labels|readable_join }}</div>
             </div>
         {% endif %}
-    </div>
 {% endif %}
 {% endblock %}
 
@@ -105,7 +109,7 @@
 
         var lastCabinType;
         $("#upgrade_cabin_type").on('change', function() {
-            if (lastCabinType !== undefined && this.value == lastCabinType) {
+            if (lastCabinType != 'undefined' && this.value == lastCabinType) {
                 return;
             } else {
                 if ($("#upgrade_camping_type").val() == "{{ c.CABIN }}") {
@@ -120,19 +124,5 @@
         })
     });
 </script>
-{% endif %}
-{% endblock %}
-
-{% block perk_info %}
-{% if (c.ADDONS_ENABLED and (not receipt or upgrade_modal)) or attendee.gets_any_kind_of_shirt or admin_area %}
-<div class="row g-sm-3{% if c.STAFF_SHIRTS_OPTIONAL %} mb-3{% endif %}">
-    {% if attendee.gets_staff_shirt and not c.STAFF_SHIRTS_OPTIONAL and c.SHIRT_OPTS != c.STAFF_SHIRT_OPTS %}
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.staff_shirt, required=True) }}</div>
-    {% endif %}
-    {% if (c.ADDONS_ENABLED and (not receipt or upgrade_modal)) or attendee.num_event_shirts_owed > 0 or (attendee.gets_staff_shirt and c.SHIRT_OPTS == c.STAFF_SHIRT_OPTS) or admin_area %}
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(badge_extras.shirt, extra_field=macros.popup_link("../static/swag/shirt_guide.png", "[size guide]")) }}
-        </div>
-    {% endif %}
-</div>
 {% endif %}
 {% endblock %}

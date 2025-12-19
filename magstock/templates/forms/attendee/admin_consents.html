@@ -6,17 +6,17 @@
 {% set allow_waiver_signature = not consents.waiver_signature or attendee.is_new or attendee.placeholder %}
 
 {% if allow_waiver_signature %}
-    <div class="row g-sm-3">
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature) }}</div>
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_date) }}</div>
+    <div class="row g-sm-3 mb-3">
+        <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_signature) }}</div>
+        <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_date) }}</div>
     </div>
 {% else %}
-    {{ form_macros.form_input(consents.acknowledged_checkin_policy, force_hidden=True)}}
-    {{ form_macros.form_input(consents.waiver_consent, force_hidden=True)}}
+    {{ form_macros.input(consents.acknowledged_checkin_policy, force_hidden=True)}}
+    {{ form_macros.input(consents.waiver_consent, force_hidden=True)}}
 
-    <div class="row g-sm-3">
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature, readonly=True) }}</div>
-        <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_date, readonly=True) }}</div>
+    <div class="row g-sm-3 mb-3">
+        <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_signature, readonly=True) }}</div>
+        <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_date, readonly=True) }}</div>
     </div>
 {% endif %}
 {% endblock %}

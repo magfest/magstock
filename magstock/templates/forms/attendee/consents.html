@@ -4,31 +4,27 @@
 {{ super() }}
 
 {% if 'transfer_badge' in c.PAGE_PATH or (not attendee.is_new and attendee.badge_status != c.PENDING_STATUS) %}
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(consents.acknowledged_checkin_policy) }}</div>
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(consents.acknowledged_checkin_policy) }}</div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-12">
-        <p class="text-center">
-            <strong>We require all attendees to sign a waiver before registering.</strong> Please 
-            {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.
-        </p>
+<div class="text-center">
+    <strong>We require all attendees to sign a waiver before registering.</strong> Please 
+    {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(consents.waiver_signature) }}</div>
+    <div class="col-sm">
+        {{ form_macros.input(consents.waiver_date, value=now()|datetime_local("%Y-%m-%d")) }}
     </div>
 </div>
 
-<div class="row g-sm-3">
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(consents.waiver_signature) }}</div>
-    <div class="col-12 col-sm-6">
-        {{ form_macros.form_input(consents.waiver_date, value=now()|datetime_local("%Y-%m-%d")) }}
-    </div>
-</div>
-
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(consents.waiver_consent) }}</div>
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(consents.waiver_consent) }}</div>
 </div>
 {% else %}
-{{ form_macros.form_input(consents.acknowledged_checkin_policy, force_hidden=True, default="false") }}
-{{ form_macros.form_input(consents.waiver_consent, force_hidden=True, default="false") }}
+<input type="hidden" name="acknowledged_checkin_policy" value="{{ consents.acknowledged_checkin_policy.data }}" />
+<input type="hidden" name="waiver_consent" value="{{ consents.waiver_consent.data }}" />
 {% endif %}
 {% endblock %}

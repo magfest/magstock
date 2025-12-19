@@ -1,24 +1,24 @@
 {% extends 'uber/templates/forms/attendee/check_in_form.html' %}
 
 {% block merch %}
-<div class="row g-sm-3">
-    <div class="col">{{ form_macros.form_input(check_in_form.camping_type, hidden_field_text=attendee.camping_type_label) }}</div>
+<div class="row g-sm-3 mb-3">
+    <div class="col">{{ form_macros.input(check_in_form.camping_type, hidden_field_text=attendee.camping_type_label) }}</div>
     {% if attendee.camping_type == c.CABIN %}
-    <div class="col">{{ form_macros.form_input(check_in_form.cabin_type, hidden_field_text=attendee.cabin_type_label) }}</div>
+    <div class="col">{{ form_macros.input(check_in_form.cabin_type, hidden_field_text=attendee.cabin_type_label) }}</div>
     {% endif %}
-    <div class="col">{{ form_macros.form_input(check_in_form.meal_plan, hidden_field_text=attendee.meal_plan_label) }}</div>
+    <div class="col">{{ form_macros.input(check_in_form.meal_plan, hidden_field_text=attendee.meal_plan_label) }}</div>
     
     {{ super() }}
 </div>
 {% endblock %}
 
 {% block editable %}
-<div class="row g-sm-3">
+<div class="row g-sm-3 mb-3">
     {% if c.COLLECT_EXACT_BIRTHDATE %}
         <div class="col">
-            {{ form_macros.form_input(check_in_form.birthdate) }}
+            {{ form_macros.input(check_in_form.birthdate) }}
         </div>
     {% endif %}
-    <div class="col">{{ form_macros.form_input(check_in_form.license_plate, help_text='The license plate # of the car they parked.') }}</div>
+    <div class="col">{{ form_macros.input(check_in_form.license_plate, help_text='The license plate # of the car they parked.') }}</div>
 </div>
 {% endblock %}

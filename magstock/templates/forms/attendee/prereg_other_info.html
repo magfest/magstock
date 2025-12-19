@@ -3,17 +3,13 @@
 {% block prereg_extras %}
 {{ super() }}
 
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(other_info.acknowledged_checkin_policy) }}</div>
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(other_info.acknowledged_checkin_policy) }}</div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-12">
-        <p class="text-center">
-            <strong>We require all attendees to sign a waiver before registering.</strong> Please 
-            {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.
-        </p>
-    </div>
+<div class="text-center">
+    <strong>We require all attendees to sign a waiver before registering.</strong> Please 
+    {{ macros.popup_link("../static_views/waiver.html", "view the waiver here") }}, then sign below.
 </div>
 
 {# The waiver validation needs to check first/last name, so they need to exist on this form. #}
@@ -21,14 +17,14 @@
 {{ other_info.last_name }}
 {{ other_info.legal_name }}
 
-<div class="row g-sm-3">
-    <div class="col-12 col-sm-6">{{ form_macros.form_input(other_info.waiver_signature) }}</div>
-    <div class="col-12 col-sm-6">
-        {{ form_macros.form_input(other_info.waiver_date, value=now()|datetime_local("%Y-%m-%d")) }}
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(other_info.waiver_signature) }}</div>
+    <div class="col-sm">
+        {{ form_macros.input(other_info.waiver_date, value=now()|datetime_local("%Y-%m-%d")) }}
     </div>
 </div>
 
-<div class="row g-sm-3">
-    <div class="col-12">{{ form_macros.form_input(other_info.waiver_consent) }}</div>
+<div class="row g-3 mb-3">
+    <div class="col-sm">{{ form_macros.input(other_info.waiver_consent) }}</div>
 </div>
 {% endblock %}

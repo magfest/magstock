@@ -18,13 +18,6 @@ class PersonalInfo:
     license_plate = StringField('License Plate #', render_kw={'placeholder': 'XXX-XXXX'})
     badge_printed_name = HiddenField('Badge Printed Name (Unused)')
 
-    def get_optional_fields(self, attendee, is_admin=False):
-        optional_list = self.super_get_optional_fields(attendee, is_admin)
-
-        # This field is disabled/hidden, so it's never required
-        optional_list.append('badge_printed_name')
-        return optional_list
-
     def onsite_contact_label(self):
         return "MAGBuddy"
 
@@ -54,6 +47,9 @@ class BadgeExtras:
             'Car and RV camping is restricted to a field adjacent to the communal bathrooms. '
             'Please review the information about camping options, including cabin type descriptions, '
             '<a href="https://magstock.org/camping-info/" target="_blank">on our website</a>.')
+    
+    def shirt_desc(self):
+        return popup_link("../static/swag/shirt_guide.png", "[size guide]")
 
     @field_validation.cabin_type
     def required_if_cabin(form, field):
@@ -83,35 +79,18 @@ class AdminBadgeExtras:
 class Consents:
     acknowledged_checkin_policy = BooleanField(
         Markup('<strong>I acknowledge that there is NO early check-in and if I show up on Wednesday night '
-               'then I will probably be asked to leave the campground.</strong>'),
-        validators=[validators.InputRequired("You must acknowledge that early check-in is not possible.")])
-    waiver_signature = StringField(
-        'Electronic Signature',
-        validators=[validators.DataRequired("You must sign your full legal name to consent to the waiver.")])
-    waiver_date = DateField('Date of Signature',
-                            validators=[validators.DataRequired("No date of signature. "
-                                                                "Please refresh the page or contact us.")],
-                            render_kw={'readonly': True, 'tabIndex': -1})
+               'then I will probably be asked to leave the campground.</strong>'))
+    waiver_signature = StringField('Electronic Signature')
+    waiver_date = DateField('Date of Signature', render_kw={'readonly': True, 'tabIndex': -1})
     waiver_consent = BooleanField(
         Markup('<strong>Yes</strong>, I understand that checking this box constitutes a legal signature '
-               'confirming that I acknowledge and agree to the above waiver.'),
-               validators=[validators.InputRequired("You must check the waiver consent checkbox.")])
+               'confirming that I acknowledge and agree to the above waiver.'))
 
     def get_non_admin_locked_fields(self, attendee):
         if attendee.needs_pii_consent:
             return []
 
         return ['pii_consent', 'acknowledged_checkin_policy', 'waiver_date', 'waiver_signature', 'waiver_consent']
-    
-    def get_optional_fields(self, attendee, is_admin=False):
-        optional_fields = self.super_get_optional_fields(attendee, is_admin)
-
-        if (attendee.is_new or attendee.badge_status == c.PENDING_STATUS) or (
-                attendee.valid_placeholder and cherrypy.request.method == 'POST'):
-            optional_fields.extend(['acknowledged_checkin_policy', 'waiver_date',
-                                    'waiver_signature', 'waiver_consent'])
-
-        return optional_fields
 
 
 @MagForm.form_mixin
@@ -132,7 +111,7 @@ class PreregOtherInfo:
     def staffing_label(self):
         return ("We already have enough volunteers to run MAGStock this year. If you'd like to be added "
                 "to our waitlist, click here and indicate your areas of interest. If we can accommodate more "
-                "volunteers, Staffing Operations will reach out to you in mid-May")
+                "volunteers, Staffing Operations will reach out to you in mid-May.")
 
 @MagForm.form_mixin
 class CheckInForm:
