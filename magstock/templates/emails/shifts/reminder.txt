@@ -8,4 +8,4 @@ You can add / drop / change your shifts anytime until {{ c.FINAL_EMAIL_DEADLINE|
 
 Please let us know if you have any questions.
 
-{{ c.STOPS_EMAIL_SIGNATURE }}
+{{ email_signature }}
