@@ -2,7 +2,7 @@ from wtforms import validators
 from wtforms.validators import ValidationError, StopValidation
 
 from .config import c
-from uber.validations import Consents, PreregOtherInfo, PanelInfo, RoomLottery, DietaryRestrictions, JobInfo, JobTemplateInfo
+from uber.validations import Consents, PreregOtherInfo, PanelInfo, RoomLottery, DietaryRestrictions, JobInfo, JobTemplateInfo, TableInfo
 
 
 def waiver_required(form):
@@ -33,3 +33,7 @@ Consents.field_validation.validations['waiver_consent']['optional'] = validators
 
 PreregOtherInfo.field_validation.required_fields.update(required_waiver_fields)
 
+
+TableInfo.field_validation.required_fields['waitlist_notice'] = (
+    "Please let us know the latest you are comfortable being pulled from the wait-list.",
+    'waitlist_notice', lambda x: x.form.model.is_dealer)

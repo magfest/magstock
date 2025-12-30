@@ -138,6 +138,8 @@ class Attendee:
 
 @Session.model_mixin
 class Group:
+    waitlist_notice = Column(Choice(c.DEALER_WAITLIST_OPTS), nullable=True)
+
     @property
     def dealer_badges_remaining(self):
         if self.status != c.APPROVED:

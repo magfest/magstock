@@ -113,6 +113,13 @@ class PreregOtherInfo:
                 "to our waitlist, click here and indicate your areas of interest. If we can accommodate more "
                 "volunteers, Staffing Operations will reach out to you in mid-May.")
 
+
+@MagForm.form_mixin
+class TableInfo:
+    waitlist_notice = SelectField('How close to the event are you comfortable being pulled from the wait-list?',
+                                  coerce=int, choices=[(0, 'Please select an option')] + c.DEALER_WAITLIST_OPTS)
+
+
 @MagForm.form_mixin
 class CheckInForm:
     camping_type = HiddenField('Camping Type')

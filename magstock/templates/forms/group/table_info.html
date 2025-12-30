@@ -1,0 +1,7 @@
+{% extends 'uber/templates/forms/group/table_info.html' %}
+
+{% block website %}
+{{ super() }}
+</div><div class="row g-3 mb-3">
+<div class="col-sm">{{ form_macros.input(table_info.waitlist_notice, required_if="is_dealer") }}</div>
+{% endblock %}
