@@ -1,5 +1,10 @@
 {% extends 'uber/templates/forms/attendee/personal_info.html' %}
 
+{% block x_data %}
+    {{ super() }}
+    get cellphoneRequired() { return !this.no_cellphone && !this.copy_cellphone && !this.unassignedOrPlaceholder },
+{% endblock %}
+
 {% block address %}
 {% if attendee.badge_type == c.PSEUDO_DEALER_BADGE or 'transfer_badge' in c.PAGE_PATH or 'badge_transfer' in c.PAGE_PATH %}
 {% if c.ADDONS_ENABLED %}

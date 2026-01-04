@@ -1,5 +1,20 @@
 {% extends 'uber/templates/forms/attendee/prereg_other_info.html' %}
 
+{% block staffing %}
+    <div class="col-12">
+        {{ form_macros.input(other_info.staffing, alpine_model="staffing") }}
+        <div class="d-none">
+            {{ form_macros.input(other_info.cellphone) }}
+            {{ form_macros.input(other_info.no_cellphone, alpine_model="no_cellphone") }}
+        </div>
+    </div>
+    {% if c.PUBLIC_DEPARTMENT_OPTS_WITH_DESC|length > 1 %}
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-12" x-show="staffing">{{ form_macros.input(other_info.requested_depts_ids) }}</div>
+    {% endif %}
+{% endblock %}
+
 {% block prereg_extras %}
 {{ super() }}
 

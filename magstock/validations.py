@@ -2,7 +2,7 @@ from wtforms import validators
 from wtforms.validators import ValidationError, StopValidation
 
 from .config import c
-from uber.validations import Consents, PreregOtherInfo, PanelInfo, RoomLottery, DietaryRestrictions, JobInfo, JobTemplateInfo, TableInfo
+from uber.validations import Consents, PreregOtherInfo, PersonalInfo, TableInfo, ignore_unassigned_and_placeholders
 
 
 def waiver_required(form):
@@ -29,6 +29,14 @@ Consents.field_validation.validations['acknowledged_checkin_policy']['optional']
 Consents.field_validation.validations['waiver_signature']['optional'] = validators.Optional()
 Consents.field_validation.validations['waiver_date']['optional'] = validators.Optional()
 Consents.field_validation.validations['waiver_consent']['optional'] = validators.Optional()
+
+
+@PersonalInfo.field_validation('cellphone')
+@ignore_unassigned_and_placeholders
+def cellphone_required(form, field):
+    if not field.data and (not hasattr(form, 'copy_phone') or not form.copy_phone.data
+            ) and not form.no_cellphone.data:
+        raise ValidationError("Please provide a phone number.")
 
 
 PreregOtherInfo.field_validation.required_fields.update(required_waiver_fields)
