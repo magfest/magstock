@@ -6,6 +6,8 @@ from uber.validations import Consents, PreregOtherInfo, PersonalInfo, TableInfo,
 
 
 def waiver_required(form):
+    if form.is_admin:
+        return False
     if type(form).__name__ == 'PreregOtherInfo' or (not form.model.is_new and form.model.badge_status != c.PENDING_STATUS):
         return True
 
