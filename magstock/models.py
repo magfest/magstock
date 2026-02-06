@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from residue import CoerceUTF8 as UnicodeText
+from sqlalchemy import String
 from sqlalchemy.types import Boolean, Date, Integer
 from uber.api import AttendeeLookup
 from uber.config import c
@@ -16,9 +16,9 @@ class Attendee:
     meal_restrictions = Column(MultiChoice(c.MEAL_TICKET_RESTRICTION_OPTS))
     camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT)
     cabin_type = Column(Choice(c.CABIN_TYPE_OPTS), nullable=True)
-    license_plate = Column(UnicodeText, default='')
+    license_plate = Column(String, default='')
     acknowledged_checkin_policy = Column(Boolean, default=False)
-    waiver_signature = Column(UnicodeText)
+    waiver_signature = Column(String)
     waiver_consent = Column(Boolean, default=False)
     waiver_date = Column(Date, nullable=True, default=None)
     

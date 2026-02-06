@@ -1,4 +1,4 @@
-import cherrypy
+import logging
 
 from markupsafe import Markup
 from wtforms import (BooleanField, DateField, EmailField, Form, FormField,
@@ -6,11 +6,13 @@ from wtforms import (BooleanField, DateField, EmailField, Form, FormField,
                      StringField, TelField, validators, TextAreaField)
 from wtforms.validators import ValidationError, StopValidation
 from wtforms.widgets import html_params
-from pockets.autolog import log
 
 from uber.config import c
 from uber.forms import (CustomValidation, MagForm, HiddenBoolField, HiddenIntField, SelectAvailableField, MultiCheckbox)
 from uber.custom_tags import popup_link, format_currency, pluralize, table_prices, email_to_link
+
+
+log = logging.getLogger(__name__)
 
 
 @MagForm.form_mixin
