@@ -15,7 +15,7 @@ from uber.utils import add_opt, mount_site_sections, static_overrides, localized
 
 @prereg_validation.Attendee
 def waiver_consent(attendee):
-    if attendee.is_new or attendee.placeholder:
+    if attendee.needs_pii_consent:
         if attendee.waiver_signature and attendee.waiver_signature != attendee.legal_first_name + ' ' + attendee.legal_last_name:
             return 'Your waiver signature must match your full legal name, {}'.format(
                 attendee.legal_first_name + ' ' + attendee.legal_last_name)
