@@ -1,0 +1,26 @@
+{% extends 'signup_base.html' %}
+{% block title %}Request Bed Space{% endblock %}
+
+{% block content %}
+
+<h2> Request Bed Space </h2>
+
+<p>
+    Staff and Volunteers can request a bed space in one of a few all-volunteer lodging options.
+    If you are tent camping, staying in an attendee cabin, or staying off-site, you do NOT need to fill out this form;
+    this is an add-on for staff/volunteers so that they can have an at-cost bed option. Those who fill out this form
+    will be invoiced the at-cost fee for a bed rental, which will need to be paid before the event.
+    If you have questions, please email {{ c.STAFF_EMAIL|email_only|email_to_link }}.
+</p>
+
+<h3><a href="{{ c.HOTEL_REQUESTS_URL }}" target="_blank">Bed Request Form</a></h3><br/>
+
+<form method="post" action="hotel">
+{{ csrf_token() }}
+<input type="hidden" name="id" value="{{ requests.db_id }}" />
+<input type="hidden" name="attendee_id" value="{{ attendee.id }}" />
+<button class="btn btn-success">I Have Filled Out The Bed Request Form</button>
+<button class="btn btn-warning" name="decline" value="1">I Will Not Need Bed Space</button>
+</form>
+
+{% endblock %}
