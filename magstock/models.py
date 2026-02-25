@@ -67,6 +67,11 @@ class Attendee:
         """
         pass
 
+    @presave_adjustment
+    def staffer_hotel_eligibility(self):
+        if self.staffing and (self.is_new or self.orig_value_of('staffing') is False) and self.badge_type != c.CONTRACTOR_BADGE:
+            self.hotel_eligible = True
+
     @property
     def available_camping_type_opts(self):
         if self.is_new or self.camping_type == c.TENT or self.is_unpaid:
