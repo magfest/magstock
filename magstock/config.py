@@ -34,7 +34,7 @@ class ExtraConfig:
              'desc': 'Price is per vehicle.'},
             {'name': 'RV', 'icon': '', 'link': '', 'value': c.RV, 'price': c.CAMPING_TYPE_PRICES[c.RV],
              'desc': 'Price is per vehicle, and there are no power or sewage hookups.'},
-            {'name': 'Cabin ($600+)', 'icon': '', 'link': '', 'value': c.CABIN,
+            {'name': 'Cabin ($650+)', 'icon': '', 'link': '', 'value': c.CABIN,
              'price': 0,
              'desc': 'Select a cabin option below. Cabins are limited availability.'}
         ]
