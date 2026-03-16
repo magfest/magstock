@@ -99,6 +99,10 @@ class ExtraConfig:
         for key, val in c.CABIN_TYPES_BOUGHT.items():
             running_total += val * int(c.CABIN_TYPE_PRICES[key])
         return running_total
+    
+    @property
+    def SUPERSTAR_MINIMUM(self):
+        return list(c.SUPERSTAR_DONATIONS.keys())[1]
 
 
 c.CABIN_TYPE_OPTS = [(key, '{} (${})'.format(desc, int(c.CABIN_TYPE_PRICES[key])) if int(c.CABIN_TYPE_PRICES.get(key, 0)) else desc) for key, desc in c.CABIN_TYPE_OPTS]

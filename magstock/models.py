@@ -6,7 +6,7 @@ from uber.api import AttendeeLookup
 from uber.config import c
 from uber.decorators import cost_property, presave_adjustment
 from uber.models import Choice, DefaultColumn as Column, MultiChoice, Session
-from uber.utils import add_opt
+from uber.utils import add_opt, remove_opt
 
 from magstock._version import __version__  # noqa: F401
 
@@ -71,6 +71,14 @@ class Attendee:
     def staffer_hotel_eligibility(self):
         if self.staffing and (self.is_new or self.orig_value_of('staffing') is False) and self.badge_type != c.CONTRACTOR_BADGE:
             self.hotel_eligible = True
+
+    @presave_adjustment
+    def set_superstar_ribbon(self):
+        if self.extra_donation >= c.SUPERSTAR_MINIMUM and c.SUPERSTAR_RIBBON not in self.ribbon_ints:
+            self.ribbon = add_opt(self.ribbon_ints, c.SUPERSTAR_RIBBON)
+        elif self.extra_donation < c.SUPERSTAR_MINIMUM and \
+                self.orig_value_of('extra_donation') >= c.SUPERSTAR_MINIMUM and c.SUPERSTAR_RIBBON in self.ribbon_ints:
+            self.ribbon = remove_opt(self.ribbon_ints, c.SUPERSTAR_RIBBON)
 
     @property
     def available_camping_type_opts(self):

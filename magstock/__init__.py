@@ -12,8 +12,11 @@ from . import models  # noqa: F401,E402,F403
 from . import model_checks  # noqa: F401,E402,F403
 from . import receipt_items  # noqa: F401
 from . import forms  # noqa: F401
+from .tasks import *
 from .validations import *  # noqa: F401,E402,F403
 
 mount_site_sections(config['module_root'])
 static_overrides(join(config['module_root'], 'static'))
 template_overrides(join(config['module_root'], 'templates'))
+
+from .automated_emails import *  # noqa: F401,E402,F403
