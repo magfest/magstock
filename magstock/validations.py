@@ -2,7 +2,7 @@ from wtforms import validators
 from wtforms.validators import ValidationError, StopValidation
 
 from .config import c
-from uber.validations import Consents, PreregOtherInfo, PersonalInfo, TableInfo, ignore_unassigned_and_placeholders
+from uber.validations import Consents, BadgeExtras, PreregOtherInfo, PersonalInfo, TableInfo, ignore_unassigned_and_placeholders
 
 
 def waiver_required(form):
@@ -22,6 +22,26 @@ required_waiver_fields = {
     'waiver_consent': ("You must check the waiver consent checkbox.",
                        'waiver_consent', lambda x: waiver_required(x.form)),    
     }
+
+
+@BadgeExtras.field_validation('cabin_type')
+def required_if_cabin(form, field):
+    if form.camping_type.data and form.camping_type.data == c.CABIN and (not field.data or field.data == 0):
+        raise ValidationError("Please select a cabin type.")
+
+
+@BadgeExtras.new_or_changed('camping_type')
+def car_or_rv_sold_out(form, field):
+    if field.data == c.CAR and c.CAR in c.SOLD_OUT_CAMPING_TYPES:
+        raise ValidationError(f"Sorry, we're sold out of car camping spaces!")
+    if field.data == c.RV and c.RV in c.SOLD_OUT_CAMPING_TYPES:
+        raise ValidationError(f"Sorry, we're sold out of RV spaces!")
+
+
+@BadgeExtras.new_or_changed('cabin_type')
+def cabin_sold_out(form, field):
+    if field.data in field.get_sold_out_list():
+        raise ValidationError(f"Sorry, we're sold out of {c.CABIN_TYPES[field.data].lower()}s!")
 
 
 Consents.field_validation.required_fields.update(required_waiver_fields)

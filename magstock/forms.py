@@ -28,8 +28,6 @@ class PersonalInfo:
 
 @MagForm.form_mixin
 class BadgeExtras:
-    field_validation, new_or_changed_validation = CustomValidation(), CustomValidation()
-
     camping_type = HiddenIntField('How are you camping?')
     cabin_type = SelectAvailableField('Cabin Type',
                                       choices=[(0, 'Please select a cabin type')] + c.CABIN_TYPE_OPTS,
@@ -50,23 +48,6 @@ class BadgeExtras:
     
     def shirt_desc(self):
         return popup_link("../static/swag/shirt_guide.png", "[size guide]")
-
-    @field_validation.cabin_type
-    def required_if_cabin(form, field):
-        if form.camping_type.data and form.camping_type.data == c.CABIN and (not field.data or field.data == 0):
-            raise ValidationError("Please select a cabin type.")
-
-    @new_or_changed_validation.camping_type
-    def car_or_rv_sold_out(form, field):
-        if field.data == c.CAR and c.CAR in c.SOLD_OUT_CAMPING_TYPES:
-            raise ValidationError(f"Sorry, we're sold out of car camping spaces!")
-        if field.data == c.RV and c.RV in c.SOLD_OUT_CAMPING_TYPES:
-            raise ValidationError(f"Sorry, we're sold out of RV spaces!")
-
-    @new_or_changed_validation.cabin_type
-    def cabin_sold_out(form, field):
-        if field.data in field.get_sold_out_list():
-            raise ValidationError(f"Sorry, we're sold out of {c.CABIN_TYPES[field.data].lower()}s!")
 
 
 @MagForm.form_mixin
