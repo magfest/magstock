@@ -32,6 +32,9 @@ def required_if_cabin(form, field):
 
 @BadgeExtras.new_or_changed('camping_type')
 def car_or_rv_sold_out(form, field):
+    if form.is_admin:
+        return
+    
     if field.data == c.CAR and c.CAR in c.SOLD_OUT_CAMPING_TYPES:
         raise ValidationError(f"Sorry, we're sold out of car camping spaces!")
     if field.data == c.RV and c.RV in c.SOLD_OUT_CAMPING_TYPES:
@@ -40,6 +43,9 @@ def car_or_rv_sold_out(form, field):
 
 @BadgeExtras.new_or_changed('cabin_type')
 def cabin_sold_out(form, field):
+    if form.is_admin:
+        return
+    
     if field.data in field.get_sold_out_list():
         raise ValidationError(f"Sorry, we're sold out of {c.CABIN_TYPES[field.data].lower()}s!")
 
