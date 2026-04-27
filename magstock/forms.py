@@ -107,3 +107,24 @@ class CheckInForm:
     cabin_type = HiddenField('Cabin Type')
     meal_plan = HiddenField('Meal Plan')
     license_plate = PersonalInfo.license_plate
+
+
+@MagForm.form_mixin
+class BaseJobInfo:
+    no_slots = HiddenField('')
+
+
+@MagForm.form_mixin
+class JobInfo:
+    slots = IntegerField('Slots', default=1)
+
+
+@MagForm.form_mixin
+class JobTemplateInfo:
+    min_slots = IntegerField('Minimum # Slots', default=1)
+
+    def no_slots_label(self):
+        return ''
+    
+    def no_slots_desc(self):
+        return ""
