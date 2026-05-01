@@ -18,7 +18,6 @@
                 Thanks for filling out the bed request form! If change your mind, please email {{ c.STAFF_EMAIL|email_only|email_to_link }}
                 {% endif %}
             {% endif %}
-            (Deadline: {{ c.ROOM_DEADLINE.astimezone(c.EVENT_TIMEZONE).strftime('%B %-e') }})
         </li>
     {% else %}
         <li>
@@ -28,7 +27,6 @@
             {% else %}
                 You didn't fill out the bed space request form before the deadline.
             {% endif %}
-            (Deadline: {{ c.ROOM_DEADLINE.astimezone(c.EVENT_TIMEZONE).strftime('%B %-e') }})
         </li>
     {% endif %}
 {% endif %}
