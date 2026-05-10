@@ -15,7 +15,7 @@
 <input type="hidden" name="meal_plan" value="{{ c.NO_FOOD }}" />
 {% endif %}
 {% endif %}
-{% if c.AT_THE_CON %}
+{% if attendee.camping_type == c.CAR or c.AT_THE_CON %}
 <div class="row g-sm-3 mb-3">
     {{ super() }}
     <div class="col-12 col-sm-6">{{ form_macros.input(personal_info.license_plate) }}</div>

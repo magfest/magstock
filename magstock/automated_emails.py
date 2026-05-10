@@ -14,3 +14,11 @@ AutomatedEmailFixture(
     when=[before(c.SUPERSTAR_DEADLINE)],
     sender='MAGFest Superstar Program <superstars@magfest.org>'
 )
+
+AutomatedEmailFixture(
+    Attendee, 'MAGStock Car Camping Information Reminder',
+    'car_camping.html',
+    filter=lambda a: a.camping_type == c.CAR,
+    ident='car_camping',
+    sender=c.REGDESK_EMAIL
+)
