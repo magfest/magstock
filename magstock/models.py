@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from residue import CoerceUTF8 as UnicodeText
+from markupsafe import Markup
 from sqlalchemy.types import Boolean, Date, Integer
 from uber.api import AttendeeLookup
 from uber.config import c
-from uber.decorators import cost_property, presave_adjustment
+from uber.decorators import presave_adjustment
 from uber.models import Choice, DefaultColumn as Column, MultiChoice, Session
 from uber.utils import add_opt, remove_opt
 
@@ -116,6 +117,27 @@ class Attendee:
                                             ' Parking Pass' if self.camping_type in [c.CAR, c.RV] else '',
                                             ' (${})'.format(c.CAMPING_TYPE_PRICES[self.camping_type])))
         return addon_list
+    
+    @property
+    def accoutrements(self):
+        stuff = []
+        if self.meal_plan >= c.BEVERAGE:
+            stuff.append("a beverage plan wristband")
+        if self.meal_plan == c.FULL_FOOD:
+            stuff.append("a meal card")
+
+    @property
+    def check_in_notes(self):
+        notes = []
+        if self.age_group_conf['consent_form']:
+            notes.append("Before checking this attendee in, please collect a signed parental consent form. If the guardian is there, and they have not already completed one, have them sign one in front of you.")
+
+        if self.meal_plan == c.FULL_FOOD:
+            notes.append("Ensure you provide the attendee with a meal card AND beverage plan wristband along with their event wristband.")
+        elif self.meal_plan == c.BEVERAGE:
+            notes.append("Ensure you provide the attendee with a beverage plan wristband along with their event wristband.")
+
+        return Markup("<br/><br/>".join(notes))
     
     @property
     def donation_swag(self):
