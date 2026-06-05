@@ -123,8 +123,10 @@ class Attendee:
         stuff = []
         if self.meal_plan >= c.BEVERAGE:
             stuff.append("a beverage plan wristband")
-        if self.meal_plan == c.FULL_FOOD:
+        elif self.meal_plan == c.FULL_FOOD:
             stuff.append("a meal card")
+        if self.camping_type == c.CAR:
+            stuff.append("a Car Camping Pass")
 
     @property
     def check_in_notes(self):
@@ -132,10 +134,20 @@ class Attendee:
         if self.age_group_conf['consent_form']:
             notes.append("Before checking this attendee in, please collect a signed parental consent form. If the guardian is there, and they have not already completed one, have them sign one in front of you.")
 
-        if self.meal_plan == c.FULL_FOOD:
-            notes.append("Ensure you provide the attendee with a meal card AND beverage plan wristband along with their event wristband.")
-        elif self.meal_plan == c.BEVERAGE:
-            notes.append("Ensure you provide the attendee with a beverage plan wristband along with their event wristband.")
+        if self.meal_plan == c.NO_FOOD and self.camping_type == c.CAR:
+            notes.append("Ensure you provide the attendee with a Car Camping Pass.")
+        else:
+            camping_pass = ''
+            if self.camping_type == c.CAR:
+                camping_pass = "a Car Camping Pass, plus "
+
+            if self.meal_plan == c.FULL_FOOD:
+                notes.append(f"Ensure you provide the attendee with {camping_pass}a meal card AND beverage plan wristband along with their event wristband.")
+            elif self.meal_plan == c.BEVERAGE:
+                notes.append(f"Ensure you provide the attendee with {camping_pass}a beverage plan wristband along with their event wristband.")
+        
+        if self.camping_type == c.CABIN and self.cabin_type:
+            notes.append("Check Cabin Assignment Sheet and provide attendee with cabin letter or number. Additionally ensure the cabin has been marked as checked in.")
 
         return Markup("<br/><br/>".join(notes))
     
