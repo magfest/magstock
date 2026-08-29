@@ -1,0 +1,28 @@
+<html>
+<head></head>
+<body>
+<p>
+    Hello Campers!
+    <br/>We're excited to see you at {{ c.EVENT_NAME }} in a month! We're reaching out because you have selected to utilize our car camping areas,
+    and we wanted to ensure everyone is prepared!
+</p>
+
+<p>
+    As a reminder, parking at {{ c.EVENT_NAME }} is free, and car camping is only needed if you are planning on camping with your vehicle.
+    Additionally, if you are wanting to camp with someone in car camping and are not bringing your own vehicle, you do not need to have car
+    camping, just the normal tent camping registration.
+</p>
+
+<p>
+    Please consider adding your license plate information
+    <a href="{{ c.URL_BASE }}/preregistration/confirm?id={{ attendee.id }}" target="_blank">into your registration details</a>
+    to help with the registration process, if you haven't already. The location of our designated Car Camping is behind the Horseshoe cabin area,
+    and can be found on our maps, such as <a href="https://magstock.org/schedule-and-map/" target="_blank">https://magstock.org/schedule-and-map/</a>
+    Our helpful parking staff will help ensure you have your Car Camping tag and will direct you to the parking site once you arrive.
+</p>
+
+<p>
+    Please feel free to contact {{ c.REGDESK_EMAIL|email_only|email_to_link }} if you have any further questions or concerns!
+</p>
+</body>
+</html>

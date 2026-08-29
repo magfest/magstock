@@ -17,17 +17,17 @@ Thanks for volunteering, welcome to the fold! Please let us know any dietary res
 
 <form method="post" action="food_restrictions">
     {{ csrf_token() }}
-    <input type="hidden" name="id" value="{{ fr.db_id }}" />
+    <input type="hidden" name="id" value="{{ restrictions.db_id }}" />
 
     Please select any options that apply:<br/>
-    <div id="restrictions">{{ macros.checkgroup(fr, 'standard') }}</div>
+    <div id="restrictions">{{ macros.checkgroup(restrictions, 'standard') }}</div>
 
     <br/>
     Let us know if you have any other allergies or restrictions,
     please use commas to separate each allergy and food restriction.
     <br/><br/>Please note we are unable to accommodate every constraint, and the form below is not designed for preferences due to taste.
     <br/><br/>
-    <textarea name="freeform" rows="3" cols="80">{{ fr.freeform }}</textarea>
+    <textarea name="freeform" rows="3" cols="80">{{ restrictions.freeform }}</textarea>
 
     <br/> <br/> <input type="submit" value="Save" /><br/>
     By clicking Save I agree that I have read the above information and indicated any restrictions requested.

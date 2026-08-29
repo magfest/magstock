@@ -1,7 +1,7 @@
 {% extends 'uber/templates/forms/attendee/admin_badge_extras.html' %}
 
 {% block add_ons %}
-    <div class="col-sm">{{ form_macros.input(badge_extras.camping_type) }}</div>
+    <div class="col-sm">{{ form_macros.input(badge_extras.camping_type, alpine_model="camping_type") }}</div>
     <div class="col-sm" x-show="cabinTypes">{{ form_macros.input(badge_extras.cabin_type, required_if="cabinTypes") }}</div>
 </div>
 <div class="row g-sm-3 mb-3">

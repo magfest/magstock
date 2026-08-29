@@ -1,0 +1,22 @@
+{% import 'macros.html' as macros %}
+{% if c.HOTELS_ENABLED and c.PRE_CON %}
+{% if c.ROOM_DEADLINE and attendee.hotel_eligible %}
+        <li>
+            {{ macros.checklist_image(attendee.hotel_requests) }}
+            {% if not attendee.hotel_requests %}
+                {% if attendee.placeholder %}
+                Tell us
+                {% else %}
+                <a href="hotel">Tell us</a>
+                {% endif %}
+                whether you want to request bed space.{% if c.STAFF_ROOM_FAQ_URL %} Please <a href="{{ c.STAFF_ROOM_FAQ_URL }}" target="_blank">review our FAQ</a> first.{% endif %}
+            {% else %}
+                {% if not attendee.hotel_requests.nights %}
+                You have already told us that you won't be requesting bed space. If you change your mind, you can <a href="hotel">still fill out the bed request form</a>.
+                {% else %}
+                Thanks for filling out the bed request form! If change your mind, please email {{ c.STAFF_EMAIL|email_only|email_to_link }}
+                {% endif %}
+            {% endif %}
+        </li>
+{% endif %}
+{% endif %}
