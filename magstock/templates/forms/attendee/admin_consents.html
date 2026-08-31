@@ -3,6 +3,7 @@
 {% block required %}
 {{ super() }}
 
+{% if c.WAIVER_REQUIRED %}
 {% set allow_waiver_signature = not consents.waiver_signature or attendee.is_new or attendee.placeholder %}
 
 {% if allow_waiver_signature %}
@@ -20,5 +21,6 @@
         <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_signature, readonly=True) }}</div>
         <div class="col-12 col-sm-6">{{ form_macros.input(consents.waiver_date, readonly=True) }}</div>
     </div>
+{% endif %}
 {% endif %}
 {% endblock %}

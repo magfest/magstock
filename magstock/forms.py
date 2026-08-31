@@ -41,6 +41,7 @@ class BadgeExtras:
                                             coerce=int, widget=MultiCheckbox(),
                                             description="Ramblewood's kitchen labels allergens at meals "
                                             "but can only specifically accommodate the above restrictions.")
+    staff_hat = SelectField('Staff Hat', coerce=int, choices=[(0, 'Please select an option')] + c.STAFF_HAT_OPTS)
 
     def camping_type_desc(self):
         return Markup(

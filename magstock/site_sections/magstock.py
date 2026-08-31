@@ -78,6 +78,20 @@ class Root:
             'grouped': sorted(
                 {frozenset(group) for group in lookup.values() if any_match(group)}, key=len, reverse=True)
         }
+    
+    @csv_file
+    def staff_hats_report(self, out, session):
+        out.writerow([
+            'Name',
+            'Email',
+            'Needs hat?'
+        ])
+        for staff in session.query(Attendee).filter(Attendee.is_valid == True, Attendee.badge_type == c.STAFF_BADGE):
+            out.writerow([
+                staff.full_name,
+                staff.email,
+                staff.staff_hat_label
+            ])
 
     def food_consumers(self, session):
         total_data = camp_food_report(session)

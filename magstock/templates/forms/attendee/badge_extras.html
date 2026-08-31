@@ -6,9 +6,17 @@ camping_type: {{ badge_extras.camping_type.data|tojson }},
 meal_plan: {{ badge_extras.meal_plan.data|tojson }},
 get cabinTypes() { return this.camping_type == {{ c.CABIN|tojson }} },
 get showFoodRestrictions() { return this.meal_plan == {{ c.FULL_FOOD|tojson }} },
+get staffHat() { return this.badge_type == {{ c.STAFF_BADGE|tojson }} },
 {% endblock %}
 
 {% set id_upgrade_prepend = "upgrade_" if upgrade_modal else "" %}
+
+{% block perk_info %}
+<div class="col-sm-6" x-show="staffHat">{{ form_macros.input(badge_extras.staff_hat, required_if="staffHat && !this.placeholder") }}</div>
+{% if (c.ADDONS_ENABLED and (not receipt or upgrade_modal)) or attendee.num_event_shirts_owed > 0 or (attendee.gets_staff_shirt and staff_shirts_on_reg_form) or admin_area %}
+    <div class="col-sm-6" x-show="shirtSize">{{ form_macros.input(badge_extras.shirt, required_if="shirtSize && !this.placeholder") }}</div>
+{% endif %}
+{% endblock %}
 
 {% block badge_type %}
 {{ super() }}
@@ -22,7 +30,7 @@ get showFoodRestrictions() { return this.meal_plan == {{ c.FULL_FOOD|tojson }} }
 <input type="hidden" name="meal_plan" value="{{ c.NO_FOOD }}" />
 {% endif %}
 
-{% if c.ADDONS_ENABLED and not receipt or upgrade_modal %}
+{% if c.ADDONS_ENABLED and (not receipt or upgrade_modal) %}
     </div>
     <div class="row g-sm-3 mb-3">
     {{ form_macros.card_select(badge_extras.camping_type,

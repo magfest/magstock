@@ -1,28 +1,29 @@
 from datetime import datetime
 
 from sqlalchemy import String
-from residue import CoerceUTF8 as UnicodeText
 from markupsafe import Markup
 from sqlalchemy.types import Boolean, Date, Integer
 from uber.api import AttendeeLookup
 from uber.config import c
 from uber.decorators import presave_adjustment
 from uber.models import Choice, DefaultColumn as Column, MultiChoice, Session
+from uber.models.types import DefaultField as Field
 from uber.utils import add_opt, remove_opt
 
 from magstock._version import __version__  # noqa: F401
 
 @Session.model_mixin
 class Attendee:
-    meal_plan = Column(Choice(c.MEAL_PLAN_OPTS), default=c.NO_FOOD)
-    meal_restrictions = Column(MultiChoice(c.MEAL_TICKET_RESTRICTION_OPTS))
-    camping_type = Column(Choice(c.CAMPING_TYPE_OPTS), default=c.TENT)
-    cabin_type = Column(Choice(c.CABIN_TYPE_OPTS), nullable=True)
-    license_plate = Column(String, default='')
-    acknowledged_checkin_policy = Column(Boolean, default=False)
-    waiver_signature = Column(String)
-    waiver_consent = Column(Boolean, default=False)
-    waiver_date = Column(Date, nullable=True, default=None)
+    meal_plan: int = Field(sa_column=Column(Choice(c.MEAL_PLAN_OPTS)), default=c.NO_FOOD)
+    meal_restrictions: int = Field(sa_type=MultiChoice(c.MEAL_TICKET_RESTRICTION_OPTS), default='')
+    camping_type: int = Field(sa_column=Column(Choice(c.CAMPING_TYPE_OPTS)), default=c.TENT)
+    cabin_type: int = Field(sa_column=Column(Choice(c.CABIN_TYPE_OPTS), nullable=True))
+    license_plate: str = Field(sa_type=String, default='')
+    acknowledged_checkin_policy: bool = Field(sa_type=Boolean, default=False)
+    waiver_signature: str = Field(sa_type=String, default='')
+    waiver_consent: bool = Field(sa_type=Boolean, default=False)
+    waiver_date: datetime | None = Field(sa_type=Date, nullable=True, default=None)
+    staff_hat: int = Field(sa_column=Column(Choice(c.STAFF_HAT_OPTS), nullable=True))
     
     def calc_meal_plan_change(self, meal_plan):
         current_cost = int(c.MEAL_PLAN_PRICES[self.meal_plan]) * 100
@@ -154,9 +155,16 @@ class Attendee:
     
     @property
     def donation_swag(self):
+        from uber.custom_tags import format_currency
+
         donation_items = []
         if self.amount_extra:
-            donation_items.append('{} (${})'.format(c.DONATION_TIERS[self.amount_extra], self.amount_extra))
+            if c.MERCH_TAX:
+                tax = c.get_amount_extra_tax(self.amount_extra)
+                donation_items.append(f'{c.DONATION_TIERS[self.amount_extra]} for {format_currency(self.amount_extra + tax)} \
+                                      (Includes {format_currency(self.amount_extra)} base price + {format_currency(tax)} Sales Tax)')
+            else:
+                donation_items.append('{} (${})'.format(c.DONATION_TIERS[self.amount_extra], self.amount_extra))
         extra_donations = ['Extra donation of ${}'.format(self.extra_donation)] if self.extra_donation else []
         return donation_items + extra_donations
     
@@ -186,7 +194,7 @@ class Attendee:
 
 @Session.model_mixin
 class Group:
-    waitlist_notice = Column(Choice(c.DEALER_WAITLIST_OPTS), nullable=True)
+    waitlist_notice: int = Field(sa_column=Column(Choice(c.DEALER_WAITLIST_OPTS), nullable=True))
 
     @property
     def dealer_badges_remaining(self):

@@ -6,7 +6,7 @@ from uber.validations import Consents, BadgeExtras, PreregOtherInfo, PersonalInf
 
 
 def waiver_required(form):
-    if form.is_admin:
+    if form.is_admin or not c.WAIVER_REQUIRED:
         return False
     if type(form).__name__ == 'PreregOtherInfo' or (not form.model.is_new and form.model.badge_status != c.PENDING_STATUS):
         return True
@@ -22,6 +22,10 @@ required_waiver_fields = {
     'waiver_consent': ("You must check the waiver consent checkbox.",
                        'waiver_consent', lambda x: waiver_required(x.form)),    
     }
+
+
+BadgeExtras.field_validation.required_fields['staff_hat'] = (
+    "Please tell us if you need or already have a staff hat.", 'staff_hat', lambda x: x.form.model.badge_type == c.STAFF_BADGE)
 
 
 @BadgeExtras.field_validation('cabin_type')

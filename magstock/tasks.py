@@ -5,8 +5,6 @@ from time import sleep, time
 import traceback
 
 from celery.schedules import crontab
-from pockets import groupify, listify
-from pockets.autolog import log
 from sqlalchemy.orm import joinedload
 
 from uber import utils
@@ -14,9 +12,9 @@ from uber.amazon_ses import email_sender
 from uber.automated_emails import AutomatedEmailFixture
 from uber.config import c
 from uber.decorators import render
+from uber.email import EmailService
 from uber.models import AutomatedEmail, Email, MagModel, Attendee, Session, ReceiptItem, ModelReceipt
 from uber.tasks import celery
-from uber.tasks.email import send_email
 
 
 @celery.schedule(crontab(minute=0, hour=0))
@@ -33,8 +31,6 @@ def superstar_receipts():
                 already_emailed = session.query(Email.ident).filter(Email.ident == ident,
                                                                     Email.fk_id == attendee.id).first()
                 if not already_emailed:
-                    subject = f"MAGStock {c.EVENT_YEAR} Superstar Donation Receipt"
-                    body = render('emails/superstar_receipt.html', {'donation': donation, 'attendee': attendee},
-                                  encoding=None)
-                    send_email("MAGWest Superstar Program <superstars@magfest.org>", attendee.email_to_address,
-                               subject, body, format='html', model=attendee.to_dict('id'), ident=ident)
+                    EmailService.queue_email(session, 'superstar_receipt', attendee,
+                                             subject=f"MAGStock {c.EVENT_YEAR} Superstar Donation Receipt",
+                                             data={'donation': donation})

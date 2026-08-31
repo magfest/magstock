@@ -9,15 +9,17 @@
     {% elif attendee.shifts %}
     {% set staffing_message = "Please " ~ 'see Staffing Operations to change your volunteer status.' if c.AT_THE_CON else 'unassign yourself from shifts before changing your volunteer status.' %}
     {% endif %}
-    {% if not attendee.assigned_depts %}
+    {% if not attendee.assigned_depts and attendee.badge_type not in [c.CONTRACTOR_BADGE, c.STAFF_BADGE] %}
         {% set label_text = "We already have enough volunteers to run MAGStock this year. If you'd like to be added to our waitlist, click here and indicate your areas of interest. If we can accommodate more volunteers, Staffing Operations will reach out to you in mid-May." %}
     {% endif %}
 {% endif %}
-<div class="row g-sm-3 mb-3">
-    <div class="col-12">{{ form_macros.input(staffing_info.staffing, label_text=label_text, help_text=staffing_message) }}</div>
+{% if staffing_message != '' %}<input type="hidden" name="{{ staffing_info.staffing.name }}" value="1">{% endif %}
+<div class="col-12">
+    {{ form_macros.input(staffing_info.staffing, help_text=staffing_message, disabled=staffing_message != '', **{'x-model.boolean':'staffing'}) }}
 </div>
 
 {% if c.PUBLIC_DEPARTMENT_OPTS_WITH_DESC|length > 1 %}
+</div>
 <div class="row g-sm-3 mb-3">
     <div class="col-12">{{ form_macros.input(staffing_info.requested_depts_ids) }}</div>
 </div>

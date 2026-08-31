@@ -3,6 +3,7 @@
 {% block required %}
 {{ super() }}
 
+{% if c.WAIVER_REQUIRED %}
 {% if 'transfer_badge' in c.PAGE_PATH or (not attendee.is_new and attendee.badge_status != c.PENDING_STATUS) %}
 <div class="row g-3 mb-3">
     <div class="col-sm">{{ form_macros.input(consents.acknowledged_checkin_policy) }}</div>
@@ -26,5 +27,6 @@
 {% else %}
 <input type="hidden" name="acknowledged_checkin_policy" value="{{ consents.acknowledged_checkin_policy.data }}" />
 <input type="hidden" name="waiver_consent" value="{{ consents.waiver_consent.data }}" />
+{% endif %}
 {% endif %}
 {% endblock %}
