@@ -55,7 +55,7 @@ def upgrade():
     op.add_column('attendee', sa.Column('meal_plan', sa.Integer(), server_default='30893849', nullable=False))
     op.alter_column('attendee', 'camping_type',
                existing_type=sa.INTEGER(),
-               nullable=False)
+               nullable=False, server_default='25381002')
     op.drop_column('attendee', 'brunch_tickets')
     op.drop_column('attendee', 'dinner_tickets')
 
