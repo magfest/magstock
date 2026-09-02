@@ -2,7 +2,8 @@ from wtforms import validators
 from wtforms.validators import ValidationError, StopValidation
 
 from .config import c
-from uber.validations import Consents, BadgeExtras, PreregOtherInfo, PersonalInfo, TableInfo, ignore_unassigned_and_placeholders
+from uber.validations import Consents, BadgeExtras, PreregOtherInfo, PersonalInfo, TableInfo, ignore_unassigned_and_placeholders, \
+    is_placeholder_or_unassigned
 
 
 def waiver_required(form):
@@ -25,7 +26,8 @@ required_waiver_fields = {
 
 
 BadgeExtras.field_validation.required_fields['staff_hat'] = (
-    "Please tell us if you need or already have a staff hat.", 'staff_hat', lambda x: x.form.model.badge_type == c.STAFF_BADGE)
+    "Please tell us if you need or already have a staff hat.", 'staff_hat',
+    lambda x: x.form.model.badge_type == c.STAFF_BADGE and not is_placeholder_or_unassigned(x.form))
 
 
 @BadgeExtras.field_validation('cabin_type')

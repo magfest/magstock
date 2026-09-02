@@ -83,6 +83,11 @@ class Attendee:
                 self.orig_value_of('extra_donation') >= c.SUPERSTAR_MINIMUM and c.SUPERSTAR_RIBBON in self.ribbon_ints:
             self.ribbon = remove_opt(self.ribbon_ints, c.SUPERSTAR_RIBBON)
 
+    @presave_adjustment
+    def no_staff_hat(self):
+        if not self.staff_hat:
+            self.staff_hat = None
+
     @property
     def available_camping_type_opts(self):
         if self.is_new or self.camping_type == c.TENT or self.is_unpaid:
