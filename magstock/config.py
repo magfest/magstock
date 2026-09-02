@@ -1,3 +1,4 @@
+import logging
 from os.path import join
 from pathlib import Path
 
@@ -7,6 +8,9 @@ from uber.models import Attendee, Session
 
 from magstock._version import __version__  # noqa: F401
 
+log = logging.getLogger(__name__)
+
+log.error(Path(__file__).parents[0])
 config = parse_config("magstock", Path(__file__).parents[0])
 c.include_plugin_config(config)
 
